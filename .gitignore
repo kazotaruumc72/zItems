@@ -3,6 +3,10 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+target/
+target-api/
+destinations.yml
+.idea/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

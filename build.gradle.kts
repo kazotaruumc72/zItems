@@ -60,6 +60,9 @@ allprojects {
         compileOnly("fr.maxlego08.menu:zmenu-api:1.1.0.4")
         compileOnly(files(rootProject.files("libs/zMenu-1.1.0.4.jar")))
 
+        /* Adventure for Spigot compatibility */
+        compileOnly("net.kyori:adventure-platform-bukkit:4.3.4")
+
         /* Libraries */
         implementation("com.github.Traqueur-dev:Structura:1.1.1")
 

@@ -1,19 +1,13 @@
-plugins {
-    id("java")
+rootProject.extra.properties["sha"]?.let { sha ->
+    version = sha
 }
 
-group = "fr.traqueur.items"
-version = "1.0-SNAPSHOT"
+tasks {
+    shadowJar {
+        destinationDirectory.set(rootProject.extra["apiFolder"] as File)
+    }
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-}
-
-tasks.test {
-    useJUnitPlatform()
+    build {
+        dependsOn(shadowJar)
+    }
 }

@@ -1,6 +1,7 @@
-package fr.traqueur.items.api;
+package fr.traqueur.items.api.utils;
 
-import io.papermc.paper.text.PaperComponents;
+import fr.traqueur.items.api.Logger;
+import fr.traqueur.items.api.PlatformType;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -19,7 +20,6 @@ import java.util.Map;
  */
 public class MessageUtil {
 
-    private static ServerType serverType;
     private static BukkitAudiences bukkitAudiences;
     private static MiniMessage miniMessage;
 
@@ -60,15 +60,13 @@ public class MessageUtil {
      * @param plugin The plugin instance
      */
     public static void init(Plugin plugin) {
-        serverType = detectServerType();
+        PlatformType platformType = PlatformType.detect();
         miniMessage = MiniMessage.miniMessage();
 
-        if (serverType == ServerType.SPIGOT) {
-            // For Spigot, we need BukkitAudiences wrapper
+        if (platformType == PlatformType.SPIGOT) {
             bukkitAudiences = BukkitAudiences.create(plugin);
             Logger.info("<yellow>Detected Spigot server - Using Adventure Platform wrapper");
         } else {
-            // For Paper, native Adventure is available
             Logger.info("<yellow>Detected Paper server - Using native Adventure API");
         }
     }
@@ -85,75 +83,63 @@ public class MessageUtil {
     }
 
     /**
-     * Sends a message to a player with MiniMessage and legacy color code support.
+     * Sends a Component message to a player.
+     * Handles Paper (native) vs Spigot (wrapper) automatically.
      *
-     * @param player  The player to send the message to
-     * @param message The message with MiniMessage tags or legacy codes
+     * @param player    The player to send the message to
+     * @param component The Component to send
      */
-    public static void sendMessage(Player player, String message) {
-        Component component = parseMessage(message);
-
-        if (serverType == ServerType.PAPER) {
-            // Use Paper's native Adventure API
+    public static void sendMessage(Player player, Component component) {
+        if (PlatformType.isPaper()) {
             player.sendMessage(component);
         } else {
-            // Use BukkitAudiences wrapper for Spigot
             Audience audience = bukkitAudiences.player(player);
             audience.sendMessage(component);
         }
     }
 
     /**
-     * Sends a message to a command sender with MiniMessage and legacy color code support.
+     * Sends a Component message to a command sender.
+     * Handles Paper (native) vs Spigot (wrapper) automatically.
      *
-     * @param sender  The command sender
-     * @param message The message with MiniMessage tags or legacy codes
+     * @param sender    The command sender
+     * @param component The Component to send
      */
-    public static void sendMessage(CommandSender sender, String message) {
-        Component component = parseMessage(message);
-
-        if (serverType == ServerType.PAPER) {
-            // Use Paper's native Adventure API
+    public static void sendMessage(CommandSender sender, Component component) {
+        if (PlatformType.isPaper()) {
             sender.sendMessage(component);
         } else {
-            // Use BukkitAudiences wrapper for Spigot
             Audience audience = bukkitAudiences.sender(sender);
             audience.sendMessage(component);
         }
     }
 
     /**
-     * Broadcasts a message to all online players.
+     * Broadcasts a Component message to all online players.
+     * Handles Paper (native) vs Spigot (wrapper) automatically.
      *
-     * @param message The message with MiniMessage tags or legacy codes
+     * @param component The Component to broadcast
      */
-    public static void broadcast(String message) {
-        Component component = parseMessage(message);
-
-        if (serverType == ServerType.PAPER) {
-            // Use Paper's native Adventure API
+    public static void broadcast(Component component) {
+        if (PlatformType.isPaper()) {
             Bukkit.broadcast(component);
         } else {
-            // Use BukkitAudiences wrapper for Spigot
             Audience audience = bukkitAudiences.all();
             audience.sendMessage(component);
         }
     }
 
     /**
-     * Sends an action bar message to a player.
+     * Sends a Component action bar message to a player.
+     * Handles Paper (native) vs Spigot (wrapper) automatically.
      *
-     * @param player  The player to send the action bar to
-     * @param message The message with MiniMessage tags or legacy codes
+     * @param player    The player to send the action bar to
+     * @param component The Component to send
      */
-    public static void sendActionBar(Player player, String message) {
-        Component component = parseMessage(message);
-
-        if (serverType == ServerType.PAPER) {
-            // Use Paper's native Adventure API
+    public static void sendActionBar(Player player, Component component) {
+        if (PlatformType.isPaper()) {
             player.sendActionBar(component);
         } else {
-            // Use BukkitAudiences wrapper for Spigot
             Audience audience = bukkitAudiences.player(player);
             audience.sendActionBar(component);
         }
@@ -167,9 +153,7 @@ public class MessageUtil {
      * @return The parsed Component
      */
     public static Component parseMessage(String message) {
-        // Convert legacy codes to MiniMessage tags
         String converted = convertLegacyToMiniMessage(message);
-        // Parse with MiniMessage
         return miniMessage.deserialize(converted);
     }
 
@@ -187,35 +171,4 @@ public class MessageUtil {
         return converted;
     }
 
-    /**
-     * Detects the server type (Paper or Spigot).
-     *
-     * @return The detected server type
-     */
-    private static ServerType detectServerType() {
-        try {
-            // Try to load a Paper-specific class
-            Class.forName("io.papermc.paper.text.PaperComponents");
-            return ServerType.PAPER;
-        } catch (ClassNotFoundException e) {
-            return ServerType.SPIGOT;
-        }
-    }
-
-    /**
-     * Gets the current server type.
-     *
-     * @return The server type (PAPER or SPIGOT)
-     */
-    public static ServerType getServerType() {
-        return serverType;
-    }
-
-    /**
-     * Enum representing the server type.
-     */
-    public enum ServerType {
-        PAPER,
-        SPIGOT
-    }
 }

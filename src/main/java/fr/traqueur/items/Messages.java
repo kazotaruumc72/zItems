@@ -1,6 +1,6 @@
 package fr.traqueur.items;
 
-import fr.traqueur.items.api.MessageUtil;
+import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.structura.api.Loadable;
 import org.bukkit.command.CommandSender;
 
@@ -16,6 +16,6 @@ public enum Messages implements Loadable {
     }
 
     public void send(CommandSender sender) {
-        MessageUtil.sendMessage(sender, this.message);
+        MessageUtil.sendMessage(sender, MessageUtil.parseMessage(this.message));
     }
 }

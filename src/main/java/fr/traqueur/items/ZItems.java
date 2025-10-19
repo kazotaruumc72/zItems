@@ -2,13 +2,12 @@ package fr.traqueur.items;
 
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.MessageUtil;
+import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.items.api.settings.PluginSettings;
 import fr.traqueur.items.api.settings.Settings;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 
@@ -31,8 +30,6 @@ public class ZItems extends ItemsPlugin {
 
         Logger.info("<yellow>=== ENABLE START ===");
         Logger.info("<gray>Plugin Version V<red>{}", this.getDescription().getVersion());
-
-        Messages.TEST_MESSAGE.send(Bukkit.getConsoleSender());
 
         Logger.info("<yellow>=== ENABLE DONE <gray>(<gold>" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<gray>) <yellow>===");
     }

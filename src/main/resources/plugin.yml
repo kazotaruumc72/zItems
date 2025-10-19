@@ -1,0 +1,10 @@
+name: zItems
+author: Traqueur_
+main: fr.traqueur.items.ZItems
+website: https://groupez.dev
+description: Custom items
+version: ${version}
+api-version: 1.21
+folia-supported: true
+depend:
+  - zMenu

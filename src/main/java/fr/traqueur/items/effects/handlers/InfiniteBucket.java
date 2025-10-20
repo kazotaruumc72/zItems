@@ -1,5 +1,6 @@
 package fr.traqueur.items.effects.handlers;
 
+import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.effects.EffectMeta;
 import fr.traqueur.items.effects.settings.EmptySettings;
@@ -29,10 +30,14 @@ public class InfiniteBucket implements EffectHandler.MultiEventEffectHandler<Emp
     }
 
     @Override
-    public void handle(Player source, ItemStack itemSource, Event event, EmptySettings settings) {
-        if (event instanceof PlayerBucketEmptyEvent emptyEvent) {
+    public void handle(EffectContext context, EmptySettings settings) {
+        if(!eventTypes().contains(context.event().getClass())) {
+            throw new IllegalArgumentException("Unsupported event type: " + context.event().getClass());
+        }
+
+        if (context.event() instanceof PlayerBucketEmptyEvent emptyEvent) {
             handleBucketEmpty(emptyEvent);
-        } else if (event instanceof PlayerBucketFillEvent fillEvent) {
+        } else if (context.event() instanceof PlayerBucketFillEvent fillEvent) {
             handleBucketFill(fillEvent);
         }
     }

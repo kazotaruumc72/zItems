@@ -6,11 +6,17 @@ import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.items.api.settings.PluginSettings;
 import fr.traqueur.items.api.settings.Settings;
 import fr.traqueur.items.effects.EffectsProvider;
+import fr.traqueur.items.effects.settings.readers.AttributeReader;
+import fr.traqueur.items.effects.settings.readers.EquipmentSlotGroupReader;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
+import fr.traqueur.structura.registries.CustomReaderRegistry;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.inventory.EquipmentSlotGroup;
 
 import java.io.File;
+import java.util.Map;
 
 public class ZItems extends ItemsPlugin {
 
@@ -23,6 +29,7 @@ public class ZItems extends ItemsPlugin {
         long enableTime = System.currentTimeMillis();
 
         this.saveDefaultConfig();
+        this.injectReaders();
 
         PluginSettings settings = this.createSettings(CONFIG_FILE, PluginSettings.class);
         Logger.init(this.getSLF4JLogger(), settings.debug());
@@ -36,6 +43,11 @@ public class ZItems extends ItemsPlugin {
         EffectsProvider.initialize(this);
 
         Logger.info("<yellow>=== ENABLE DONE <gray>(<gold>" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<gray>) <yellow>===");
+    }
+
+    private void injectReaders() {
+        CustomReaderRegistry.getInstance().register(EquipmentSlotGroup.class, new EquipmentSlotGroupReader());
+        CustomReaderRegistry.getInstance().register( Attribute.class, new AttributeReader());
     }
 
     @Override

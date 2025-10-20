@@ -21,15 +21,9 @@ public sealed interface EffectHandler<T extends EffectSettings> permits EffectHa
         Class<E> eventType();
     }
 
-    non-sealed interface NoEventEffectHandler<T extends EffectSettings> extends EffectHandler<T> {
-        default void handle(Player source, ItemStack itemStack, Event event, T settings) {
-            this.effect(source, itemStack, settings);
-        }
+    non-sealed interface NoEventEffectHandler<T extends EffectSettings> extends EffectHandler<T> { }
 
-        void effect(Player source, ItemStack itemSource, T settings);
-    }
-
-    void handle(Player source, ItemStack itemSource, Event event, T settings);
+    void handle(EffectContext context, T settings);
 
     int priority();
 

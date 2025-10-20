@@ -35,10 +35,12 @@ public class EffectsProvider {
         return instance;
     }
 
+    private final ItemsPlugin plugin;
     private final Map<String, EffectHandler<?>> handlers;
     private final Set<String> scannedPackages;
 
     private EffectsProvider(ItemsPlugin plugin) {
+        this.plugin = plugin;
         this.handlers = new HashMap<>();
         this.scannedPackages = new HashSet<>();
 
@@ -127,11 +129,13 @@ public class EffectsProvider {
                 effectId, handler.getClass().getSimpleName());
 
         // Enregistrer le EffectSettings dans le registry polymorphique
-        registerHandlerSettings(handler);
+        registerHandlerSettings(effectId, handler);
     }
 
     /**
      * Registers a single effect handler class.
+     * Tries to instantiate using a constructor with ItemsPlugin parameter first,
+     * then falls back to a no-args constructor if not available.
      * @return true if successfully registered, false otherwise
      */
     private boolean registerEffectHandler(Class<? extends EffectHandler<?>> clazz) {
@@ -150,19 +154,16 @@ public class EffectsProvider {
                 return false;
             }
 
-            EffectHandler<?> handler = clazz.getDeclaredConstructor().newInstance();
+            EffectHandler<?> handler = instantiateHandler(clazz);
 
             this.handlers.put(effectId, handler);
             Logger.debug("Registered effect handler: <aqua>{}<reset> -> {}", effectId, clazz.getSimpleName());
 
             // Enregistrer le EffectSettings dans le registry polymorphique
-            registerHandlerSettings(handler);
+            registerHandlerSettings(effectId, handler);
 
             return true;
 
-        } catch (NoSuchMethodException e) {
-            Logger.severe("Effect handler {} must have a no-args constructor.", clazz.getSimpleName());
-            return false;
         } catch (Exception e) {
             Logger.severe("Failed to instantiate effect handler: {}", e, clazz.getName());
             return false;
@@ -170,22 +171,44 @@ public class EffectsProvider {
     }
 
     /**
+     * Instantiates an effect handler using the appropriate constructor.
+     * Tries constructor with ItemsPlugin parameter first, then no-args constructor.
+     *
+     * @param clazz the effect handler class to instantiate
+     * @return the instantiated handler
+     * @throws Exception if instantiation fails
+     */
+    private EffectHandler<?> instantiateHandler(Class<? extends EffectHandler<?>> clazz) throws Exception {
+        // Try constructor with ItemsPlugin parameter first
+        try {
+            return clazz.getDeclaredConstructor(ItemsPlugin.class).newInstance(this.plugin);
+        } catch (NoSuchMethodException e) {
+            // Fall back to no-args constructor
+            try {
+                return clazz.getDeclaredConstructor().newInstance();
+            } catch (NoSuchMethodException ex) {
+                throw new NoSuchMethodException(
+                    "Effect handler " + clazz.getSimpleName() +
+                    " must have either a no-args constructor or a constructor with ItemsPlugin parameter."
+                );
+            }
+        }
+    }
+
+    /**
      * Registers the settings class of a handler in the PolymorphicRegistry.
      */
-    private void registerHandlerSettings(EffectHandler<?> handler) {
+    private void registerHandlerSettings(String effectId, EffectHandler<?> handler) {
         Class<? extends EffectSettings> settingsClass = handler.settingsType();
         if (settingsClass != null) {
             try {
                 PolymorphicRegistry<EffectSettings> registry = PolymorphicRegistry.get(EffectSettings.class);
-
-                // Vérifier si déjà enregistré
-                String settingsName = settingsClass.getSimpleName().toLowerCase();
-                if (registry.get(settingsName).isPresent()) {
+                if (registry.get(effectId).isPresent()) {
                     Logger.debug("EffectSettings class {} already registered.", settingsClass.getSimpleName());
                     return;
                 }
 
-                registry.register(settingsClass);
+                registry.register(effectId, settingsClass);
                 Logger.debug("Registered EffectSettings class: <aqua>{}<reset>", settingsClass.getSimpleName());
             } catch (Exception e) {
                 Logger.severe("Failed to register EffectSettings class: {}", e, settingsClass.getName());

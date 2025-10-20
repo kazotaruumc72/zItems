@@ -59,7 +59,7 @@ public class MessageUtil {
      *
      * @param plugin The plugin instance
      */
-    public static void init(Plugin plugin) {
+    public static void initialize(Plugin plugin) {
         PlatformType platformType = PlatformType.detect();
         miniMessage = MiniMessage.miniMessage();
 

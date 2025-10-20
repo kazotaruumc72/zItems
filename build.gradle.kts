@@ -65,6 +65,7 @@ allprojects {
 
         /* Libraries */
         implementation("com.github.Traqueur-dev:Structura:1.1.1")
+        compileOnly("org.reflections:reflections:0.10.2")
 
     }
 

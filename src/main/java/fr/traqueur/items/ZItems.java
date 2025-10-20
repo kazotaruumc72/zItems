@@ -5,6 +5,7 @@ import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.items.api.settings.PluginSettings;
 import fr.traqueur.items.api.settings.Settings;
+import fr.traqueur.items.effects.EffectsProvider;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 import org.bukkit.Bukkit;
@@ -22,14 +23,17 @@ public class ZItems extends ItemsPlugin {
         long enableTime = System.currentTimeMillis();
 
         this.saveDefaultConfig();
-        this.reloadConfig();
 
-        PluginSettings settings = Settings.get(PluginSettings.class);
+        PluginSettings settings = this.createSettings(CONFIG_FILE, PluginSettings.class);
         Logger.init(this.getSLF4JLogger(), settings.debug());
-        MessageUtil.init(this);
 
         Logger.info("<yellow>=== ENABLE START ===");
         Logger.info("<gray>Plugin Version V<red>{}", this.getDescription().getVersion());
+
+        this.reloadConfig();
+
+        MessageUtil.initialize(this);
+        EffectsProvider.initialize(this);
 
         Logger.info("<yellow>=== ENABLE DONE <gray>(<gold>" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<gray>) <yellow>===");
     }
@@ -62,13 +66,14 @@ public class ZItems extends ItemsPlugin {
         }
     }
 
-    private <T extends Settings> void createSettings(String path, Class<T> clazz) {
+    private <T extends Settings> T createSettings(String path, Class<T> clazz) {
         File file = new File(this.getDataFolder(), path);
         if (!file.exists()) {
             throw new IllegalArgumentException("File " + path + " does not exist.");
         }
         T instance = Structura.load(file, clazz);
         Settings.register(clazz, instance);
+        return instance;
     }
 
     private void saveIfNotExits(String fileName) {

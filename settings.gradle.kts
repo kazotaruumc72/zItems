@@ -19,4 +19,3 @@ file("hooks").listFiles()?.forEach { file ->
         include(":hooks:${file.name}")
     }
 }
-include("hooks")

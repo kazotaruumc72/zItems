@@ -183,7 +183,6 @@ public class EffectsProvider {
         try {
             return clazz.getDeclaredConstructor(ItemsPlugin.class).newInstance(this.plugin);
         } catch (NoSuchMethodException e) {
-            // Fall back to no-args constructor
             try {
                 return clazz.getDeclaredConstructor().newInstance();
             } catch (NoSuchMethodException ex) {

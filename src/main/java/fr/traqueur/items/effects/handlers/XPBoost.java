@@ -18,6 +18,8 @@ import java.util.concurrent.ThreadLocalRandom;
 @EffectMeta(value = "XP_BOOST")
 public class XPBoost implements EffectHandler.SingleEventEffectHandler<XPBoostSettings, BlockBreakEvent> {
 
+    private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
+
     @Override
     public Class<BlockBreakEvent> eventType() {
         return BlockBreakEvent.class;
@@ -56,7 +58,7 @@ public class XPBoost implements EffectHandler.SingleEventEffectHandler<XPBoostSe
     }
 
     private int randomInt(int minInclusive, int maxInclusive) {
-        return ThreadLocalRandom.current().nextInt(minInclusive, maxInclusive + 1);
+        return RANDOM.nextInt(minInclusive, maxInclusive + 1);
     }
 
     @Override

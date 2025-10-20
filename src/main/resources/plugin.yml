@@ -6,6 +6,10 @@ description: Custom items
 version: ${version}
 api-version: 1.21
 folia-supported: true
+softdepend:
+  - EconomyShopGUI
+  - ShopGUIPlus
+  - ZShop
 depend:
   - zMenu
 libraries:

@@ -3,8 +3,10 @@ package fr.traqueur.items.api.utils;
 import fr.traqueur.items.api.PlatformType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -210,11 +212,17 @@ public class ItemUtil {
             return;
         }
 
+        PlayerItemDamageEvent damageEvent = new PlayerItemDamageEvent(player, item, damage, damage);
+        damageEvent.callEvent();
+        if (damageEvent.isCancelled()) {
+            return;
+        }
+
         if (item.getItemMeta() instanceof Damageable damageable) {
             int currentDamage = damageable.getDamage();
             int maxDurability = item.getType().getMaxDurability();
 
-            int newDamage = currentDamage + damage;
+            int newDamage = currentDamage + damageEvent.getDamage();
 
             if (newDamage >= maxDurability) {
                 // Item breaks

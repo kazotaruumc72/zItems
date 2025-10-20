@@ -3,6 +3,7 @@ package fr.traqueur.items.api.shop;
 import fr.traqueur.items.api.ItemsPlugin;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class ShopProvider {
 
@@ -15,7 +16,7 @@ public abstract class ShopProvider {
          INSTANCE = provider;
      }
 
-     public static ShopProvider get() {
+     public static @NotNull ShopProvider get() {
          if (INSTANCE == null) {
                 throw new IllegalStateException("No ShopProvider has been registered");
          }

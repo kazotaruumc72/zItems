@@ -1,9 +1,11 @@
 package fr.traqueur.items.shop;
 
+import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.shop.ShopProvider;
 import org.bukkit.Bukkit;
 
 import java.util.Comparator;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -13,6 +15,8 @@ public enum ShopProviders {
     ECONOMY_SHOP_GUI("EconomyShopGUI", EconomyShopGUIProvider::new, 0),
     SHOP_GUI_PLUS("ShopGUIPlus", ShopGUIPlusProvider::new, 0)
     ;
+
+    public static ShopProviders FOUND_PROVIDER;
 
     private final String pluginName;
     private final Supplier<? extends ShopProvider> supplier;
@@ -24,12 +28,21 @@ public enum ShopProviders {
         this.priority = priority;
     }
 
-    public void initialize() {
+    public static boolean initialize() {
+        AtomicBoolean result = new AtomicBoolean(false);
         Stream.of(ShopProviders.values()).sorted(Comparator.comparingInt(sp -> sp.priority)).forEach(shopProvider -> {
+            Logger.debug("Checking shop provider: " + shopProvider.pluginName());
             if(shopProvider.isEnable()) {
                 ShopProvider.register(shopProvider.supplier.get());
+                FOUND_PROVIDER = shopProvider;
+                result.set(true);
             }
         });
+        return result.get();
+    }
+
+    public String pluginName() {
+        return pluginName;
     }
 
     private boolean isEnable() {

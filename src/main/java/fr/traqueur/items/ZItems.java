@@ -10,6 +10,7 @@ import fr.traqueur.items.effects.settings.readers.AttributeReader;
 import fr.traqueur.items.effects.settings.readers.EnchantmentReader;
 import fr.traqueur.items.effects.settings.readers.EquipmentSlotGroupReader;
 import fr.traqueur.items.effects.settings.readers.TagReader;
+import fr.traqueur.items.shop.ShopProviders;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.registries.CustomReaderRegistry;
@@ -44,6 +45,17 @@ public class ZItems extends ItemsPlugin {
         Logger.info("<gray>Plugin Version V<red>{}", this.getDescription().getVersion());
 
         this.reloadConfig();
+
+        if (!ShopProviders.initialize()) {
+            Logger.severe("No shop provider found! Disabling plugin.");
+            Logger.info("Available shop providers:");
+            for (ShopProviders shopProviders: ShopProviders.values()) {
+                Logger.info("- <gold>{}", shopProviders.pluginName());
+            }
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        Logger.info("Shop provider <green>{} <reset>has been found.", ShopProviders.FOUND_PROVIDER.pluginName());
 
         MessageUtil.initialize(this);
         EffectsProvider.initialize(this);

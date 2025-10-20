@@ -7,12 +7,18 @@ import fr.traqueur.items.api.settings.PluginSettings;
 import fr.traqueur.items.api.settings.Settings;
 import fr.traqueur.items.effects.EffectsProvider;
 import fr.traqueur.items.effects.settings.readers.AttributeReader;
+import fr.traqueur.items.effects.settings.readers.EnchantmentReader;
 import fr.traqueur.items.effects.settings.readers.EquipmentSlotGroupReader;
+import fr.traqueur.items.effects.settings.readers.TagReader;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.registries.CustomReaderRegistry;
+import fr.traqueur.structura.types.TypeToken;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
 
 import java.io.File;
@@ -47,7 +53,9 @@ public class ZItems extends ItemsPlugin {
 
     private void injectReaders() {
         CustomReaderRegistry.getInstance().register(EquipmentSlotGroup.class, new EquipmentSlotGroupReader());
-        CustomReaderRegistry.getInstance().register( Attribute.class, new AttributeReader());
+        CustomReaderRegistry.getInstance().register(Attribute.class, new AttributeReader());
+        CustomReaderRegistry.getInstance().register(Enchantment.class, new EnchantmentReader());
+        CustomReaderRegistry.getInstance().register(new TypeToken<>() {}, new TagReader());
     }
 
     @Override

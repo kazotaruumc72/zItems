@@ -1,0 +1,167 @@
+package fr.traqueur.items.effects.handlers;
+
+import fr.traqueur.items.api.Logger;
+import fr.traqueur.items.api.effects.EffectContext;
+import fr.traqueur.items.api.effects.EffectHandler;
+import fr.traqueur.items.api.effects.EffectMeta;
+import fr.traqueur.items.api.settings.PluginSettings;
+import fr.traqueur.items.api.settings.Settings;
+import fr.traqueur.items.api.utils.EventUtil;
+import fr.traqueur.items.api.utils.ItemUtil;
+import fr.traqueur.items.effects.settings.HammerSettings;
+import org.bukkit.FluidCollisionMode;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.plugin.RegisteredListener;
+import org.bukkit.util.RayTraceResult;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@EffectMeta(value = "HAMMER")
+public class Hammer implements EffectHandler.SingleEventEffectHandler<HammerSettings, BlockBreakEvent> {
+
+    @Override
+    public Class<BlockBreakEvent> eventType() {
+        return BlockBreakEvent.class;
+    }
+
+    @Override
+    public void handle(EffectContext context, HammerSettings settings) {
+        BlockBreakEvent event = context.getEventAs(BlockBreakEvent.class);
+        Block block = event.getBlock();
+        Player player = context.executor();
+
+        BlockFace face = getAdjustedBlockFace(player);
+        Set<Block> blocksToBreak = new HashSet<>();
+
+        int nbBlocks = processBlocks(player, settings, blocksToBreak, block, face);
+
+        if (nbBlocks == 0) {
+            return;
+        }
+
+        // Cancel the main event to prevent default block break behavior
+        event.setCancelled(true);
+
+        int actuallyBrokenBlocks = 0;
+
+        // Collect drops for all blocks
+        for (Block targetBlock : blocksToBreak) {
+            // Fire BlockBreakEvent for allowed plugins only
+            boolean cancelled = EventUtil.fireEvent(new BlockBreakEvent(targetBlock, player), BlockBreakEvent.getHandlerList());
+            if (cancelled) {
+                continue; // Skip this block if event was cancelled
+            }
+
+            // Add to affected blocks only if not cancelled
+            context.affectedBlocks().add(targetBlock);
+
+            Collection<ItemStack> blockDrops = targetBlock.getDrops(context.itemSource());
+            context.addDrops(blockDrops);
+
+            actuallyBrokenBlocks++;
+        }
+
+        // Apply damage based on actually broken blocks
+        int damage = settings.damage() == -1 ? actuallyBrokenBlocks : settings.damage();
+        if (damage > 0) {
+            ItemUtil.applyDamageToItem(context.itemSource(), damage, player);
+        }
+    }
+
+    private int processBlocks(Player player, HammerSettings settings, Set<Block> blocksToBreak, Block block, BlockFace face) {
+        int depth = settings.depth();
+        int width = settings.width();
+        int height = settings.height();
+        int nbBlocks = 0;
+
+        for (int d = 0; d < depth; d++) {
+            for (int h = -height / 2; h <= height / 2; h++) {
+                for (int w = -width / 2; w <= width / 2; w++) {
+                    Block targetBlock = getRelativeBlock(block, face, player.getLocation().getYaw(), d, h, w);
+                    if (targetBlock != null && isValidTargetBlock(targetBlock, blocksToBreak, settings)) {
+                        blocksToBreak.add(targetBlock);
+                        nbBlocks++;
+                    }
+                }
+            }
+        }
+        return nbBlocks;
+    }
+
+    private boolean isValidTargetBlock(Block targetBlock, Set<Block> alreadyProcessed, HammerSettings settings) {
+        // Don't process the same block twice
+        if (alreadyProcessed.contains(targetBlock)) {
+            return false;
+        }
+
+        // Use settings to check if block is breakable (includes air, liquid, and material/tag checks)
+        return settings.isBreakable(targetBlock);
+    }
+
+    private BlockFace getAdjustedBlockFace(Player player) {
+        BlockFace face = getBlockFace(player);
+        if (face != BlockFace.UP && face != BlockFace.DOWN) {
+            face = player.getFacing();
+        }
+        return face;
+    }
+
+    private Block getRelativeBlock(Block baseBlock, BlockFace face, float yaw, int depth, int height, int width) {
+        switch (face) {
+            case NORTH -> {
+                return baseBlock.getRelative(width, height, -depth);
+            }
+            case SOUTH -> {
+                return baseBlock.getRelative(width, height, depth);
+            }
+            case EAST -> {
+                return baseBlock.getRelative(depth, height, width);
+            }
+            case WEST -> {
+                return baseBlock.getRelative(-depth, height, width);
+            }
+            case UP, DOWN -> {
+                if ((yaw > 45 && yaw <= 135) || (yaw < -45 && yaw >= -135)) {
+                    return (face == BlockFace.UP) ? baseBlock.getRelative(height, -depth, width) : baseBlock.getRelative(height, depth, width);
+                } else {
+                    return (face == BlockFace.UP) ? baseBlock.getRelative(width, -depth, height) : baseBlock.getRelative(width, depth, height);
+                }
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
+
+    private BlockFace getBlockFace(Player player) {
+        Location eyeLoc = player.getEyeLocation();
+        RayTraceResult result = player.getLocation().getWorld().rayTraceBlocks(eyeLoc, eyeLoc.getDirection(), 10, FluidCollisionMode.NEVER);
+
+        if (result == null || result.getHitBlockFace() == null) {
+            // Fallback to player facing direction if raytrace fails
+            return player.getFacing();
+        }
+
+        return result.getHitBlockFace();
+    }
+
+    @Override
+    public int priority() {
+        return 1;
+    }
+
+    @Override
+    public Class<HammerSettings> settingsType() {
+        return HammerSettings.class;
+    }
+}

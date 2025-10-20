@@ -4,7 +4,9 @@ import fr.traqueur.items.api.PlatformType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -201,6 +203,27 @@ public class ItemUtil {
         }
 
         return itemStack;
+    }
+
+    public static void applyDamageToItem(ItemStack item, int damage, Player player) {
+        if (item == null || item.getType().isAir()) {
+            return;
+        }
+
+        if (item.getItemMeta() instanceof Damageable damageable) {
+            int currentDamage = damageable.getDamage();
+            int maxDurability = item.getType().getMaxDurability();
+
+            int newDamage = currentDamage + damage;
+
+            if (newDamage >= maxDurability) {
+                // Item breaks
+                player.getInventory().setItemInMainHand(null);
+            } else {
+                damageable.setDamage(newDamage);
+                item.setItemMeta(damageable);
+            }
+        }
     }
 
     /**

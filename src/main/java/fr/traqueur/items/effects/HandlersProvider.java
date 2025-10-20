@@ -14,21 +14,21 @@ import org.reflections.util.ConfigurationBuilder;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
-public class EffectsProvider {
+public class HandlersProvider {
 
-    private static volatile EffectsProvider instance;
+    private static volatile HandlersProvider instance;
 
     public static void initialize(ItemsPlugin plugin) {
         if (instance == null) {
-            synchronized (EffectsProvider.class) {
+            synchronized (HandlersProvider.class) {
                 if (instance == null) {
-                    instance = new EffectsProvider(plugin);
+                    instance = new HandlersProvider(plugin);
                 }
             }
         }
     }
 
-    public static EffectsProvider getInstance() {
+    public static HandlersProvider getInstance() {
         if (instance == null) {
             throw new IllegalStateException("EffectsProvider is not initialized. Call initialize() first.");
         }
@@ -39,7 +39,7 @@ public class EffectsProvider {
     private final Map<String, EffectHandler<?>> handlers;
     private final Set<String> scannedPackages;
 
-    private EffectsProvider(ItemsPlugin plugin) {
+    private HandlersProvider(ItemsPlugin plugin) {
         this.plugin = plugin;
         this.handlers = new HashMap<>();
         this.scannedPackages = new HashSet<>();

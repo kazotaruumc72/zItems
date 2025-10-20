@@ -1,0 +1,19 @@
+# Hammer Effect Example
+# Break blocks in a 3x3 area
+id: "super_hammer"
+type: "HAMMER"
+materials:             # List of materials that can be broken (whitelist)
+  - STONE
+  - COBBLESTONE
+  - DEEPSLATE
+  - COBBLED_DEEPSLATE
+  - ANDESITE
+  - DIORITE
+  - GRANITE
+  - NETHERRACK
+  - END_STONE
+blacklisted: false     # Use blacklist mode instead of whitelist (optional, default: false)
+height: 3              # Height of the break area
+width: 3               # Width of the break area
+depth: 3               # Depth of the break area
+damage: 1              # Durability damage per block (optional, default: -1 for auto)

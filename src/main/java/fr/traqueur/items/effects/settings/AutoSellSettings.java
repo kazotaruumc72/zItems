@@ -5,7 +5,6 @@ import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultDouble;
 
 public record AutoSellSettings(
-        String name,
         @Options(optional = true) @DefaultDouble(1.0) double multiplier
 ) implements EffectSettings {
 }

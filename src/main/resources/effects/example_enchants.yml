@@ -1,0 +1,14 @@
+# Enchantments Effect Example
+# Apply custom enchantments to items
+id: "super_enchanted_sword"
+type: "ENCHANTS_APPLICATOR"
+enchantments:
+  - enchantment: SHARPNESS
+    evolution: INCREASE  # INCREASE or DECREASE
+    level: 10            # Enchantment level
+  - enchantment: FIRE_ASPECT
+    evolution: INCREASE
+    level: 3
+  - enchantment: LOOTING
+    evolution: INCREASE
+    level: 5

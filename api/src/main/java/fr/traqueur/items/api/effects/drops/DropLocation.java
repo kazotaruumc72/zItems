@@ -1,4 +1,4 @@
-package fr.traqueur.items.api.drops;
+package fr.traqueur.items.api.effects.drops;
 
 public enum DropLocation {
     BLOCK,

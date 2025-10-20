@@ -1,0 +1,5 @@
+# Absorption Effect Example
+# Automatically adds block drops to player inventory instead of dropping on ground
+id: "absorption_pickaxe"
+type: "ABSORPTION"
+# No additional settings required - automatically adds drops to inventory

@@ -12,7 +12,7 @@ public class AttributeReader implements Reader<Attribute> {
     @Override
     public Attribute read(String s) throws StructuraException {
         try {
-            return Registry.ATTRIBUTE.getOrThrow(NamespacedKey.minecraft(s));
+            return Registry.ATTRIBUTE.getOrThrow(NamespacedKey.minecraft(s.toLowerCase()));
         } catch (NoSuchElementException e) {
             throw new StructuraException("Unknown attribute: " + s);
         }

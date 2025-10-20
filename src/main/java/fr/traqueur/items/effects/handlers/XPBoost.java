@@ -68,6 +68,6 @@ public class XPBoost implements EffectHandler.SingleEventEffectHandler<XPBoostSe
 
     @Override
     public Class<XPBoostSettings> settingsType() {
-        return null;
+        return XPBoostSettings.class;
     }
 }

@@ -1,0 +1,30 @@
+# Farming Hoe Effect Example
+# Advanced farming tool with auto-harvest, auto-replant, and area tilling
+id: "super_farming_hoe"
+type: "FARMING_HOE"
+size: 5                # Area size (must be odd number, default: 3)
+autoReplant: true      # Auto-replant crops after harvest (optional, default: true)
+dropLocation: "PLAYER" # Drop location: BLOCK, CENTER, PLAYER (optional)
+dropInInventory: true  # Add drops directly to inventory (optional, default: false)
+harvest: true          # Enable area tilling (optional, default: true)
+plantSeeds: true       # Enable area seeding (optional, default: true)
+harvestDamage: 1       # Durability damage on harvest (optional, default: 1)
+tillDamage: 1          # Durability damage on tilling (optional, default: 1)
+
+# Optional: List of allowed crops to harvest
+# allowedCrops:
+#   - WHEAT
+#   - CARROTS
+#   - POTATOES
+#   - BEETROOTS
+
+# Optional: List of allowed seeds to plant
+# allowedSeeds:
+#   - WHEAT_SEEDS
+#   - CARROT
+#   - POTATO
+#   - BEETROOT_SEEDS
+
+# Optional: Blacklist items from drops
+# dropBlacklist:
+#   - POISONOUS_POTATO

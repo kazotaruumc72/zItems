@@ -56,6 +56,6 @@ public class SilkSpawner implements EffectHandler.SingleEventEffectHandler<Empty
 
     @Override
     public Class<EmptySettings> settingsType() {
-        return null;
+        return EmptySettings.class;
     }
 }

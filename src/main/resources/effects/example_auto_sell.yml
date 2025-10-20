@@ -1,0 +1,5 @@
+# Auto Sell Effect Example
+# Automatically sells all drops from BlockBreakEvent and EntityDeathEvent
+id: "auto_sell_pickaxe"
+type: "AUTO_SELL"
+multiplier: 1.5  # 150% sell price (optional, default: 1.0)

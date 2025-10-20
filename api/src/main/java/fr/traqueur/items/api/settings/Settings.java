@@ -16,9 +16,5 @@ public interface Settings extends Loadable {
         INSTANCES.putInstance(clazz, instance);
     }
 
-    static boolean contains(Class<? extends Settings> clazz) {
-        return INSTANCES.containsKey(clazz);
-    }
-
 
 }

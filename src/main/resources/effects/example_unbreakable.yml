@@ -1,0 +1,5 @@
+# Unbreakable Effect Example
+# Makes the item unbreakable
+id: "unbreakable_tool"
+type: "UNBREAKABLE"
+# No additional settings required - applied when item is created

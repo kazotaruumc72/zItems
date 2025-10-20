@@ -2,10 +2,13 @@ package fr.traqueur.items;
 
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
+import fr.traqueur.items.api.effects.EffectsRegistry;
+import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.items.api.settings.PluginSettings;
 import fr.traqueur.items.api.settings.Settings;
-import fr.traqueur.items.effects.EffectsProvider;
+import fr.traqueur.items.effects.EffectsRegistryImpl;
+import fr.traqueur.items.effects.HandlersProvider;
 import fr.traqueur.items.effects.settings.readers.AttributeReader;
 import fr.traqueur.items.effects.settings.readers.EnchantmentReader;
 import fr.traqueur.items.effects.settings.readers.EquipmentSlotGroupReader;
@@ -15,15 +18,11 @@ import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.registries.CustomReaderRegistry;
 import fr.traqueur.structura.types.TypeToken;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
 
 import java.io.File;
-import java.util.Map;
 
 public class ZItems extends ItemsPlugin {
 
@@ -58,7 +57,11 @@ public class ZItems extends ItemsPlugin {
         Logger.info("Shop provider <green>{} <reset>has been found.", ShopProviders.FOUND_PROVIDER.pluginName());
 
         MessageUtil.initialize(this);
-        EffectsProvider.initialize(this);
+        HandlersProvider.initialize(this);
+        Registry.register(EffectsRegistry.class, new EffectsRegistryImpl(this));
+        EffectsRegistry effectsRegistry = Registry.get(EffectsRegistry.class);
+        effectsRegistry.loadFromFolder(this.getDataPath().resolve("effects"));
+        Logger.info("<green>Registered <gold>{} <green>effects.", Registry.get(EffectsRegistry.class).getAll().size());
 
         Logger.info("<yellow>=== ENABLE DONE <gray>(<gold>" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<gray>) <yellow>===");
     }

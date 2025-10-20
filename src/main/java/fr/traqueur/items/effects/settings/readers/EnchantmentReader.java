@@ -13,7 +13,7 @@ public class EnchantmentReader implements Reader<Enchantment> {
     @Override
     public Enchantment read(String s) throws StructuraException {
         try {
-            return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).getOrThrow(NamespacedKey.minecraft(s));
+            return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).getOrThrow(NamespacedKey.minecraft(s.toLowerCase()));
         } catch (NoSuchElementException e) {
             throw new StructuraException("Enchantment " + s + " not found");
         }

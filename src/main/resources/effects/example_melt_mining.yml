@@ -1,0 +1,5 @@
+# Melt Mining Effect Example
+# Automatically smelt ores when mining
+id: "auto_smelt_pickaxe"
+type: "MELT_MINING"
+# No additional settings required - automatically smelts compatible ores

@@ -1,6 +1,6 @@
 package fr.traqueur.items.effects.settings;
 
-import fr.traqueur.items.api.drops.DropLocation;
+import fr.traqueur.items.api.effects.drops.DropLocation;
 import fr.traqueur.items.api.effects.EffectSettings;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultBool;
@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import java.util.List;
 
 public record FarmingHoeSettings(
-        String name,
         @Options(optional = true) @DefaultInt(3) int size,
         @Options(optional = true) @DefaultBool(true) boolean autoReplant,
         @Options(optional = true) DropLocation dropLocation,

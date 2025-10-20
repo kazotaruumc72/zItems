@@ -1,0 +1,5 @@
+# Infinite Bucket Effect Example
+# Makes water and lava buckets infinite (never empty)
+id: "infinite_bucket"
+type: "INFINITE_BUCKET"
+# No additional settings required - automatically refills buckets

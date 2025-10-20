@@ -8,7 +8,7 @@ import org.bukkit.inventory.EquipmentSlotGroup;
 
 import java.util.List;
 
-public record AttributesSettings(String name, List<AttributeSetting> attributes) implements EffectSettings {
+public record AttributesSettings(List<AttributeSetting> attributes) implements EffectSettings {
 
     public record AttributeSetting(Attribute attribute, AttributeModifier.Operation operation, double amount, EquipmentSlotGroup slot) implements Loadable { }
 

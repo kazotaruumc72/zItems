@@ -49,6 +49,6 @@ public class EnchantsApplicator implements EffectHandler.NoEventEffectHandler<En
 
     @Override
     public Class<EnchantsSettings> settingsType() {
-        return null;
+        return EnchantsSettings.class;
     }
 }

@@ -1,0 +1,17 @@
+# Attributes Effect Example
+# Apply custom attributes to items
+id: "legendary_sword"
+type: "ATTRIBUTES_APPLICATOR"
+attributes:
+  - attribute: ATTACK_DAMAGE
+    operation: ADD_NUMBER        # ADD_NUMBER, ADD_SCALAR, MULTIPLY_SCALAR_1
+    amount: 10.0
+    slot: HAND                   # HAND, OFF_HAND, FEET, LEGS, CHEST, HEAD, ANY, MAINHAND, OFFHAND, ARMOR, BODY
+  - attribute: ATTACK_SPEED
+    operation: ADD_NUMBER
+    amount: 2.0
+    slot: HAND
+  - attribute: MOVEMENT_SPEED
+    operation: ADD_SCALAR
+    amount: 0.2                  # 20% speed increase
+    slot: HAND

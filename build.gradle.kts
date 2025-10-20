@@ -64,7 +64,7 @@ allprojects {
         compileOnly("net.kyori:adventure-platform-bukkit:4.3.4")
 
         /* Libraries */
-        implementation("com.github.Traqueur-dev:Structura:1.3.0")
+        implementation("com.github.Traqueur-dev:Structura:1.3.1")
         compileOnly("org.reflections:reflections:0.10.2")
 
     }

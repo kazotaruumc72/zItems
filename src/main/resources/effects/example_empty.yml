@@ -1,0 +1,5 @@
+# Empty Effect Example
+# A placeholder effect with no functionality (useful for testing)
+id: "empty_effect"
+type: "EMPTY"
+# No settings required - this effect does nothing

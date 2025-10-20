@@ -1,0 +1,40 @@
+package fr.traqueur.items.effects.settings;
+
+import fr.traqueur.items.api.drops.DropLocation;
+import fr.traqueur.items.api.effects.EffectSettings;
+import fr.traqueur.structura.annotations.Options;
+import fr.traqueur.structura.annotations.defaults.DefaultBool;
+import fr.traqueur.structura.annotations.defaults.DefaultInt;
+import org.bukkit.Material;
+
+import java.util.List;
+
+public record FarmingHoeSettings(
+        String name,
+        @Options(optional = true) @DefaultInt(3) int size,
+        @Options(optional = true) @DefaultBool(true) boolean autoReplant,
+        @Options(optional = true) DropLocation dropLocation,
+        @Options(optional = true) @DefaultBool(false) boolean dropInInventory,
+        @Options(optional = true) @DefaultBool(true) boolean harvest,
+        @Options(optional = true) @DefaultBool(true) boolean plantSeeds,
+        @Options(optional = true) List<Material> dropBlacklist,
+        @Options(optional = true) List<Material> allowedCrops,
+        @Options(optional = true) List<Material> allowedSeeds,
+        @Options(optional = true) @DefaultInt(1) int harvestDamage,
+        @Options(optional = true) @DefaultInt(1) int tillDamage
+) implements EffectSettings {
+
+    /**
+     * Gets the range from the center based on size
+     */
+    public int range() {
+        return size / 2;
+    }
+
+    /**
+     * Checks if the size is valid (must be odd)
+     */
+    public boolean isValidSize() {
+        return size % 2 != 0;
+    }
+}

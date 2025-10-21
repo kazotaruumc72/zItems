@@ -37,7 +37,7 @@ public class VeinMiner implements EffectHandler.SingleEventEffectHandler<VeinMin
         Set<Block> veinBlocks = getVeinBlocks(block, settings.blockLimit());
 
         // Filter blocks that can be broken
-        veinBlocks.removeIf(veinBlock -> !isValidTargetBlock(veinBlock, new HashSet<>(), settings));
+        veinBlocks.removeIf(veinBlock -> !isValidTargetBlock(veinBlock, new HashSet<>(), settings, player));
 
         if (veinBlocks.isEmpty()) {
             return;
@@ -117,8 +117,13 @@ public class VeinMiner implements EffectHandler.SingleEventEffectHandler<VeinMin
         return veinBlocks;
     }
 
-    private boolean isValidTargetBlock(Block targetBlock, Set<Block> alreadyProcessed, VeinMinerSettings settings) {
+    private boolean isValidTargetBlock(Block targetBlock, Set<Block> alreadyProcessed, VeinMinerSettings settings, Player player) {
         if (alreadyProcessed.contains(targetBlock)) {
+            return false;
+        }
+
+        // Check if player has permission to break block at this location
+        if (!EventUtil.canBreakBlock(player, targetBlock.getLocation())) {
             return false;
         }
 

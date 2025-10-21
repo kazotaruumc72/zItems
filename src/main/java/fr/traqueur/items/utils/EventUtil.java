@@ -1,8 +1,13 @@
 package fr.traqueur.items.utils;
 
 import fr.traqueur.items.api.Logger;
+import fr.traqueur.items.api.effects.access.LocationAccess;
+import fr.traqueur.items.api.registries.LocationAccessRegistry;
+import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.settings.PluginSettings;
 import fr.traqueur.items.api.settings.Settings;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -32,6 +37,30 @@ public class EventUtil {
             return !cancellableEvent.isCancelled();
         }
         return true;
+    }
+
+    /**
+     * Checks if a player can break a block at the given location.
+     * This method checks all registered LocationAccess hooks.
+     *
+     * @param player the player attempting to break the block
+     * @param location the location of the block
+     * @return true if the player can break the block, false otherwise
+     */
+    public static boolean canBreakBlock(Player player, Location location) {
+        LocationAccessRegistry registry = Registry.get(LocationAccessRegistry.class);
+        if (registry == null) {
+            return true; // If no registry, allow by default
+        }
+
+        // Check all registered location access hooks
+        for (LocationAccess access : registry.getAll()) {
+            if (!access.hasAccess(player, location)) {
+                return false; // If any hook denies access, return false
+            }
+        }
+
+        return true; // All hooks allow access
     }
 
 }

@@ -22,15 +22,6 @@ public enum Messages implements Loadable {
     }
 
     /**
-     * Gets the message Component with no placeholders.
-     *
-     * @return the parsed Component
-     */
-    public Component get() {
-        return MessageUtil.parseMessage(rawMessage);
-    }
-
-    /**
      * Gets the message Component with placeholders replaced.
      * <p>
      * Example usage:

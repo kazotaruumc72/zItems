@@ -81,7 +81,7 @@ public class Hammer implements EffectHandler.SingleEventEffectHandler<HammerSett
             for (int h = -height / 2; h <= height / 2; h++) {
                 for (int w = -width / 2; w <= width / 2; w++) {
                     Block targetBlock = getRelativeBlock(block, face, player.getLocation().getYaw(), d, h, w);
-                    if (targetBlock != null && isValidTargetBlock(targetBlock, blocksToBreak, settings)) {
+                    if (targetBlock != null && isValidTargetBlock(targetBlock, blocksToBreak, settings, player)) {
                         blocksToBreak.add(targetBlock);
                         nbBlocks++;
                     }
@@ -91,9 +91,14 @@ public class Hammer implements EffectHandler.SingleEventEffectHandler<HammerSett
         return nbBlocks;
     }
 
-    private boolean isValidTargetBlock(Block targetBlock, Set<Block> alreadyProcessed, HammerSettings settings) {
+    private boolean isValidTargetBlock(Block targetBlock, Set<Block> alreadyProcessed, HammerSettings settings, Player player) {
         // Don't process the same block twice
         if (alreadyProcessed.contains(targetBlock)) {
+            return false;
+        }
+
+        // Check if player has permission to break block at this location
+        if (!EventUtil.canBreakBlock(player, targetBlock.getLocation())) {
             return false;
         }
 

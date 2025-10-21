@@ -4,6 +4,7 @@ import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.effects.EffectMeta;
+import fr.traqueur.items.utils.EventUtil;
 import fr.traqueur.items.utils.ItemUtil;
 import fr.traqueur.items.effects.settings.FarmingHoeSettings;
 import org.bukkit.Location;
@@ -116,6 +117,11 @@ public class FarmingHoe implements EffectHandler.MultiEventEffectHandler<Farming
             return false;
         }
 
+        // Check if player has permission to break block at this location
+        if (!EventUtil.canBreakBlock(player, block.getLocation())) {
+            return false;
+        }
+
         // Vérifier si autorisé
         if (settings.allowedCrops() != null && !settings.allowedCrops().isEmpty()) {
             if (!settings.allowedCrops().contains(block.getType())) {
@@ -201,7 +207,8 @@ public class FarmingHoe implements EffectHandler.MultiEventEffectHandler<Farming
                         block.getZ() + z
                 );
 
-                if (canBecomeFarmland(targetBlock)) {
+                // Check if player has permission to modify block at this location
+                if (canBecomeFarmland(targetBlock) && EventUtil.canBreakBlock(player, targetBlock.getLocation())) {
                     targetBlock.setType(Material.FARMLAND);
                     damaged = true;
                 }

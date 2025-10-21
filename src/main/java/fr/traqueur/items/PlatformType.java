@@ -1,4 +1,4 @@
-package fr.traqueur.items.api;
+package fr.traqueur.items;
 
 /**
  * Enum representing the server platform type.

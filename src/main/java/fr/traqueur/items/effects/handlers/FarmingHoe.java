@@ -4,7 +4,7 @@ import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.effects.EffectMeta;
-import fr.traqueur.items.api.utils.ItemUtil;
+import fr.traqueur.items.utils.ItemUtil;
 import fr.traqueur.items.effects.settings.FarmingHoeSettings;
 import org.bukkit.Location;
 import org.bukkit.Material;

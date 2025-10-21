@@ -1,6 +1,6 @@
 package fr.traqueur.items;
 
-import fr.traqueur.items.api.utils.MessageUtil;
+import fr.traqueur.items.utils.MessageUtil;
 import fr.traqueur.structura.api.Loadable;
 import org.bukkit.command.CommandSender;
 

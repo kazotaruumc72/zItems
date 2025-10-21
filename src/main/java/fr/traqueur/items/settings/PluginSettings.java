@@ -1,5 +1,6 @@
-package fr.traqueur.items.api.settings;
+package fr.traqueur.items.settings;
 
+import fr.traqueur.items.api.settings.Settings;
 import fr.traqueur.structura.annotations.Options;
 
 import java.util.List;

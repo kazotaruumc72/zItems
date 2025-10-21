@@ -1,7 +1,7 @@
-package fr.traqueur.items.api.utils;
+package fr.traqueur.items.utils;
 
+import fr.traqueur.items.PlatformType;
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.PlatformType;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;

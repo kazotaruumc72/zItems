@@ -6,7 +6,7 @@ import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.effects.EffectMeta;
 import fr.traqueur.items.api.effects.interactions.InteractionAction;
 import fr.traqueur.items.api.shop.ShopProvider;
-import fr.traqueur.items.api.utils.ItemUtil;
+import fr.traqueur.items.utils.ItemUtil;
 import fr.traqueur.items.effects.settings.SellStickSettings;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

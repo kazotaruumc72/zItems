@@ -1,9 +1,8 @@
-package fr.traqueur.items.api.utils;
+package fr.traqueur.items.utils;
 
-import fr.traqueur.items.api.PlatformType;
+import fr.traqueur.items.PlatformType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerItemDamageEvent;

@@ -1,7 +1,7 @@
-package fr.traqueur.items.api.utils;
+package fr.traqueur.items.utils;
 
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.settings.PluginSettings;
+import fr.traqueur.items.settings.PluginSettings;
 import fr.traqueur.items.api.settings.Settings;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

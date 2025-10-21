@@ -7,6 +7,7 @@ target/
 target-api/
 destinations.yml
 .idea/
+.claude/
 MIGRATION.md
 
 ### IntelliJ IDEA ###

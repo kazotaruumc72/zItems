@@ -1,24 +1,18 @@
 package fr.traqueur.items.registries;
 
+import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
+import fr.traqueur.items.api.effects.ExtractorMeta;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import fr.traqueur.items.api.registries.ExtractorsRegistry;
-import fr.traqueur.items.effects.extractors.*;
 import org.bukkit.event.Event;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDropItemEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityDropItemEvent;
-import org.bukkit.event.entity.EntityEvent;
-import org.bukkit.event.player.PlayerEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
+import org.reflections.util.ConfigurationBuilder;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * Registry for ItemSourceExtractors with hierarchical resolution.
@@ -41,32 +35,123 @@ import java.util.Map;
  */
 public class ZExtractorsRegistry implements ExtractorsRegistry {
 
+    private final ItemsPlugin plugin;
     private final Map<Class<? extends Event>, ItemSourceExtractor<?>> extractors;
     private final Map<Class<? extends Event>, ItemSourceExtractor<?>> cache;
+    private final Set<String> scannedPackages;
 
-    public ZExtractorsRegistry() {
+    public ZExtractorsRegistry(ItemsPlugin plugin) {
+        this.plugin = plugin;
         this.extractors = new HashMap<>();
         this.cache = new HashMap<>();
+        this.scannedPackages = new HashSet<>();
+    }
+
+    @Override
+    public void scanPackage(JavaPlugin plugin, String packageName) {
+        if (packageName == null || packageName.trim().isEmpty()) {
+            Logger.warning("Cannot scan null or empty package name.");
+            return;
+        }
+
+        if (scannedPackages.contains(packageName)) {
+            Logger.debug("Package {} already scanned, skipping.", packageName);
+            return;
+        }
+
+        Logger.info("Scanning package <aqua>{}<reset> for ItemSourceExtractors...", packageName);
+
+        try {
+            Reflections reflections = new Reflections(new ConfigurationBuilder()
+                    .forPackage(packageName, plugin.getClass().getClassLoader())
+                    .addClassLoaders(plugin.getClass().getClassLoader())
+                    .setScanners(Scanners.TypesAnnotated, Scanners.SubTypes));
+
+            Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(ExtractorMeta.class);
+
+            int count = 0;
+            for (Class<?> clazz : annotatedClasses) {
+                if (!ItemSourceExtractor.class.isAssignableFrom(clazz)) {
+                    Logger.warning("Class <yellow>{}<reset> is annotated with @ExtractorMeta but does not implement ItemSourceExtractor. Skipping.",
+                            clazz.getSimpleName());
+                    continue;
+                }
+                //noinspection unchecked
+                if (registerExtractor((Class<? extends ItemSourceExtractor<?>>) clazz)) {
+                    count++;
+                }
+            }
+
+            scannedPackages.add(packageName);
+            Logger.info("Registered <gold>{}<reset> ItemSourceExtractor(s) from package {}.", count, packageName);
+
+        } catch (Exception e) {
+            Logger.severe("Failed to scan package {}: {}", e, packageName);
+        }
+    }
+
+    @Override
+    public Set<String> getScannedPackages() {
+        return Collections.unmodifiableSet(scannedPackages);
     }
 
     /**
-     * Registers all default extractors.
-     * Generic extractors are registered first, then specific ones override them.
+     * Registers a single extractor class.
+     * Tries to instantiate using a constructor with ItemsPlugin parameter first,
+     * then falls back to a no-args constructor if not available.
+     * @return true if successfully registered, false otherwise
      */
-    @Override
-    public void registerDefaults() {
-        // Generic extractors (parent classes)
-        register(PlayerEvent.class, new PlayerEventExtractor());
+    private boolean registerExtractor(Class<? extends ItemSourceExtractor<?>> clazz) {
+        if (Modifier.isAbstract(clazz.getModifiers()) || Modifier.isInterface(clazz.getModifiers())) {
+            Logger.debug("Class {} is abstract or an interface. Skipping.", clazz.getSimpleName());
+            return false;
+        }
 
-        // Specific extractors (override generic behavior)
-        register(BlockBreakEvent.class, new BlockBreakExtractor());
-        register(BlockDropItemEvent.class, new BlockDropItemExtractor());
-        register(PlayerInteractEvent.class, new PlayerInteractExtractor());
-        register(EntityDeathEvent.class, new EntityDeathExtractor());
-        register(EntityDamageByEntityEvent.class, new EntityDamageByEntityExtractor());
-        register(EntityDropItemEvent.class, new EntityDropItemExtractor());
+        try {
+            ExtractorMeta meta = clazz.getAnnotation(ExtractorMeta.class);
+            Class<? extends Event> eventType = meta.value();
 
-        Logger.info("Registered <gold>{}<reset> ItemSourceExtractors with hierarchy support", extractors.size());
+            if (this.extractors.containsKey(eventType)) {
+                Logger.warning("Event type <yellow>{}<reset> already has a registered extractor. Skipping class {}.",
+                        eventType.getSimpleName(), clazz.getSimpleName());
+                return false;
+            }
+
+            ItemSourceExtractor<?> extractor = instantiateExtractor(clazz);
+
+            this.extractors.put(eventType, extractor);
+            Logger.debug("Registered ItemSourceExtractor: <aqua>{}<reset> -> {}", eventType.getSimpleName(), clazz.getSimpleName());
+
+            return true;
+
+        } catch (Exception e) {
+            Logger.severe("Failed to instantiate ItemSourceExtractor: {}", e, clazz.getName());
+            return false;
+        }
+    }
+
+    /**
+     * Instantiates an extractor using the appropriate constructor.
+     * Tries constructor with ItemsPlugin parameter first, then no-args constructor.
+     *
+     * @param clazz the extractor class to instantiate
+     * @return the instantiated extractor
+     * @throws Exception if instantiation fails
+     */
+    private ItemSourceExtractor<?> instantiateExtractor(Class<? extends ItemSourceExtractor<?>> clazz) throws Exception {
+        // Try constructor with ItemsPlugin parameter first
+        try {
+            return clazz.getDeclaredConstructor(ItemsPlugin.class).newInstance(this.plugin);
+        } catch (NoSuchMethodException e) {
+            try {
+                return clazz.getDeclaredConstructor().newInstance();
+            } catch (NoSuchMethodException ex) {
+                throw new NoSuchMethodException(
+                    "ItemSourceExtractor " + clazz.getSimpleName() +
+                    " must have either a no-args constructor or a constructor with ItemsPlugin parameter."
+                );
+            }
+        }
     }
 
     /**

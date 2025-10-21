@@ -1,5 +1,6 @@
 package fr.traqueur.items.effects.extractors;
 
+import fr.traqueur.items.api.effects.ExtractorMeta;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -7,12 +8,13 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Extractor for BlockBreakEvent.
+ * Extractor for BlockDropItemEvent.
  * <p>
  * Extracts the item in the player's main hand when they break a block.
  * This is typically used for tools like pickaxes with effects like
  * Vein Mining, Hammer, or Auto Sell.
  */
+@ExtractorMeta(BlockDropItemEvent.class)
 public class BlockDropItemExtractor implements ItemSourceExtractor<BlockDropItemEvent> {
 
     @Override

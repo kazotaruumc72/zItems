@@ -2,6 +2,8 @@ package fr.traqueur.items.effects;
 
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.*;
+import fr.traqueur.items.api.registries.HandlersRegistry;
+import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.serialization.Keys;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -10,16 +12,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class ZEffectsDispatcher implements EffectsDispatcher {
-
-    private final HandlersProvider handlersProvider;
-
-    /**
-     * Creates a new dispatcher with the given effects provider.
-     *
-     */
-    public ZEffectsDispatcher() {
-        this.handlersProvider = HandlersProvider.getInstance();
-    }
 
     @Override
     public EffectContext applyNoEventEffects(Player player, ItemStack itemSource) {
@@ -35,7 +27,7 @@ public class ZEffectsDispatcher implements EffectsDispatcher {
                 new HashSet<>(), // affectedBlocks
                 new ArrayList<>() // drops
         );
-        EffectHandler<?> handler = handlersProvider.getHandler(effect.type());
+        EffectHandler<?> handler = Registry.get(HandlersRegistry.class).getById(effect.type());
         if (handler != null) {
             // Only execute if this is a NoEventHandler (canApply returns true for null event)
             if (!handler.canApply(null)) {
@@ -116,7 +108,7 @@ public class ZEffectsDispatcher implements EffectsDispatcher {
 
         for (Effect effect : effects) {
             // Get the handler for this effect
-            EffectHandler<?> handler = handlersProvider.getHandler(effect.type());
+            EffectHandler<?> handler = Registry.get(HandlersRegistry.class).getById(effect.type());
 
             if (handler == null) {
                 Logger.warning("No handler found for effect ID: <yellow>{}<reset> of type {}", effect.id(), effect.type());

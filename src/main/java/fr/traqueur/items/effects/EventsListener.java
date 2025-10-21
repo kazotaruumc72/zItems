@@ -6,6 +6,7 @@ import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.effects.EffectsDispatcher;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import fr.traqueur.items.api.registries.ExtractorsRegistry;
+import fr.traqueur.items.api.registries.HandlersRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -60,13 +61,13 @@ public class EventsListener implements Listener {
      * for each unique event type.
      * <p>
      * This method should be called after all handlers have been registered
-     * in the {@link HandlersProvider}.
+     * in the {@link HandlersRegistry}.
      *
      * @param plugin the plugin instance to register listeners with
      */
     public void registerDynamicListeners(JavaPlugin plugin) {
-        HandlersProvider handlersProvider = HandlersProvider.getInstance();
-        Set<Class<? extends Event>> eventTypes = collectEventTypes(handlersProvider);
+        HandlersRegistry handlersRegistry = Registry.get(HandlersRegistry.class);
+        Set<Class<? extends Event>> eventTypes = collectEventTypes(handlersRegistry);
 
         Logger.info("Registering dynamic listeners for <gold>{}<reset> event type(s)...", eventTypes.size());
 
@@ -89,13 +90,13 @@ public class EventsListener implements Listener {
      *   <li>{@link EffectHandler.MultiEventEffectHandler#eventTypes()}</li>
      * </ul>
      *
-     * @param handlersProvider the provider containing all registered handlers
+     * @param handlersRegistry the registry containing all registered handlers
      * @return a set of all unique event types
      */
-    private Set<Class<? extends Event>> collectEventTypes(HandlersProvider handlersProvider) {
+    private Set<Class<? extends Event>> collectEventTypes(HandlersRegistry handlersRegistry) {
         Set<Class<? extends Event>> eventTypes = new HashSet<>();
 
-        for (EffectHandler<?> handler : handlersProvider.getHandlers().values()) {
+        for (EffectHandler<?> handler : handlersRegistry.getAll()) {
             switch (handler) {
                 case EffectHandler.SingleEventEffectHandler<?, ?> single ->
                     eventTypes.add(single.eventType());

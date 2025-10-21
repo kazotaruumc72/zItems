@@ -1,5 +1,6 @@
 package fr.traqueur.items.effects.extractors;
 
+import fr.traqueur.items.api.effects.ExtractorMeta;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -14,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
  * This is used for effects that trigger on mob kills, such as
  * Auto Sell for mob drops or XP Boost effects.
  */
+@ExtractorMeta(EntityDeathEvent.class)
 public class EntityDeathExtractor implements ItemSourceExtractor<EntityDeathEvent> {
 
     @Override

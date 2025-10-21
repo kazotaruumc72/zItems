@@ -1,10 +1,11 @@
-package fr.traqueur.items.effects;
+package fr.traqueur.items.registries;
 
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.effects.EffectMeta;
 import fr.traqueur.items.api.effects.EffectSettings;
+import fr.traqueur.items.api.registries.HandlersRegistry;
 import fr.traqueur.structura.registries.PolymorphicRegistry;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
@@ -14,51 +15,35 @@ import org.reflections.util.ConfigurationBuilder;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
-public class HandlersProvider {
-
-    private static volatile HandlersProvider instance;
-
-    public static void initialize(ItemsPlugin plugin) {
-        if (instance == null) {
-            synchronized (HandlersProvider.class) {
-                if (instance == null) {
-                    instance = new HandlersProvider(plugin);
-                }
-            }
-        }
-    }
-
-    public static HandlersProvider getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException("EffectsProvider is not initialized. Call initialize() first.");
-        }
-        return instance;
-    }
+/**
+ * Implementation of HandlersRegistry that discovers and registers EffectHandlers.
+ * <p>
+ * This registry:
+ * <ul>
+ *   <li>Scans packages for @EffectMeta annotated classes</li>
+ *   <li>Instantiates handlers via reflection (supports constructors with/without JavaPlugin)</li>
+ *   <li>Registers handlers by their effect ID</li>
+ *   <li>Manages polymorphic EffectSettings registration via Structura</li>
+ * </ul>
+ */
+public class ZHandlersRegistry implements HandlersRegistry {
 
     private final ItemsPlugin plugin;
     private final Map<String, EffectHandler<?>> handlers;
     private final Set<String> scannedPackages;
 
-    private HandlersProvider(ItemsPlugin plugin) {
+    public ZHandlersRegistry(ItemsPlugin plugin) {
         this.plugin = plugin;
         this.handlers = new HashMap<>();
         this.scannedPackages = new HashSet<>();
 
-        // Créer le registry pour EffectSettings
+        // Create the polymorphic registry for EffectSettings
         PolymorphicRegistry.create(EffectSettings.class, registry -> {
-            // Registry vide au départ, sera rempli après scan
+            // Empty at initialization, will be filled after scanning
         });
-
-        // Scanner votre package par défaut
-        this.scanPackage(plugin, "fr.traqueur.items");
     }
 
-    /**
-     * Allows external plugins/libraries to register their own package for scanning.
-     * Can be called after initialization to add more packages.
-     *
-     * @param packageName the package to scan for EffectHandlers
-     */
+    @Override
     public void scanPackage(JavaPlugin plugin, String packageName) {
         if (packageName == null || packageName.trim().isEmpty()) {
             Logger.warning("Cannot scan null or empty package name.");
@@ -101,14 +86,13 @@ public class HandlersProvider {
         }
     }
 
-    /**
-     * Manually register an effect handler instance.
-     * Useful for dynamic registration without package scanning.
-     *
-     * @param effectId the effect identifier
-     * @param handler the effect handler instance
-     */
-    public void registerHandler(String effectId, EffectHandler<?> handler) {
+    @Override
+    public Set<String> getScannedPackages() {
+        return Collections.unmodifiableSet(scannedPackages);
+    }
+
+    @Override
+    public void register(String effectId, EffectHandler<?> handler) {
         if (effectId == null || effectId.trim().isEmpty()) {
             Logger.severe("Cannot register handler with null or empty effect ID.");
             return;
@@ -125,11 +109,21 @@ public class HandlersProvider {
         }
 
         this.handlers.put(effectId, handler);
-        Logger.info("Manually registered effect handler: <aqua>{}<reset> -> {}",
+        Logger.debug("Registered effect handler: <aqua>{}<reset> -> {}",
                 effectId, handler.getClass().getSimpleName());
 
-        // Enregistrer le EffectSettings dans le registry polymorphique
+        // Register the EffectSettings in the polymorphic registry
         registerHandlerSettings(effectId, handler);
+    }
+
+    @Override
+    public EffectHandler<?> getById(String effectId) {
+        return this.handlers.get(effectId);
+    }
+
+    @Override
+    public Collection<EffectHandler<?>> getAll() {
+        return this.handlers.values();
     }
 
     /**
@@ -159,7 +153,7 @@ public class HandlersProvider {
             this.handlers.put(effectId, handler);
             Logger.debug("Registered effect handler: <aqua>{}<reset> -> {}", effectId, clazz.getSimpleName());
 
-            // Enregistrer le EffectSettings dans le registry polymorphique
+            // Register the EffectSettings in the polymorphic registry
             registerHandlerSettings(effectId, handler);
 
             return true;
@@ -213,33 +207,5 @@ public class HandlersProvider {
                 Logger.severe("Failed to register EffectSettings class: {}", e, settingsClass.getName());
             }
         }
-    }
-
-    /**
-     * Gets a registered effect handler by its identifier.
-     *
-     * @param effectId the effect identifier
-     * @return the effect handler, or null if not found
-     */
-    public EffectHandler<?> getHandler(String effectId) {
-        return this.handlers.get(effectId);
-    }
-
-    /**
-     * Gets all registered effect handlers.
-     *
-     * @return an unmodifiable view of all registered handlers
-     */
-    public Map<String, EffectHandler<?>> getHandlers() {
-        return Collections.unmodifiableMap(this.handlers);
-    }
-
-    /**
-     * Gets all scanned packages.
-     *
-     * @return an unmodifiable view of all scanned packages
-     */
-    public Set<String> getScannedPackages() {
-        return Collections.unmodifiableSet(this.scannedPackages);
     }
 }

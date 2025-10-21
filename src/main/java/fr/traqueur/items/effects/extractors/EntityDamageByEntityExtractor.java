@@ -1,5 +1,6 @@
 package fr.traqueur.items.effects.extractors;
 
+import fr.traqueur.items.api.effects.ExtractorMeta;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -14,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
  * This is useful for combat effects like lifesteal, damage boosts,
  * or special on-hit effects.
  */
+@ExtractorMeta(EntityDamageByEntityEvent.class)
 public class EntityDamageByEntityExtractor implements ItemSourceExtractor<EntityDamageByEntityEvent> {
 
     @Override

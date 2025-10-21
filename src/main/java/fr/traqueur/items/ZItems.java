@@ -8,6 +8,7 @@ import fr.traqueur.items.api.effects.EffectsDispatcher;
 import fr.traqueur.items.api.managers.EffectsManager;
 import fr.traqueur.items.api.registries.EffectsRegistry;
 import fr.traqueur.items.api.registries.ExtractorsRegistry;
+import fr.traqueur.items.api.registries.HandlersRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.commands.arguments.EffectArgument;
 import fr.traqueur.items.effects.ZEffectsManager;
@@ -22,8 +23,8 @@ import fr.traqueur.items.commands.ZItemsCommand;
 import fr.traqueur.items.effects.ZEffectsDispatcher;
 import fr.traqueur.items.registries.ZEffectsRegistry;
 import fr.traqueur.items.effects.EventsListener;
-import fr.traqueur.items.effects.HandlersProvider;
 import fr.traqueur.items.registries.ZExtractorsRegistry;
+import fr.traqueur.items.registries.ZHandlersRegistry;
 import fr.traqueur.items.shop.ShopProviders;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
@@ -59,7 +60,6 @@ public class ZItems extends ItemsPlugin {
         Logger.info("<gray>Plugin Version V<red>{}", this.getDescription().getVersion());
 
         MessageUtil.initialize(this);
-        HandlersProvider.initialize(this);
 
         ZEffectDataType.initialize();
         Keys.initialize(this);
@@ -77,13 +77,17 @@ public class ZItems extends ItemsPlugin {
         }
         Logger.info("Shop provider <green>{} <reset>has been found.", ShopProviders.FOUND_PROVIDER.pluginName());
 
+        // Register and scan effect handlers
+        Registry.register(HandlersRegistry.class, new ZHandlersRegistry(this));
+        Registry.get(HandlersRegistry.class).scanPackage(this, "fr.traqueur.items");
+
         // Register and load effects from files
         Registry.register(EffectsRegistry.class, new ZEffectsRegistry(this));
         Registry.get(EffectsRegistry.class).loadFromFolder(this.getDataPath().resolve("effects"));
 
-        // Register and load extractors
-        Registry.register(ExtractorsRegistry.class, new ZExtractorsRegistry());
-        Registry.get(ExtractorsRegistry.class).registerDefaults();
+        // Register and scan extractors
+        Registry.register(ExtractorsRegistry.class, new ZExtractorsRegistry(this));
+        Registry.get(ExtractorsRegistry.class).scanPackage(this, "fr.traqueur.items");
 
         Logger.info("Setting up event dispatching system...");
         this.dispatcher = new ZEffectsDispatcher();

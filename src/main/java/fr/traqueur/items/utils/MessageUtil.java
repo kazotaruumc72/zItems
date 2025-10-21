@@ -6,6 +6,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -155,6 +156,30 @@ public class MessageUtil {
     public static Component parseMessage(String message) {
         String converted = convertLegacyToMiniMessage(message);
         return miniMessage.deserialize(converted);
+    }
+
+    /**
+     * Parses a message with MiniMessage tags, legacy color codes, and custom placeholders.
+     * Converts legacy codes to MiniMessage format first, then parses with placeholder resolution.
+     * <p>
+     * Example usage:
+     * <pre>{@code
+     * import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+     *
+     * Component message = MessageUtil.parseMessage(
+     *     "<green>Player <player> earned <amount> coins!",
+     *     Placeholder.parsed("player", playerName),
+     *     Placeholder.parsed("amount", String.valueOf(coins))
+     * );
+     * }</pre>
+     *
+     * @param message The message to parse
+     * @param placeholders The TagResolvers for placeholder replacement
+     * @return The parsed Component with placeholders replaced
+     */
+    public static Component parseMessage(String message, TagResolver... placeholders) {
+        String converted = convertLegacyToMiniMessage(message);
+        return miniMessage.deserialize(converted, placeholders);
     }
 
     /**

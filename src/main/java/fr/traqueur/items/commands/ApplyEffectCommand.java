@@ -6,6 +6,7 @@ import fr.traqueur.items.Messages;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.managers.EffectsManager;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -33,6 +34,9 @@ public class ApplyEffectCommand extends Command<@NotNull ItemsPlugin> {
         ItemStack item = player.getInventory().getItemInMainHand();
         EffectsManager manager = this.getPlugin().getManager(EffectsManager.class);
         manager.applyEffect(player, item, effect);
-        Messages.EFFECT_APPLIED.send(player);
+        Messages.EFFECT_APPLIED.send(
+            player,
+            Placeholder.parsed("effect", effect.id())
+        );
     }
 }

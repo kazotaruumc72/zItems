@@ -1,6 +1,19 @@
 # ========================================
 #  zItems - Messages Configuration
 # ========================================
+#
+# This file uses MiniMessage format for text formatting.
+# Documentation: https://docs.advntr.dev/minimessage/format.html
+#
+# Placeholders are defined using tags: <placeholder_name>
+# Colors: <red>, <green>, <yellow>, <gold>, <aqua>, etc.
+# Formatting: <bold>, <italic>, <underline>, <strikethrough>
+# Hex colors: <#FF5555>
+#
+# Examples:
+#   effect-applied: "<green>Effect <yellow><effect></yellow> applied!"
+#   coins-earned: "<gold>You earned <amount> coins!"
+# ========================================
 
 # ========================================
 # Command Messages
@@ -10,4 +23,4 @@ only-in-game: "<red>This command can only be executed in-game."
 requirement-not-met: "<red>You do not meet the requirements to perform this command."
 arg-not-recognized: "<red>Argument not recognized."
 
-effect-applied: "<green>Effect %effect% has been applied to your item."
+effect-applied: "<green>Effect <yellow><effect></yellow> has been applied to your item."

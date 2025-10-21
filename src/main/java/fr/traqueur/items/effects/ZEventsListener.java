@@ -43,7 +43,7 @@ import java.util.Set;
  *   <li>Extensible via custom extractors</li>
  * </ul>
  */
-public class EventsListener implements Listener {
+public class ZEventsListener implements Listener {
 
     private final EffectsDispatcher dispatcher;
 
@@ -52,7 +52,7 @@ public class EventsListener implements Listener {
      *
      * @param dispatcher the dispatcher to send events to
      */
-    public EventsListener(EffectsDispatcher dispatcher) {
+    public ZEventsListener(EffectsDispatcher dispatcher) {
         this.dispatcher = dispatcher;
     }
 

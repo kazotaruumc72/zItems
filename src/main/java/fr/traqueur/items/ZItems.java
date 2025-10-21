@@ -6,12 +6,12 @@ import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.effects.EffectsDispatcher;
 import fr.traqueur.items.api.managers.EffectsManager;
-import fr.traqueur.items.api.registries.EffectsRegistry;
-import fr.traqueur.items.api.registries.ExtractorsRegistry;
-import fr.traqueur.items.api.registries.HandlersRegistry;
-import fr.traqueur.items.api.registries.Registry;
+import fr.traqueur.items.api.registries.*;
 import fr.traqueur.items.commands.arguments.EffectArgument;
 import fr.traqueur.items.effects.ZEffectsManager;
+import fr.traqueur.items.hooks.SuperiorSkyBlockHook;
+import fr.traqueur.items.hooks.WorldGuardHook;
+import fr.traqueur.items.registries.*;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.serialization.ZEffectDataType;
 import fr.traqueur.items.settings.readers.*;
@@ -21,10 +21,7 @@ import fr.traqueur.items.api.settings.Settings;
 import fr.traqueur.items.commands.CommandsMessageHandler;
 import fr.traqueur.items.commands.ZItemsCommand;
 import fr.traqueur.items.effects.ZEffectsDispatcher;
-import fr.traqueur.items.registries.ZEffectsRegistry;
-import fr.traqueur.items.effects.EventsListener;
-import fr.traqueur.items.registries.ZExtractorsRegistry;
-import fr.traqueur.items.registries.ZHandlersRegistry;
+import fr.traqueur.items.effects.ZEventsListener;
 import fr.traqueur.items.shop.ShopProviders;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
@@ -77,6 +74,12 @@ public class ZItems extends ItemsPlugin {
         }
         Logger.info("Shop provider <green>{} <reset>has been found.", ShopProviders.FOUND_PROVIDER.pluginName());
 
+        Registry.register(LocationAccessRegistry.class, new ZLocationAccessRegistry());
+        Registry.register(HooksRegistry.class, new ZHooksRegistry());
+        HooksRegistry hooksRegistry = Registry.get(HooksRegistry.class);
+        hooksRegistry.register("WorldGuard", new WorldGuardHook());
+        hooksRegistry.register("SuperiorSkyBlock2", new SuperiorSkyBlockHook());
+
         // Register and scan effect handlers
         Registry.register(HandlersRegistry.class, new ZHandlersRegistry(this));
         Registry.get(HandlersRegistry.class).scanPackage(this, "fr.traqueur.items");
@@ -89,9 +92,11 @@ public class ZItems extends ItemsPlugin {
         Registry.register(ExtractorsRegistry.class, new ZExtractorsRegistry(this));
         Registry.get(ExtractorsRegistry.class).scanPackage(this, "fr.traqueur.items");
 
+        Registry.get(HooksRegistry.class).enableAll();
+
         Logger.info("Setting up event dispatching system...");
         this.dispatcher = new ZEffectsDispatcher();
-        EventsListener eventsListener = new EventsListener(this.dispatcher);
+        ZEventsListener eventsListener = new ZEventsListener(this.dispatcher);
         eventsListener.registerDynamicListeners(this);
         Logger.info("<green>Event dispatching system initialized successfully!");
 

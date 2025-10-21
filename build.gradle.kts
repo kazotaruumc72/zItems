@@ -39,6 +39,9 @@ allprojects {
         archiveBaseName.set("zItems")
         archiveAppendix.set(if (project.path == ":") "" else project.name)
         archiveClassifier.set("")
+
+        relocate("fr.traqueur.structura", "fr.traqueur.items.libs.structura")
+        relocate("fr.traqueur.commands", "fr.traqueur.items.libs.commands")
     }
 
     tasks.compileJava {
@@ -65,6 +68,7 @@ allprojects {
 
         /* Libraries */
         implementation("com.github.Traqueur-dev:Structura:1.3.1")
+        implementation("com.github.Traqueur-dev.CommandsAPI:platform-spigot:4.2.3")
         compileOnly("org.reflections:reflections:0.10.2")
 
     }

@@ -1,5 +1,6 @@
 package fr.traqueur.items;
 
+import fr.traqueur.commands.spigot.CommandManager;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.EffectsDispatcher;
@@ -9,6 +10,8 @@ import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.items.api.settings.PluginSettings;
 import fr.traqueur.items.api.settings.Settings;
+import fr.traqueur.items.commands.CommandsMessageHandler;
+import fr.traqueur.items.commands.ZItemsCommand;
 import fr.traqueur.items.effects.ZEffectsDispatcher;
 import fr.traqueur.items.registries.ZEffectsRegistry;
 import fr.traqueur.items.effects.EventsListener;
@@ -26,6 +29,7 @@ import fr.traqueur.structura.types.TypeToken;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
@@ -86,6 +90,23 @@ public class ZItems extends ItemsPlugin {
         EventsListener eventsListener = new EventsListener(this.dispatcher);
         eventsListener.registerDynamicListeners(this);
         Logger.info("<green>Event dispatching system initialized successfully!");
+
+        CommandManager<@NotNull ItemsPlugin> commandManager = new CommandManager<>(this);
+        commandManager.setLogger(new fr.traqueur.commands.api.logging.Logger() {
+            @Override
+            public void error(String s) {
+                Logger.severe(s);
+            }
+
+            @Override
+            public void info(String s) {
+                Logger.info(s);
+            }
+        });
+        commandManager.setDebug(settings.debug());
+        commandManager.setMessageHandler(new CommandsMessageHandler());
+        commandManager.registerCommand(new ZItemsCommand(this));
+
 
         Logger.info("<yellow>=== ENABLE DONE <gray>(<gold>" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<gray>) <yellow>===");
     }

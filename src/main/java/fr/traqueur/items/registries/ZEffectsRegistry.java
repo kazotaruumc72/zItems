@@ -4,6 +4,7 @@ import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.registries.EffectsRegistry;
+import fr.traqueur.items.effects.ZEffect;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 
@@ -107,7 +108,7 @@ public class ZEffectsRegistry implements EffectsRegistry {
 
     private void loadEffect(Path file) {
         try {
-            Effect effect = Structura.load(file, Effect.class);
+            Effect effect = Structura.load(file, ZEffect.class);
             this.register(effect.id(), effect);
             Logger.debug("Loaded effect: " + effect.id() + " from file: " + file.getFileName());
         } catch (StructuraException e) {

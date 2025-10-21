@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
  * <p>
  * The dispatcher is responsible for:
  * <ol>
- *   <li>Retrieving effects from an ItemStack via the {@link EffectsProvider}</li>
+ *   <li>Retrieving effects from an ItemStack via the EffectsProvider</li>
  *   <li>Creating a shared {@link EffectContext} for all effects</li>
  *   <li>Finding applicable handlers for each effect</li>
  *   <li>Sorting handlers by priority</li>
@@ -57,6 +57,8 @@ public interface EffectsDispatcher {
      * @return the EffectContext after all handlers have executed, or null if no effects were found
      */
     EffectContext applyNoEventEffects(Player player, ItemStack itemSource);
+
+    void applyNoEventEffect(Player player, ItemStack itemSource, Effect effect);
 
     /**
      * Dispatches an event to all applicable effect handlers.

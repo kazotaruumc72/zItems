@@ -1,4 +1,4 @@
-package fr.traqueur.items.effects.settings.readers;
+package fr.traqueur.items.settings.readers;
 
 import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.readers.Reader;

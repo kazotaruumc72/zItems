@@ -3,10 +3,17 @@ package fr.traqueur.items;
 import fr.traqueur.commands.spigot.CommandManager;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
+import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.effects.EffectsDispatcher;
+import fr.traqueur.items.api.managers.EffectsManager;
 import fr.traqueur.items.api.registries.EffectsRegistry;
 import fr.traqueur.items.api.registries.ExtractorsRegistry;
 import fr.traqueur.items.api.registries.Registry;
+import fr.traqueur.items.commands.arguments.EffectArgument;
+import fr.traqueur.items.effects.ZEffectsManager;
+import fr.traqueur.items.serialization.Keys;
+import fr.traqueur.items.serialization.ZEffectDataType;
+import fr.traqueur.items.settings.readers.*;
 import fr.traqueur.items.utils.MessageUtil;
 import fr.traqueur.items.settings.PluginSettings;
 import fr.traqueur.items.api.settings.Settings;
@@ -17,22 +24,18 @@ import fr.traqueur.items.registries.ZEffectsRegistry;
 import fr.traqueur.items.effects.EventsListener;
 import fr.traqueur.items.effects.HandlersProvider;
 import fr.traqueur.items.registries.ZExtractorsRegistry;
-import fr.traqueur.items.effects.settings.readers.AttributeReader;
-import fr.traqueur.items.effects.settings.readers.EnchantmentReader;
-import fr.traqueur.items.effects.settings.readers.EquipmentSlotGroupReader;
-import fr.traqueur.items.effects.settings.readers.TagReader;
 import fr.traqueur.items.shop.ShopProviders;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.registries.CustomReaderRegistry;
 import fr.traqueur.structura.types.TypeToken;
+import net.kyori.adventure.text.Component;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.List;
 
 public class ZItems extends ItemsPlugin {
 
@@ -55,6 +58,12 @@ public class ZItems extends ItemsPlugin {
         Logger.info("<yellow>=== ENABLE START ===");
         Logger.info("<gray>Plugin Version V<red>{}", this.getDescription().getVersion());
 
+        MessageUtil.initialize(this);
+        HandlersProvider.initialize(this);
+
+        ZEffectDataType.initialize();
+        Keys.initialize(this);
+
         this.reloadConfig();
 
         if (!ShopProviders.initialize()) {
@@ -68,11 +77,6 @@ public class ZItems extends ItemsPlugin {
         }
         Logger.info("Shop provider <green>{} <reset>has been found.", ShopProviders.FOUND_PROVIDER.pluginName());
 
-        MessageUtil.initialize(this);
-
-        // Initialize handlers provider (scans all @EffectMeta handlers)
-        HandlersProvider.initialize(this);
-
         // Register and load effects from files
         Registry.register(EffectsRegistry.class, new ZEffectsRegistry(this));
         Registry.get(EffectsRegistry.class).loadFromFolder(this.getDataPath().resolve("effects"));
@@ -82,15 +86,19 @@ public class ZItems extends ItemsPlugin {
         Registry.get(ExtractorsRegistry.class).registerDefaults();
 
         Logger.info("Setting up event dispatching system...");
-        //TODO make it configurable
-        this.dispatcher = new ZEffectsDispatcher((item) ->
-                List.of(Registry.get(EffectsRegistry.class).getById("absorption_pickaxe"),
-                        Registry.get(EffectsRegistry.class).getById("super_hammer"),
-                        Registry.get(EffectsRegistry.class).getById("xp_boost_pickaxe")));
+        this.dispatcher = new ZEffectsDispatcher();
         EventsListener eventsListener = new EventsListener(this.dispatcher);
         eventsListener.registerDynamicListeners(this);
         Logger.info("<green>Event dispatching system initialized successfully!");
 
+        this.registerManager(EffectsManager.class, new ZEffectsManager());
+
+        this.registerCommands(settings);
+
+        Logger.info("<yellow>=== ENABLE DONE <gray>(<gold>" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<gray>) <yellow>===");
+    }
+
+    private void registerCommands(PluginSettings settings) {
         CommandManager<@NotNull ItemsPlugin> commandManager = new CommandManager<>(this);
         commandManager.setLogger(new fr.traqueur.commands.api.logging.Logger() {
             @Override
@@ -105,10 +113,10 @@ public class ZItems extends ItemsPlugin {
         });
         commandManager.setDebug(settings.debug());
         commandManager.setMessageHandler(new CommandsMessageHandler());
+
+        commandManager.registerConverter(Effect.class, new EffectArgument());
+
         commandManager.registerCommand(new ZItemsCommand(this));
-
-
-        Logger.info("<yellow>=== ENABLE DONE <gray>(<gold>" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<gray>) <yellow>===");
     }
 
     private void injectReaders() {
@@ -116,6 +124,7 @@ public class ZItems extends ItemsPlugin {
         CustomReaderRegistry.getInstance().register(Attribute.class, new AttributeReader());
         CustomReaderRegistry.getInstance().register(Enchantment.class, new EnchantmentReader());
         CustomReaderRegistry.getInstance().register(new TypeToken<>() {}, new TagReader());
+        CustomReaderRegistry.getInstance().register(Component.class, new ComponentReader());
     }
 
     @Override

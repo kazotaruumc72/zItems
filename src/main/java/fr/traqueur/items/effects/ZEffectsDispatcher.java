@@ -2,6 +2,7 @@ package fr.traqueur.items.effects;
 
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.*;
+import fr.traqueur.items.serialization.Keys;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -10,16 +11,13 @@ import java.util.*;
 
 public class ZEffectsDispatcher implements EffectsDispatcher {
 
-    private final EffectsProvider effectsProvider;
     private final HandlersProvider handlersProvider;
 
     /**
      * Creates a new dispatcher with the given effects provider.
      *
-     * @param effectsProvider the provider to retrieve effects from ItemStacks
      */
-    public ZEffectsDispatcher(EffectsProvider effectsProvider) {
-        this.effectsProvider = effectsProvider;
+    public ZEffectsDispatcher() {
         this.handlersProvider = HandlersProvider.getInstance();
     }
 
@@ -29,9 +27,35 @@ public class ZEffectsDispatcher implements EffectsDispatcher {
     }
 
     @Override
+    public void applyNoEventEffect(Player player, ItemStack itemSource, Effect effect) {
+        EffectContext context = new EffectContext(
+                player,
+                itemSource,
+                null,
+                new HashSet<>(), // affectedBlocks
+                new ArrayList<>() // drops
+        );
+        EffectHandler<?> handler = handlersProvider.getHandler(effect.type());
+        if (handler != null) {
+            // Only execute if this is a NoEventHandler (canApply returns true for null event)
+            if (!handler.canApply(null)) {
+                Logger.debug("Handler {} is not a NoEventHandler, skipping",
+                    handler.getClass().getSimpleName());
+                return;
+            }
+            try {
+                executeHandler(handler, context, effect.settings());
+            } catch (Exception e) {
+                Logger.severe("Error executing handler <red>{}<reset> for effect <yellow>{}",
+                        e, handler.getClass().getSimpleName(), effect.id());
+            }
+        }
+    }
+
+    @Override
     public EffectContext dispatch(Player player, ItemStack itemSource, Event event) {
         // 1. Retrieve effects from the item's PDC
-        List<Effect> effects = effectsProvider.getEffects(itemSource);
+        List<Effect> effects = Keys.EFFECTS.get(itemSource.getItemMeta().getPersistentDataContainer(), new ArrayList<>());
         if (effects == null || effects.isEmpty()) {
             return null; // No effects to process
         }

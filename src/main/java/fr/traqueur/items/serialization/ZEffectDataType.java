@@ -1,0 +1,27 @@
+package fr.traqueur.items.serialization;
+
+import fr.traqueur.items.api.effects.Effect;
+import fr.traqueur.items.api.registries.EffectsRegistry;
+import fr.traqueur.items.api.registries.Registry;
+import fr.traqueur.items.api.serialization.EffectDataType;
+import org.bukkit.persistence.PersistentDataAdapterContext;
+import org.jetbrains.annotations.NotNull;
+
+public class ZEffectDataType extends EffectDataType {
+
+    public static void initialize() {
+        EffectDataType.INSTANCE = new ZEffectDataType();
+    }
+
+    private ZEffectDataType() {}
+
+    @Override
+    public @NotNull String toPrimitive(@NotNull Effect complex, @NotNull PersistentDataAdapterContext context) {
+        return complex.id();
+    }
+
+    @Override
+    public @NotNull Effect fromPrimitive(@NotNull String primitive, @NotNull PersistentDataAdapterContext context) {
+        return Registry.get(EffectsRegistry.class).getById(primitive);
+    }
+}

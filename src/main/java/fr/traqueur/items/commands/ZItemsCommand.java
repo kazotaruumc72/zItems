@@ -17,6 +17,8 @@ public class ZItemsCommand extends Command<@NotNull ItemsPlugin> {
         this.addAlias("zit", "zitem");
         this.setPermission("zitems.command.admin");
         this.setDescription("Main command for ZItems plugin.");
+
+        this.addSubCommand(new ApplyEffectCommand(plugin));
     }
 
     @Override

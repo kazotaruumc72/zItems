@@ -11,21 +11,21 @@ public class CommandsMessageHandler implements MessageHandler {
 
     @Override
     public String getNoPermissionMessage() {
-        return SERIALIZER.serialize(MessageUtil.parseMessage(Messages.NO_PERMISSION.get()));
+        return SERIALIZER.serialize(Messages.NO_PERMISSION.get());
     }
 
     @Override
     public String getOnlyInGameMessage() {
-        return SERIALIZER.serialize(MessageUtil.parseMessage(Messages.ONLY_IN_GAME.get()));
+        return SERIALIZER.serialize(Messages.ONLY_IN_GAME.get());
     }
 
     @Override
     public String getArgNotRecognized() {
-        return SERIALIZER.serialize(MessageUtil.parseMessage(Messages.ARG_NOT_RECOGNIZED.get()));
+        return SERIALIZER.serialize(Messages.ARG_NOT_RECOGNIZED.get());
     }
 
     @Override
     public String getRequirementMessage() {
-        return SERIALIZER.serialize(MessageUtil.parseMessage(Messages.REQUIREMENT_NOT_MET.get()));
+        return SERIALIZER.serialize(Messages.REQUIREMENT_NOT_MET.get());
     }
 }

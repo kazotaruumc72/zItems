@@ -6,9 +6,11 @@ import fr.traqueur.items.api.registries.ExtractorsRegistry;
 import fr.traqueur.items.effects.extractors.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -55,15 +57,14 @@ public class ZExtractorsRegistry implements ExtractorsRegistry {
     public void registerDefaults() {
         // Generic extractors (parent classes)
         register(PlayerEvent.class, new PlayerEventExtractor());
-        register(EntityEvent.class, new EntityEventExtractor());
 
         // Specific extractors (override generic behavior)
         register(BlockBreakEvent.class, new BlockBreakExtractor());
-        register(BlockPlaceEvent.class, new BlockPlaceExtractor());
+        register(BlockDropItemEvent.class, new BlockDropItemExtractor());
         register(PlayerInteractEvent.class, new PlayerInteractExtractor());
-        register(PlayerItemDamageEvent.class, new PlayerItemDamageExtractor());
         register(EntityDeathEvent.class, new EntityDeathExtractor());
         register(EntityDamageByEntityEvent.class, new EntityDamageByEntityExtractor());
+        register(EntityDropItemEvent.class, new EntityDropItemExtractor());
 
         Logger.info("Registered <gold>{}<reset> ItemSourceExtractors with hierarchy support", extractors.size());
     }

@@ -2,13 +2,19 @@ package fr.traqueur.items;
 
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.effects.EffectsRegistry;
+import fr.traqueur.items.api.effects.Effect;
+import fr.traqueur.items.api.effects.EffectsProvider;
+import fr.traqueur.items.api.registries.EffectsRegistry;
+import fr.traqueur.items.api.registries.ExtractorsRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.items.api.settings.PluginSettings;
 import fr.traqueur.items.api.settings.Settings;
-import fr.traqueur.items.effects.EffectsRegistryImpl;
+import fr.traqueur.items.effects.EffectsDispatcher;
+import fr.traqueur.items.registries.EffectsRegistryImpl;
+import fr.traqueur.items.effects.EventsListener;
 import fr.traqueur.items.effects.HandlersProvider;
+import fr.traqueur.items.registries.ExtractorsRegistryImpl;
 import fr.traqueur.items.effects.settings.readers.AttributeReader;
 import fr.traqueur.items.effects.settings.readers.EnchantmentReader;
 import fr.traqueur.items.effects.settings.readers.EquipmentSlotGroupReader;
@@ -21,13 +27,17 @@ import fr.traqueur.structura.types.TypeToken;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.util.List;
 
 public class ZItems extends ItemsPlugin {
 
     private static final String CONFIG_FILE = "config.yml";
     private static final String MESSAGES_FILE = "messages.yml";
+
+    private EffectsDispatcher dispatcher;
 
     @Override
     public void onEnable() {
@@ -57,11 +67,27 @@ public class ZItems extends ItemsPlugin {
         Logger.info("Shop provider <green>{} <reset>has been found.", ShopProviders.FOUND_PROVIDER.pluginName());
 
         MessageUtil.initialize(this);
+
+        // Initialize handlers provider (scans all @EffectMeta handlers)
         HandlersProvider.initialize(this);
+
+        // Register and load effects from files
         Registry.register(EffectsRegistry.class, new EffectsRegistryImpl(this));
-        EffectsRegistry effectsRegistry = Registry.get(EffectsRegistry.class);
-        effectsRegistry.loadFromFolder(this.getDataPath().resolve("effects"));
-        Logger.info("<green>Registered <gold>{} <green>effects.", Registry.get(EffectsRegistry.class).getAll().size());
+        Registry.get(EffectsRegistry.class).loadFromFolder(this.getDataPath().resolve("effects"));
+
+        // Register and load extractors
+        Registry.register(ExtractorsRegistry.class, new ExtractorsRegistryImpl());
+        Registry.get(ExtractorsRegistry.class).registerDefaults();
+
+        Logger.info("Setting up event dispatching system...");
+        //TODO make it configurable
+        this.dispatcher = new EffectsDispatcher((item) ->
+                List.of(Registry.get(EffectsRegistry.class).getById("absorption_pickaxe"),
+                        Registry.get(EffectsRegistry.class).getById("super_hammer"),
+                        Registry.get(EffectsRegistry.class).getById("xp_boost_pickaxe")));
+        EventsListener eventsListener = new EventsListener(this.dispatcher);
+        eventsListener.registerDynamicListeners(this);
+        Logger.info("<green>Event dispatching system initialized successfully!");
 
         Logger.info("<yellow>=== ENABLE DONE <gray>(<gold>" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<gray>) <yellow>===");
     }

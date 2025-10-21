@@ -1,11 +1,8 @@
 package fr.traqueur.items.effects.handlers;
 
-import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.effects.EffectMeta;
-import fr.traqueur.items.api.settings.PluginSettings;
-import fr.traqueur.items.api.settings.Settings;
 import fr.traqueur.items.api.utils.EventUtil;
 import fr.traqueur.items.api.utils.ItemUtil;
 import fr.traqueur.items.effects.settings.HammerSettings;
@@ -14,16 +11,12 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.util.RayTraceResult;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @EffectMeta(value = "HAMMER")
@@ -57,8 +50,8 @@ public class Hammer implements EffectHandler.SingleEventEffectHandler<HammerSett
         // Collect drops for all blocks
         for (Block targetBlock : blocksToBreak) {
             // Fire BlockBreakEvent for allowed plugins only
-            boolean cancelled = EventUtil.fireEvent(new BlockBreakEvent(targetBlock, player), BlockBreakEvent.getHandlerList());
-            if (cancelled) {
+            boolean success = EventUtil.fireEvent(new BlockBreakEvent(targetBlock, player), BlockBreakEvent.getHandlerList());
+            if (!success) {
                 continue; // Skip this block if event was cancelled
             }
 

@@ -1,17 +1,15 @@
-package fr.traqueur.items.effects;
+package fr.traqueur.items.registries;
 
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.Effect;
-import fr.traqueur.items.api.effects.EffectsRegistry;
+import fr.traqueur.items.api.registries.EffectsRegistry;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,8 +43,8 @@ public class EffectsRegistryImpl implements EffectsRegistry {
     }
 
     @Override
-    public void register(Effect item) {
-        this.effects.put(item.id(), item);
+    public void register(String id, Effect item) {
+        this.effects.put(id, item);
     }
 
     @Override
@@ -110,7 +108,7 @@ public class EffectsRegistryImpl implements EffectsRegistry {
     private void loadEffect(Path file) {
         try {
             Effect effect = Structura.load(file, Effect.class);
-            this.register(effect);
+            this.register(effect.id(), effect);
             Logger.debug("Loaded effect: " + effect.id() + " from file: " + file.getFileName());
         } catch (StructuraException e) {
             Logger.severe("Failed to load effect from file: " + file.getFileName(), e);

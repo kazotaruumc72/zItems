@@ -1,22 +1,16 @@
 package fr.traqueur.items.effects.handlers;
 
-import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.effects.EffectMeta;
-import fr.traqueur.items.api.settings.PluginSettings;
-import fr.traqueur.items.api.settings.Settings;
 import fr.traqueur.items.api.utils.EventUtil;
 import fr.traqueur.items.api.utils.ItemUtil;
 import fr.traqueur.items.effects.settings.VeinMinerSettings;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.plugin.RegisteredListener;
 
 import java.util.*;
 
@@ -57,8 +51,8 @@ public class VeinMiner implements EffectHandler.SingleEventEffectHandler<VeinMin
         // Process all vein blocks
         for (Block veinBlock : veinBlocks) {
             // Fire BlockBreakEvent for allowed plugins only
-            boolean cancelled = EventUtil.fireEvent(new BlockBreakEvent(veinBlock, player), BlockBreakEvent.getHandlerList());
-            if (cancelled) {
+            boolean success = EventUtil.fireEvent(new BlockBreakEvent(veinBlock, player), BlockBreakEvent.getHandlerList());
+            if (!success) {
                 continue; // Skip this block if event was cancelled
             }
 

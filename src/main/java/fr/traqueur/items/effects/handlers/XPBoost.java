@@ -63,7 +63,7 @@ public class XPBoost implements EffectHandler.SingleEventEffectHandler<XPBoostSe
 
     @Override
     public int priority() {
-        return -1;
+        return 0;
     }
 
     @Override

@@ -2,19 +2,18 @@ package fr.traqueur.items;
 
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.effects.Effect;
-import fr.traqueur.items.api.effects.EffectsProvider;
+import fr.traqueur.items.api.effects.EffectsDispatcher;
 import fr.traqueur.items.api.registries.EffectsRegistry;
 import fr.traqueur.items.api.registries.ExtractorsRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.items.api.settings.PluginSettings;
 import fr.traqueur.items.api.settings.Settings;
-import fr.traqueur.items.effects.EffectsDispatcher;
-import fr.traqueur.items.registries.EffectsRegistryImpl;
+import fr.traqueur.items.effects.ZEffectsDispatcher;
+import fr.traqueur.items.registries.ZEffectsRegistry;
 import fr.traqueur.items.effects.EventsListener;
 import fr.traqueur.items.effects.HandlersProvider;
-import fr.traqueur.items.registries.ExtractorsRegistryImpl;
+import fr.traqueur.items.registries.ZExtractorsRegistry;
 import fr.traqueur.items.effects.settings.readers.AttributeReader;
 import fr.traqueur.items.effects.settings.readers.EnchantmentReader;
 import fr.traqueur.items.effects.settings.readers.EquipmentSlotGroupReader;
@@ -27,7 +26,6 @@ import fr.traqueur.structura.types.TypeToken;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
-import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.List;
@@ -72,16 +70,16 @@ public class ZItems extends ItemsPlugin {
         HandlersProvider.initialize(this);
 
         // Register and load effects from files
-        Registry.register(EffectsRegistry.class, new EffectsRegistryImpl(this));
+        Registry.register(EffectsRegistry.class, new ZEffectsRegistry(this));
         Registry.get(EffectsRegistry.class).loadFromFolder(this.getDataPath().resolve("effects"));
 
         // Register and load extractors
-        Registry.register(ExtractorsRegistry.class, new ExtractorsRegistryImpl());
+        Registry.register(ExtractorsRegistry.class, new ZExtractorsRegistry());
         Registry.get(ExtractorsRegistry.class).registerDefaults();
 
         Logger.info("Setting up event dispatching system...");
         //TODO make it configurable
-        this.dispatcher = new EffectsDispatcher((item) ->
+        this.dispatcher = new ZEffectsDispatcher((item) ->
                 List.of(Registry.get(EffectsRegistry.class).getById("absorption_pickaxe"),
                         Registry.get(EffectsRegistry.class).getById("super_hammer"),
                         Registry.get(EffectsRegistry.class).getById("xp_boost_pickaxe")));
@@ -147,4 +145,8 @@ public class ZItems extends ItemsPlugin {
         }
     }
 
+    @Override
+    public EffectsDispatcher getDispatcher() {
+        return dispatcher;
+    }
 }

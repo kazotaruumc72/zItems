@@ -37,12 +37,12 @@ import java.util.Map;
  * CustomPlayerEvent → PlayerEventExtractor (parent match)
  * </pre>
  */
-public class ExtractorsRegistryImpl implements ExtractorsRegistry {
+public class ZExtractorsRegistry implements ExtractorsRegistry {
 
     private final Map<Class<? extends Event>, ItemSourceExtractor<?>> extractors;
     private final Map<Class<? extends Event>, ItemSourceExtractor<?>> cache;
 
-    public ExtractorsRegistryImpl() {
+    public ZExtractorsRegistry() {
         this.extractors = new HashMap<>();
         this.cache = new HashMap<>();
     }

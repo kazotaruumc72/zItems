@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class EffectsRegistryImpl implements EffectsRegistry {
+public class ZEffectsRegistry implements EffectsRegistry {
 
     private static final String[] EXAMPLE_FILES = {
         "example_absorption.yml",
@@ -37,7 +37,7 @@ public class EffectsRegistryImpl implements EffectsRegistry {
     private final Map<String, Effect> effects;
     private final ItemsPlugin plugin;
 
-    public EffectsRegistryImpl(ItemsPlugin plugin) {
+    public ZEffectsRegistry(ItemsPlugin plugin) {
         this.effects = new HashMap<>();
         this.plugin = plugin;
     }

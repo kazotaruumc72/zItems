@@ -3,6 +3,7 @@ package fr.traqueur.items.effects;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
+import fr.traqueur.items.api.effects.EffectsDispatcher;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import fr.traqueur.items.api.registries.ExtractorsRegistry;
 import fr.traqueur.items.api.registries.Registry;
@@ -30,7 +31,7 @@ import java.util.Set;
  *   <li>Scan all registered handlers to find which event types they handle</li>
  *   <li>Dynamically register a Bukkit listener for each unique event type</li>
  *   <li>Extract the ItemStack source using the ExtractorsRegistry</li>
- *   <li>Dispatch events to the {@link EffectsDispatcher}</li>
+ *   <li>Dispatch events to the {@link ZEffectsDispatcher}</li>
  * </ol>
  * <p>
  * Benefits of this approach:
@@ -183,7 +184,7 @@ public class EventsListener implements Listener {
      *   <li>Get the appropriate {@link ItemSourceExtractor} for this event</li>
      *   <li>Extract the player and ItemStack from the event</li>
      *   <li>Validate the extraction result</li>
-     *   <li>Dispatch to the {@link EffectsDispatcher}</li>
+     *   <li>Dispatch to the {@link ZEffectsDispatcher}</li>
      * </ol>
      *
      * @param event the Bukkit event

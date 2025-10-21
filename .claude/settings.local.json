@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//a/Developpement/workspace/GroupeZ/zItemsOld/src/main/java/fr/maxlego08/items/runes/activators/**)",
+      "Read(//a/Developpement/workspace/GroupeZ/zItemsOld/src/main/resources/runes/**)",
+      "Read(//a/Developpement/workspace/GroupeZ/zItemsOld/src/main/java/fr/maxlego08/items/inventories/**)",
+      "Read(//a/Developpement/workspace/GroupeZ/zItemsOld/src/main/resources/items/**)",
+      "Read(//a/Developpement/workspace/GroupeZ/zItemsOld/src/main/java/fr/maxlego08/items/command/commands/**)",
+      "Read(//a/Developpement/workspace/GroupeZ/zItemsOld/src/main/java/fr/maxlego08/items/hooks/**)",
+      "Bash(xargs basename:*)",
+      "Read(//a/Developpement/workspace/GroupeZ/zItemsOld/src/main/java/**)",
+      "Read(//a/Developpement/workspace/GroupeZ/zItemsOld/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

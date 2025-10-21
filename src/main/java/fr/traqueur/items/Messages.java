@@ -48,15 +48,6 @@ public enum Messages implements Loadable {
     }
 
     /**
-     * Sends this message to a command sender with no placeholders.
-     *
-     * @param sender the command sender
-     */
-    public void send(CommandSender sender) {
-        MessageUtil.sendMessage(sender, get());
-    }
-
-    /**
      * Sends this message to a command sender with placeholders replaced.
      * <p>
      * Example usage:

@@ -1,8 +1,6 @@
 package fr.traqueur.items.api.effects;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
 

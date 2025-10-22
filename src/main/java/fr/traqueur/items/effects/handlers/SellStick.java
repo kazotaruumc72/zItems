@@ -1,13 +1,13 @@
 package fr.traqueur.items.effects.handlers;
 
 import fr.traqueur.items.api.ItemsPlugin;
+import fr.traqueur.items.api.annotations.EffectMeta;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
-import fr.traqueur.items.api.effects.EffectMeta;
 import fr.traqueur.items.api.effects.interactions.InteractionAction;
 import fr.traqueur.items.api.shop.ShopProvider;
-import fr.traqueur.items.utils.ItemUtil;
 import fr.traqueur.items.effects.settings.SellStickSettings;
+import fr.traqueur.items.utils.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;

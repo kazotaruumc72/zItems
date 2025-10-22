@@ -1,0 +1,20 @@
+# Farming Hoe Example
+# A hoe with farming abilities
+id: "farming_hoe"
+material: DIAMOND_HOE
+display-name: "<gradient:#00FF00:#32CD32><bold>🌾 Farming Hoe</bold></gradient>"
+lore:
+  - "<gray>The ultimate farming tool!"
+  - ""
+  - "<gold>Effects:"
+  - "  <yellow>• Farming Hoe (3x3 tilling)"
+  - "  <yellow>• XP Boost (2x)"
+enchantments:
+  - enchantment: efficiency
+    level: 5
+effects:
+  - super_farming_hoe
+  - xp_boost_pickaxe
+unbreakable: true
+hide-tooltip: false
+max-stack-size: 1

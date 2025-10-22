@@ -1,7 +1,7 @@
 package fr.traqueur.items.effects.settings;
 
-import fr.traqueur.items.api.effects.drops.DropLocation;
 import fr.traqueur.items.api.effects.EffectSettings;
+import fr.traqueur.items.api.effects.drops.DropLocation;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultBool;
 import fr.traqueur.structura.annotations.defaults.DefaultInt;

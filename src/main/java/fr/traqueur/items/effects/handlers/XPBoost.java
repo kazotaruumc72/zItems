@@ -1,17 +1,13 @@
 package fr.traqueur.items.effects.handlers;
 
+import fr.traqueur.items.api.annotations.EffectMeta;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
-import fr.traqueur.items.api.effects.EffectMeta;
 import fr.traqueur.items.effects.settings.XPBoostSettings;
-import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ExperienceOrb;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.concurrent.ThreadLocalRandom;
 

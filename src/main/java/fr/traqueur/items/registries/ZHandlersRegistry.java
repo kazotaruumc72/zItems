@@ -2,8 +2,8 @@ package fr.traqueur.items.registries;
 
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
+import fr.traqueur.items.api.annotations.EffectMeta;
 import fr.traqueur.items.api.effects.EffectHandler;
-import fr.traqueur.items.api.effects.EffectMeta;
 import fr.traqueur.items.api.effects.EffectSettings;
 import fr.traqueur.items.api.registries.HandlersRegistry;
 import fr.traqueur.structura.registries.PolymorphicRegistry;

@@ -5,24 +5,26 @@ import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.effects.EffectsDispatcher;
+import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.managers.EffectsManager;
 import fr.traqueur.items.api.registries.*;
+import fr.traqueur.items.api.settings.Settings;
+import fr.traqueur.items.commands.CommandsMessageHandler;
+import fr.traqueur.items.commands.ZItemsCommand;
 import fr.traqueur.items.commands.arguments.EffectArgument;
+import fr.traqueur.items.commands.arguments.ItemArgument;
+import fr.traqueur.items.effects.ZEffectsDispatcher;
 import fr.traqueur.items.effects.ZEffectsManager;
+import fr.traqueur.items.effects.ZEventsListener;
 import fr.traqueur.items.hooks.SuperiorSkyBlockHook;
 import fr.traqueur.items.hooks.WorldGuardHook;
 import fr.traqueur.items.registries.*;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.serialization.ZEffectDataType;
-import fr.traqueur.items.settings.readers.*;
-import fr.traqueur.items.utils.MessageUtil;
 import fr.traqueur.items.settings.PluginSettings;
-import fr.traqueur.items.api.settings.Settings;
-import fr.traqueur.items.commands.CommandsMessageHandler;
-import fr.traqueur.items.commands.ZItemsCommand;
-import fr.traqueur.items.effects.ZEffectsDispatcher;
-import fr.traqueur.items.effects.ZEventsListener;
+import fr.traqueur.items.settings.readers.*;
 import fr.traqueur.items.shop.ShopProviders;
+import fr.traqueur.items.utils.MessageUtil;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.registries.CustomReaderRegistry;
@@ -88,6 +90,10 @@ public class ZItems extends ItemsPlugin {
         Registry.register(EffectsRegistry.class, new ZEffectsRegistry(this));
         Registry.get(EffectsRegistry.class).loadFromFolder(this.getDataPath().resolve("effects"));
 
+        // Register and load items from files
+        Registry.register(ItemsRegistry.class, new ZItemsRegistry(this));
+        Registry.get(ItemsRegistry.class).loadFromFolder(this.getDataPath().resolve("items"));
+
         // Register and scan extractors
         Registry.register(ExtractorsRegistry.class, new ZExtractorsRegistry(this));
         Registry.get(ExtractorsRegistry.class).scanPackage(this, "fr.traqueur.items");
@@ -124,6 +130,7 @@ public class ZItems extends ItemsPlugin {
         commandManager.setMessageHandler(new CommandsMessageHandler());
 
         commandManager.registerConverter(Effect.class, new EffectArgument());
+        commandManager.registerConverter(Item.class, new ItemArgument());
 
         commandManager.registerCommand(new ZItemsCommand(this));
     }
@@ -134,6 +141,12 @@ public class ZItems extends ItemsPlugin {
         CustomReaderRegistry.getInstance().register(Enchantment.class, new EnchantmentReader());
         CustomReaderRegistry.getInstance().register(new TypeToken<>() {}, new TagReader());
         CustomReaderRegistry.getInstance().register(Component.class, new ComponentReader());
+        CustomReaderRegistry.getInstance().register(Effect.class, new EffectReader());
+        CustomReaderRegistry.getInstance().register(org.bukkit.potion.PotionEffectType.class, new PotionEffectTypeReader());
+        CustomReaderRegistry.getInstance().register(org.bukkit.potion.PotionType.class, new PotionTypeReader());
+        CustomReaderRegistry.getInstance().register(org.bukkit.Color.class, new ColorReader());
+        CustomReaderRegistry.getInstance().register(org.bukkit.inventory.meta.trim.TrimMaterial.class, new TrimMaterialReader());
+        CustomReaderRegistry.getInstance().register(org.bukkit.inventory.meta.trim.TrimPattern.class, new TrimPatternReader());
     }
 
     @Override

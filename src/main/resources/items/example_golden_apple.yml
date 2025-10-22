@@ -1,0 +1,30 @@
+# Golden Apple with Food Metadata Example
+id: "golden_apple"
+material: GOLDEN_APPLE
+display-name: "<gradient:#FFD700:#FFA500><bold>✨ Enchanted Golden Apple</bold></gradient>"
+lore:
+  - "<gray>A mystical apple imbued with powerful magic"
+  - ""
+  - "<gold>Effects:"
+  - "  <yellow>• Regeneration II (10s)"
+  - "  <yellow>• Absorption IV (2min)"
+  - "  <yellow>• Resistance I (5min)"
+enchantments:
+  - enchantment: protection
+    level: 2
+metadata:
+  food:
+    nutrition: 8
+    saturation: 9.6
+    can-always-eat: true
+    eat-seconds: 0.8 #PAPER ONLY
+    effects: # PAPER ONLY
+      - type: REGENERATION
+        duration: 200
+        amplifier: 1
+      - type: ABSORPTION
+        duration: 2400
+        amplifier: 3
+      - type: RESISTANCE
+        duration: 6000
+        amplifier: 0

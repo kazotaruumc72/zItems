@@ -1,0 +1,62 @@
+package fr.traqueur.items.items.metadata;
+
+import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.items.ItemMetadata;
+import fr.traqueur.items.settings.models.PotionEffectSettings;
+import fr.traqueur.structura.annotations.Options;
+import fr.traqueur.structura.annotations.defaults.DefaultBool;
+import fr.traqueur.structura.annotations.defaults.DefaultDouble;
+import fr.traqueur.structura.annotations.defaults.DefaultInt;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.Consumable;
+import io.papermc.paper.datacomponent.item.FoodProperties;
+import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
+@MetadataMeta("food")
+@MetadataMeta.PaperMetadata
+public record FoodMetadata(
+        @DefaultInt(4) int nutrition,
+        @DefaultDouble(2.4) double saturation,
+        @Options(optional = true) @DefaultBool(false) boolean canAlwaysEat,
+        @Options(optional = true) List<PotionEffectSettings> effects,
+        @Options(optional = true) @DefaultDouble(-1) double eatSeconds) implements ItemMetadata {
+
+
+    @Override
+    public void apply(ItemStack itemStack, @Nullable Player player) {
+        FoodProperties properties = FoodProperties.food()
+                .canAlwaysEat(true)
+                .nutrition(nutrition)
+                .saturation((float) saturation).build();
+
+        itemStack.setData(DataComponentTypes.FOOD, properties);
+
+        Consumable.Builder builder = null;
+
+        if(effects != null && !effects.isEmpty()) {
+            List<PotionEffect> potionEffects = effects.stream()
+                    .map(PotionEffectSettings::toPotionEffect)
+                    .toList();
+            builder = Consumable.consumable()
+                    .addEffect(ConsumeEffect.applyStatusEffects(potionEffects, 1.0f));
+        }
+
+        if(eatSeconds > 0) {
+            if(builder == null) {
+                builder = Consumable.consumable();
+            }
+            builder.consumeSeconds((float) eatSeconds);
+        }
+
+        if(builder != null) {
+            itemStack.setData(DataComponentTypes.CONSUMABLE, builder.build());
+        }
+
+    }
+}

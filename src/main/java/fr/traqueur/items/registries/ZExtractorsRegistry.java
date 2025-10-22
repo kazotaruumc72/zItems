@@ -2,7 +2,7 @@ package fr.traqueur.items.registries;
 
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.effects.ExtractorMeta;
+import fr.traqueur.items.api.annotations.ExtractorMeta;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import fr.traqueur.items.api.registries.ExtractorsRegistry;
 import org.bukkit.event.Event;

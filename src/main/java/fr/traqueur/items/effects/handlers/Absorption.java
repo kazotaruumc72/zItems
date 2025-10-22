@@ -1,16 +1,14 @@
 package fr.traqueur.items.effects.handlers;
 
+import fr.traqueur.items.api.annotations.EffectMeta;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
-import fr.traqueur.items.api.effects.EffectMeta;
 import fr.traqueur.items.effects.settings.EmptySettings;
 import org.bukkit.entity.Item;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;

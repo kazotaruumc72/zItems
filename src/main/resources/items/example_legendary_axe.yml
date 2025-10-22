@@ -1,0 +1,41 @@
+# Legendary Axe Example
+# A powerful axe with multiple effects and attributes
+id: "legendary_axe"
+material: NETHERITE_AXE
+display-name: "<gradient:#FF00FF:#8B00FF><bold>⚡ Legendary Axe</bold></gradient>"
+item-name: "legendary_axe"
+lore:
+  - "<gradient:#FF00FF:#8B00FF>A legendary weapon forged by the gods"
+  - ""
+  - "<gold><bold>Effects:</bold>"
+  - "  <yellow>• Vein Miner"
+  - "  <yellow>• XP Boost (3x)"
+  - ""
+  - "<gold><bold>Attributes:</bold>"
+  - "  <yellow>• +20 Attack Damage"
+  - "  <yellow>• +5 Armor"
+  - ""
+  - "<dark_gray>Legendary Item"
+enchantments:
+  - enchantment: sharpness
+    level: 7
+  - enchantment: efficiency
+    level: 10
+  - enchantment: unbreaking
+    level: 5
+attributes:
+  - attribute: attack_damage
+    operation: ADD_NUMBER
+    amount: 20.0
+    slot: HAND
+  - attribute: armor
+    operation: ADD_NUMBER
+    amount: 5.0
+    slot: HAND
+effects:
+  - vein_miner_pickaxe
+  - xp_boost_pickaxe
+custom-model-data: 5000
+unbreakable: true
+hide-tooltip: false
+max-stack-size: 1

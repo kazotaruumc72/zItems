@@ -2,6 +2,7 @@ package fr.traqueur.items.utils;
 
 import fr.traqueur.items.PlatformType;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -38,12 +39,15 @@ public class ItemUtil {
             return;
         }
 
+        Component processedDisplayName = displayName.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
+
+
         if (PlatformType.isPaper()) {
             // Use Paper's native Adventure API
-            meta.displayName(displayName);
+            meta.displayName(processedDisplayName);
         } else {
             // Convert Component to legacy format for Spigot
-            String legacy = LEGACY_SERIALIZER.serialize(displayName);
+            String legacy = LEGACY_SERIALIZER.serialize(processedDisplayName);
             meta.setDisplayName(legacy);
         }
 
@@ -53,6 +57,7 @@ public class ItemUtil {
     /**
      * Sets the lore of an ItemStack using a list of Components.
      * Handles Paper (native) vs Spigot (legacy conversion) automatically.
+     * Automatically disables italic decoration for all lore lines.
      *
      * @param itemStack The ItemStack to modify
      * @param lore      The lore lines as Components
@@ -67,13 +72,19 @@ public class ItemUtil {
             return;
         }
 
+        // Disable italic decoration for all lore lines
+        List<Component> processedLore = new ArrayList<>();
+        for (Component line : lore) {
+            processedLore.add(line.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+        }
+
         if (PlatformType.isPaper()) {
             // Use Paper's native Adventure API
-            meta.lore(lore);
+            meta.lore(processedLore);
         } else {
             // Convert Components to legacy format for Spigot
             List<String> legacyLore = new ArrayList<>();
-            for (Component line : lore) {
+            for (Component line : processedLore) {
                 String legacy = LEGACY_SERIALIZER.serialize(line);
                 legacyLore.add(legacy);
             }
@@ -85,6 +96,7 @@ public class ItemUtil {
 
     /**
      * Adds a Component line to the lore of an ItemStack.
+     * Automatically disables italic decoration for the added line.
      *
      * @param itemStack The ItemStack to modify
      * @param line      The line to add as a Component
@@ -99,19 +111,22 @@ public class ItemUtil {
             return;
         }
 
+        // Disable italic decoration for the line
+        Component processedLine = line.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
+
         if (PlatformType.isPaper()) {
             List<Component> lore = meta.lore();
             if (lore == null) {
                 lore = new ArrayList<>();
             }
-            lore.add(line);
+            lore.add(processedLine);
             meta.lore(lore);
         } else {
             List<String> lore = meta.getLore();
             if (lore == null) {
                 lore = new ArrayList<>();
             }
-            String legacy = LEGACY_SERIALIZER.serialize(line);
+            String legacy = LEGACY_SERIALIZER.serialize(processedLine);
             lore.add(legacy);
             meta.setLore(lore);
         }
@@ -192,7 +207,7 @@ public class ItemUtil {
      * @param lore        The lore lines as Components
      * @return The created ItemStack
      */
-    public static ItemStack createItem(Material material, int amount, Component displayName, List<Component> lore) {
+    public static ItemStack createItem(Material material, int amount, Component displayName, List<Component> lore, Component itemName) {
         ItemStack itemStack = ItemStack.of(material, amount);
 
         if (displayName != null) {
@@ -203,7 +218,36 @@ public class ItemUtil {
             setLore(itemStack, lore);
         }
 
+        if (itemName != null) {
+            setItemName(itemStack, itemName);
+        }
+
         return itemStack;
+    }
+
+    private static void setItemName(ItemStack itemStack, Component itemName) {
+        if (itemStack == null || itemName == null) {
+            return;
+        }
+
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta == null) {
+            return;
+        }
+
+        Component processedItemName = itemName.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
+
+
+        if (PlatformType.isPaper()) {
+            // Use Paper's native Adventure API
+            meta.itemName(processedItemName);
+        } else {
+            // Convert Component to legacy format for Spigot
+            String legacy = LEGACY_SERIALIZER.serialize(processedItemName);
+            meta.setItemName(legacy);
+        }
+
+        itemStack.setItemMeta(meta);
     }
 
     public static void applyDamageToItem(ItemStack item, int damage, Player player) {
@@ -231,28 +275,5 @@ public class ItemUtil {
                 item.setItemMeta(damageable);
             }
         }
-    }
-
-    /**
-     * Creates a new ItemStack with the specified material and display name.
-     *
-     * @param material    The material of the item
-     * @param displayName The display name as a Component
-     * @return The created ItemStack
-     */
-    public static ItemStack createItem(Material material, Component displayName) {
-        return createItem(material, 1, displayName, null);
-    }
-
-    /**
-     * Creates a new ItemStack with the specified material, display name, and lore.
-     *
-     * @param material    The material of the item
-     * @param displayName The display name as a Component
-     * @param lore        The lore lines as Components
-     * @return The created ItemStack
-     */
-    public static ItemStack createItem(Material material, Component displayName, List<Component> lore) {
-        return createItem(material, 1, displayName, lore);
     }
 }

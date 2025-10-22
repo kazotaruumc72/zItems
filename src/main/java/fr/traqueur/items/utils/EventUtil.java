@@ -4,8 +4,8 @@ import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.access.LocationAccess;
 import fr.traqueur.items.api.registries.LocationAccessRegistry;
 import fr.traqueur.items.api.registries.Registry;
-import fr.traqueur.items.settings.PluginSettings;
 import fr.traqueur.items.api.settings.Settings;
+import fr.traqueur.items.settings.PluginSettings;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -49,10 +49,6 @@ public class EventUtil {
      */
     public static boolean canBreakBlock(Player player, Location location) {
         LocationAccessRegistry registry = Registry.get(LocationAccessRegistry.class);
-        if (registry == null) {
-            return true; // If no registry, allow by default
-        }
-
         // Check all registered location access hooks
         for (LocationAccess access : registry.getAll()) {
             if (!access.hasAccess(player, location)) {

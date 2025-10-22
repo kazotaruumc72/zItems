@@ -24,3 +24,10 @@ requirement-not-met: "<red>You do not meet the requirements to perform this comm
 arg-not-recognized: "<red>Argument not recognized."
 
 effect-applied: "<green>Effect <yellow><effect></yellow> has been applied to your item."
+
+# ========================================
+# Item Give Command Messages
+# ========================================
+item-given: "<green>Given <yellow><amount>x <item></yellow> to <aqua><player></aqua>."
+item-received: "<green>You received <yellow><amount>x <item></yellow>."
+item-give-invalid-amount: "<red>Invalid amount! Amount must be greater than 0."

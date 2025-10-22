@@ -13,7 +13,11 @@ public enum Messages implements Loadable {
     ARG_NOT_RECOGNIZED("<red>Argument not recognized."),
     REQUIREMENT_NOT_MET("<red>You do not meet the requirements to perform this command."),
 
-    EFFECT_APPLIED("<green>Effect <yellow><effect></yellow> applied successfully."),;
+    EFFECT_APPLIED("<green>Effect <yellow><effect></yellow> applied successfully."),
+
+    ITEM_GIVEN("<green>Given <yellow><amount>x <item></yellow> to <aqua><player></aqua>."),
+    ITEM_RECEIVED("<green>You received <yellow><amount>x <item></yellow>."),
+    ITEM_GIVE_INVALID_AMOUNT("<red>Invalid amount! Amount must be greater than 0."),;
 
     private final String rawMessage;
 

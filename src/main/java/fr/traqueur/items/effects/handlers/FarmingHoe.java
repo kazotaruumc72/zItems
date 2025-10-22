@@ -1,12 +1,12 @@
 package fr.traqueur.items.effects.handlers;
 
 import fr.traqueur.items.api.Logger;
+import fr.traqueur.items.api.annotations.EffectMeta;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
-import fr.traqueur.items.api.effects.EffectMeta;
+import fr.traqueur.items.effects.settings.FarmingHoeSettings;
 import fr.traqueur.items.utils.EventUtil;
 import fr.traqueur.items.utils.ItemUtil;
-import fr.traqueur.items.effects.settings.FarmingHoeSettings;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -20,7 +20,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @EffectMeta(value = "FARMING_HOE")
 public class FarmingHoe implements EffectHandler.MultiEventEffectHandler<FarmingHoeSettings> {

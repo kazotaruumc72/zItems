@@ -1,6 +1,6 @@
 package fr.traqueur.items.effects.extractors;
 
-import fr.traqueur.items.api.effects.ExtractorMeta;
+import fr.traqueur.items.api.annotations.ExtractorMeta;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;

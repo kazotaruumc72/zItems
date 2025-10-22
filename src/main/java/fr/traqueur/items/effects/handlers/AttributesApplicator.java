@@ -1,9 +1,9 @@
 package fr.traqueur.items.effects.handlers;
 
 import fr.traqueur.items.api.ItemsPlugin;
+import fr.traqueur.items.api.annotations.EffectMeta;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
-import fr.traqueur.items.api.effects.EffectMeta;
 import fr.traqueur.items.effects.settings.AttributesSettings;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.AttributeModifier;

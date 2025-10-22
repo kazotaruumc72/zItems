@@ -1,5 +1,6 @@
-package fr.traqueur.items.api.effects;
+package fr.traqueur.items.api.annotations;
 
+import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import org.bukkit.event.Event;
 
 import java.lang.annotation.ElementType;

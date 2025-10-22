@@ -1,8 +1,8 @@
 package fr.traqueur.items.effects.handlers;
 
+import fr.traqueur.items.api.annotations.EffectMeta;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
-import fr.traqueur.items.api.effects.EffectMeta;
 import fr.traqueur.items.effects.settings.EmptySettings;
 import org.bukkit.*;
 import org.bukkit.block.Block;

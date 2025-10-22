@@ -30,9 +30,17 @@ import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.registries.CustomReaderRegistry;
 import fr.traqueur.structura.types.TypeToken;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Color;
+import org.bukkit.Sound;
+import org.bukkit.Tag;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
+import org.bukkit.inventory.meta.trim.TrimPattern;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -142,11 +150,13 @@ public class ZItems extends ItemsPlugin {
         CustomReaderRegistry.getInstance().register(new TypeToken<>() {}, new TagReader());
         CustomReaderRegistry.getInstance().register(Component.class, new ComponentReader());
         CustomReaderRegistry.getInstance().register(Effect.class, new EffectReader());
-        CustomReaderRegistry.getInstance().register(org.bukkit.potion.PotionEffectType.class, new PotionEffectTypeReader());
-        CustomReaderRegistry.getInstance().register(org.bukkit.potion.PotionType.class, new PotionTypeReader());
-        CustomReaderRegistry.getInstance().register(org.bukkit.Color.class, new ColorReader());
-        CustomReaderRegistry.getInstance().register(org.bukkit.inventory.meta.trim.TrimMaterial.class, new TrimMaterialReader());
-        CustomReaderRegistry.getInstance().register(org.bukkit.inventory.meta.trim.TrimPattern.class, new TrimPatternReader());
+        CustomReaderRegistry.getInstance().register(PotionEffectType.class, new PotionEffectTypeReader());
+        CustomReaderRegistry.getInstance().register(PotionType.class, new PotionTypeReader());
+        CustomReaderRegistry.getInstance().register(Color.class, new ColorReader());
+        CustomReaderRegistry.getInstance().register(TrimMaterial.class, new TrimMaterialReader());
+        CustomReaderRegistry.getInstance().register(TrimPattern.class, new TrimPatternReader());
+        CustomReaderRegistry.getInstance().register(Sound.class, new SoundReader());
+        CustomReaderRegistry.getInstance().register(new TypeToken<>() {}, new DamageTypeReader());
     }
 
     @Override

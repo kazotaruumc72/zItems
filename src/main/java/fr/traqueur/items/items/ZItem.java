@@ -1,5 +1,6 @@
 package fr.traqueur.items.items;
 
+import fr.traqueur.items.PlatformType;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.items.Item;
@@ -11,9 +12,12 @@ import fr.traqueur.structura.api.Loadable;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.tag.DamageTypeTags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,8 +68,12 @@ public record ZItem(String id, @Options(inline = true) ItemSettings settings) im
             }
 
             if (settings.customModelData() > 0) {
-                meta.getCustomModelDataComponent()
-                        .setFloats(List.of((float) settings.customModelData()));
+                if(PlatformType.isPaper()) {
+                    meta.getCustomModelDataComponent()
+                            .setFloats(List.of((float) settings.customModelData()));
+                } else {
+                    meta.setCustomModelData(settings.customModelData());
+                }
             }
 
             meta.setUnbreakable(settings.unbreakable());
@@ -75,6 +83,25 @@ public record ZItem(String id, @Options(inline = true) ItemSettings settings) im
             if (settings.maxStackSize() > 0) {
                 meta.setMaxStackSize(settings.maxStackSize());
             }
+
+            if(settings.rarity() != null) {
+                meta.setRarity(settings.rarity());
+            }
+
+            if (settings.flags() != null) {
+                meta.addItemFlags(settings.flags().toArray(ItemFlag[]::new));
+            }
+
+            if(meta instanceof Repairable repairable) {
+                if(settings.repairCost() >= 0) {
+                    repairable.setRepairCost(settings.repairCost());
+                }
+            }
+
+            if(settings.damageTypeResistance() != null) {
+                meta.setDamageResistant(settings.damageTypeResistance());
+            }
+
         });
 
         if (settings.effects() != null && !settings.effects().isEmpty()) {

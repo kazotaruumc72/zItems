@@ -7,10 +7,14 @@ import fr.traqueur.structura.annotations.defaults.DefaultInt;
 import fr.traqueur.structura.api.Loadable;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemRarity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -41,6 +45,12 @@ public record ItemSettings(
         List<Effect> effects,
 
         @Options(optional = true)
+        ItemRarity rarity,
+
+        @Options(optional = true)
+        List<ItemFlag> flags,
+
+        @Options(optional = true)
         List<ItemMetadata> metadata,
 
         @Options(optional = true)
@@ -61,7 +71,13 @@ public record ItemSettings(
 
         @Options(optional = true)
         @DefaultInt(-1)
-        int maxStackSize
+        int maxStackSize,
+
+        @Options(optional = true)
+        @DefaultInt(-1) int repairCost,
+
+        @Options(optional = true)
+        Tag<DamageType> damageTypeResistance
 ) implements Loadable {
 
     /**

@@ -5,6 +5,8 @@ import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.ExtractorMeta;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import fr.traqueur.items.api.registries.ExtractorsRegistry;
+import fr.traqueur.items.utils.ReflectionsCache;
+import javassist.tools.reflect.Reflection;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
@@ -62,10 +64,7 @@ public class ZExtractorsRegistry implements ExtractorsRegistry {
         Logger.info("Scanning package <aqua>{}<reset> for ItemSourceExtractors...", packageName);
 
         try {
-            Reflections reflections = new Reflections(new ConfigurationBuilder()
-                    .forPackage(packageName, plugin.getClass().getClassLoader())
-                    .addClassLoaders(plugin.getClass().getClassLoader())
-                    .setScanners(Scanners.TypesAnnotated, Scanners.SubTypes));
+            Reflections reflections = ReflectionsCache.getInstance().getOrCreate(plugin, packageName);
 
             Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(ExtractorMeta.class);
 

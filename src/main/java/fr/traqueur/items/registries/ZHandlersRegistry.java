@@ -6,6 +6,7 @@ import fr.traqueur.items.api.annotations.EffectMeta;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.effects.EffectSettings;
 import fr.traqueur.items.api.registries.HandlersRegistry;
+import fr.traqueur.items.utils.ReflectionsCache;
 import fr.traqueur.structura.registries.PolymorphicRegistry;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
@@ -58,10 +59,7 @@ public class ZHandlersRegistry implements HandlersRegistry {
         Logger.info("Scanning package <aqua>{}<reset> for EffectHandlers...", packageName);
 
         try {
-            Reflections reflections = new Reflections(new ConfigurationBuilder()
-                    .forPackage(packageName, plugin.getClass().getClassLoader())
-                    .addClassLoaders(plugin.getClass().getClassLoader())
-                    .setScanners(Scanners.TypesAnnotated, Scanners.SubTypes));
+            Reflections reflections = ReflectionsCache.getInstance().getOrCreate(plugin, packageName);
 
             Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(EffectMeta.class);
 

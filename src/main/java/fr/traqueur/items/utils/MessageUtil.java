@@ -27,32 +27,29 @@ public class MessageUtil {
     /**
      * Legacy Minecraft color codes mapping to MiniMessage tags.
      */
-    private static final Map<String, String> LEGACY_TO_MINIMESSAGE = new HashMap<>();
-
-    static {
-        // Legacy color codes to MiniMessage tags
-        LEGACY_TO_MINIMESSAGE.put("&0", "<black>");
-        LEGACY_TO_MINIMESSAGE.put("&1", "<dark_blue>");
-        LEGACY_TO_MINIMESSAGE.put("&2", "<dark_green>");
-        LEGACY_TO_MINIMESSAGE.put("&3", "<dark_aqua>");
-        LEGACY_TO_MINIMESSAGE.put("&4", "<dark_red>");
-        LEGACY_TO_MINIMESSAGE.put("&5", "<dark_purple>");
-        LEGACY_TO_MINIMESSAGE.put("&6", "<gold>");
-        LEGACY_TO_MINIMESSAGE.put("&7", "<gray>");
-        LEGACY_TO_MINIMESSAGE.put("&8", "<dark_gray>");
-        LEGACY_TO_MINIMESSAGE.put("&9", "<blue>");
-        LEGACY_TO_MINIMESSAGE.put("&a", "<green>");
-        LEGACY_TO_MINIMESSAGE.put("&b", "<aqua>");
-        LEGACY_TO_MINIMESSAGE.put("&c", "<red>");
-        LEGACY_TO_MINIMESSAGE.put("&d", "<light_purple>");
-        LEGACY_TO_MINIMESSAGE.put("&e", "<yellow>");
-        LEGACY_TO_MINIMESSAGE.put("&f", "<white>");
-        LEGACY_TO_MINIMESSAGE.put("&l", "<bold>");
-        LEGACY_TO_MINIMESSAGE.put("&m", "<strikethrough>");
-        LEGACY_TO_MINIMESSAGE.put("&n", "<underlined>");
-        LEGACY_TO_MINIMESSAGE.put("&o", "<italic>");
-        LEGACY_TO_MINIMESSAGE.put("&r", "<reset>");
-    }
+    private static final Map<String, String> LEGACY_TO_MINIMESSAGE = Map.ofEntries(
+            Map.entry("&0", "<black>"),
+            Map.entry("&1", "<dark_blue>"),
+            Map.entry("&2", "<dark_green>"),
+            Map.entry("&3", "<dark_aqua>"),
+            Map.entry("&4", "<dark_red>"),
+            Map.entry("&5", "<dark_purple>"),
+            Map.entry("&6", "<gold>"),
+            Map.entry("&7", "<gray>"),
+            Map.entry("&8", "<dark_gray>"),
+            Map.entry("&9", "<blue>"),
+            Map.entry("&a", "<green>"),
+            Map.entry("&b", "<aqua>"),
+            Map.entry("&c", "<red>"),
+            Map.entry("&d", "<light_purple>"),
+            Map.entry("&e", "<yellow>"),
+            Map.entry("&f", "<white>"),
+            Map.entry("&l", "<bold>"),
+            Map.entry("&m", "<strikethrough>"),
+            Map.entry("&n", "<underlined>"),
+            Map.entry("&o", "<italic>"),
+            Map.entry("&r", "<reset>")
+    );
 
     /**
      * Initializes the MessageUtil with the plugin instance.
@@ -189,11 +186,27 @@ public class MessageUtil {
      * @return The message with MiniMessage tags
      */
     private static String convertLegacyToMiniMessage(String message) {
-        String converted = message;
-        for (Map.Entry<String, String> entry : LEGACY_TO_MINIMESSAGE.entrySet()) {
-            converted = converted.replace(entry.getKey(), entry.getValue());
+        if (!message.contains("&")) {
+            return message;
         }
-        return converted;
+
+        StringBuilder builder = new StringBuilder(message.length() + 20);
+        int length = message.length();
+
+        for (int i = 0; i < length; i++) {
+            if (message.charAt(i) == '&' && i + 1 < length) {
+                String code = "&" + message.charAt(i + 1);
+                String replacement = LEGACY_TO_MINIMESSAGE.get(code);
+                if (replacement != null) {
+                    builder.append(replacement);
+                    i++; // Skip next char
+                    continue;
+                }
+            }
+            builder.append(message.charAt(i));
+        }
+
+        return builder.toString();
     }
 
 }

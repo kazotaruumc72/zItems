@@ -1,6 +1,7 @@
-package fr.traqueur.items.api.items;
+package fr.traqueur.items.api.settings;
 
 import fr.traqueur.items.api.effects.Effect;
+import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultBool;
 import fr.traqueur.structura.annotations.defaults.DefaultInt;
@@ -77,7 +78,10 @@ public record ItemSettings(
         @DefaultInt(-1) int repairCost,
 
         @Options(optional = true)
-        Tag<DamageType> damageTypeResistance
+        Tag<DamageType> damageTypeResistance,
+
+        @Options(optional = true)
+        RecipeSettings recipe
 ) implements Loadable {
 
     /**

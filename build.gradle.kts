@@ -42,6 +42,7 @@ allprojects {
 
         relocate("fr.traqueur.structura", "fr.traqueur.items.libs.structura")
         relocate("fr.traqueur.commands", "fr.traqueur.items.libs.commands")
+        relocate("fr.traqueur.recipes", "fr.traqueur.items.libs.recipes")
     }
 
     tasks.compileJava {
@@ -67,6 +68,7 @@ allprojects {
         compileOnly("net.kyori:adventure-platform-bukkit:4.3.4")
 
         /* Libraries */
+        implementation("com.github.Traqueur-dev:RecipesAPI:feat~player-dynamic-SNAPSHOT")
         implementation("com.github.Traqueur-dev:Structura:1.4.0")
         implementation("com.github.Traqueur-dev.CommandsAPI:platform-spigot:4.2.3")
         compileOnly("org.reflections:reflections:0.10.2")

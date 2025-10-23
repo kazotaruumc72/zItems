@@ -100,6 +100,10 @@ public class Logger {
         return message;
     }
 
+    public static void setDebug(boolean debug) {
+        DEBUG = debug;
+    }
+
     private enum Level {
         INFO, WARN, ERROR
     }

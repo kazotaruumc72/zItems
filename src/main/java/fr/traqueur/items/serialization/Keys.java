@@ -20,6 +20,7 @@ import java.util.Optional;
  */
 public class Keys {
 
+    public static final DataKey<String> ITEM_ID = new DataKey<>(PersistentDataType.STRING);
     public static final DataKey<List<Effect>> EFFECTS = new DataKey<>(PersistentDataType.LIST.listTypeFrom(EffectDataType.INSTANCE));
 
     private Keys() {}

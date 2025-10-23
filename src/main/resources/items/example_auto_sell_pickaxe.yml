@@ -21,3 +21,19 @@ custom-model-data: 1001
 unbreakable: false
 hide-tooltip: false
 max-stack-size: 1
+
+recipe:
+  type: CRAFTING_SHAPED
+  # Not for Smithing recipes
+  group: example
+  # Not for Smithing recipes
+  # FOOD, BLOCKS, MISC for smelting recipes
+  # BUILDING, REDSTONE, EQUIPMENT, MISC for crafting recipes
+  category: MISC
+  pattern:
+    - "###"
+    - "## "
+  result-amount: 5
+  ingredients:
+    - item: "material:stone"
+      sign: '#'

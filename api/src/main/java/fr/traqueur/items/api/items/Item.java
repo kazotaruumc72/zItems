@@ -1,5 +1,6 @@
 package fr.traqueur.items.api.items;
 
+import fr.traqueur.items.api.settings.ItemSettings;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

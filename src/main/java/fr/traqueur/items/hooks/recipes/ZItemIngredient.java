@@ -1,0 +1,33 @@
+package fr.traqueur.items.hooks.recipes;
+
+import fr.traqueur.items.api.items.Item;
+import fr.traqueur.items.api.registries.ItemsRegistry;
+import fr.traqueur.items.api.registries.Registry;
+import fr.traqueur.items.serialization.Keys;
+import fr.traqueur.recipes.api.domains.Ingredient;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.persistence.PersistentDataContainer;
+
+public class ZItemIngredient extends Ingredient {
+
+    private final Item item;
+
+    public ZItemIngredient(String id, Character sign) {
+        super(sign);
+        this.item = Registry.get(ItemsRegistry.class).getById(id);
+    }
+
+    @Override
+    public boolean isSimilar(ItemStack item) {
+        if(item == null) return false;
+        if (!item.hasItemMeta()) return false;
+        PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+        return Keys.ITEM_ID.get(container).map(id -> this.item.id().equals(id)).orElse(false);
+    }
+
+    @Override
+    public RecipeChoice choice() {
+        return new RecipeChoice.MaterialChoice(this.item.settings().material());
+    }
+}

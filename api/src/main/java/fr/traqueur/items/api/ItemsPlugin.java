@@ -2,10 +2,13 @@ package fr.traqueur.items.api;
 
 import fr.traqueur.items.api.effects.EffectsDispatcher;
 import fr.traqueur.items.api.managers.Manager;
+import fr.traqueur.recipes.api.RecipesAPI;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class ItemsPlugin extends JavaPlugin {
+
+    public abstract RecipesAPI getRecipesManager();
 
     public abstract EffectsDispatcher getDispatcher();
 

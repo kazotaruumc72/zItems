@@ -4,7 +4,7 @@ import fr.traqueur.items.PlatformType;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.items.Item;
-import fr.traqueur.items.api.items.ItemSettings;
+import fr.traqueur.items.api.settings.ItemSettings;
 import fr.traqueur.items.api.managers.EffectsManager;
 import fr.traqueur.items.utils.ItemUtil;
 import fr.traqueur.structura.annotations.Options;
@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.tag.DamageTypeTags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

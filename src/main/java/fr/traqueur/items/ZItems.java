@@ -7,6 +7,7 @@ import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.effects.EffectsDispatcher;
 import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.managers.EffectsManager;
+import fr.traqueur.items.api.managers.ItemsManager;
 import fr.traqueur.items.api.registries.*;
 import fr.traqueur.items.api.settings.Settings;
 import fr.traqueur.items.commands.CommandsMessageHandler;
@@ -18,6 +19,8 @@ import fr.traqueur.items.effects.ZEffectsManager;
 import fr.traqueur.items.effects.ZEventsListener;
 import fr.traqueur.items.hooks.SuperiorSkyBlockHook;
 import fr.traqueur.items.hooks.WorldGuardHook;
+import fr.traqueur.items.hooks.recipes.RecipesHook;
+import fr.traqueur.items.items.ZItemsManager;
 import fr.traqueur.items.registries.*;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.serialization.ZEffectDataType;
@@ -25,6 +28,8 @@ import fr.traqueur.items.settings.PluginSettings;
 import fr.traqueur.items.settings.readers.*;
 import fr.traqueur.items.shop.ShopProviders;
 import fr.traqueur.items.utils.MessageUtil;
+import fr.traqueur.recipes.api.RecipesAPI;
+import fr.traqueur.recipes.api.hook.Hook;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.registries.CustomReaderRegistry;
@@ -32,9 +37,7 @@ import fr.traqueur.structura.types.TypeToken;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Sound;
-import org.bukkit.Tag;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
@@ -49,7 +52,10 @@ public class ZItems extends ItemsPlugin {
 
     private static final String CONFIG_FILE = "config.yml";
     private static final String MESSAGES_FILE = "messages.yml";
+    private static final String ITEMS_FOLDER = "items";
+    private static final String EFFECTS_FOLDER = "effects";
 
+    private RecipesAPI recipesManager;
     private EffectsDispatcher dispatcher;
 
     @Override
@@ -67,9 +73,10 @@ public class ZItems extends ItemsPlugin {
         Logger.info("<gray>Plugin Version V<red>{}", this.getDescription().getVersion());
 
         MessageUtil.initialize(this);
-
         ZEffectDataType.initialize();
         Keys.initialize(this);
+        this.recipesManager = new RecipesAPI(this, settings.debug());
+        Hook.addHook(new RecipesHook(this));
 
         this.reloadConfig();
 
@@ -96,11 +103,11 @@ public class ZItems extends ItemsPlugin {
 
         // Register and load effects from files
         Registry.register(EffectsRegistry.class, new ZEffectsRegistry(this));
-        Registry.get(EffectsRegistry.class).loadFromFolder(this.getDataPath().resolve("effects"));
+        Registry.get(EffectsRegistry.class).loadFromFolder(this.getDataPath().resolve(EFFECTS_FOLDER));
 
         // Register and load items from files
         Registry.register(ItemsRegistry.class, new ZItemsRegistry(this));
-        Registry.get(ItemsRegistry.class).loadFromFolder(this.getDataPath().resolve("items"));
+        Registry.get(ItemsRegistry.class).loadFromFolder(this.getDataPath().resolve(ITEMS_FOLDER));
 
         // Register and scan extractors
         Registry.register(ExtractorsRegistry.class, new ZExtractorsRegistry(this));
@@ -115,6 +122,8 @@ public class ZItems extends ItemsPlugin {
         Logger.info("<green>Event dispatching system initialized successfully!");
 
         this.registerManager(EffectsManager.class, new ZEffectsManager());
+        ItemsManager manager = this.registerManager(ItemsManager.class, new ZItemsManager());
+        manager.generateRecipesFromLoadedItems();
 
         this.registerCommands(settings);
 
@@ -179,11 +188,26 @@ public class ZItems extends ItemsPlugin {
     @Override
     public void reloadConfig() {
         super.reloadConfig();
-        this.createSettings(CONFIG_FILE, PluginSettings.class);
+        PluginSettings settings = this.createSettings(CONFIG_FILE, PluginSettings.class);
+        Logger.setDebug(settings.debug());
         try {
             Structura.loadEnum(this.getDataPath().resolve(MESSAGES_FILE), Messages.class);
         } catch (StructuraException e) {
             this.getSLF4JLogger().error("Failed to load messages configuration.", e);
+        }
+
+        ItemsRegistry registry = Registry.get(ItemsRegistry.class);
+        if(registry != null) {
+            registry.loadFromFolder(this.getDataPath().resolve(ITEMS_FOLDER));
+        }
+        EffectsRegistry effectsRegistry = Registry.get(EffectsRegistry.class);
+        if(effectsRegistry != null) {
+            effectsRegistry.loadFromFolder(this.getDataPath().resolve(EFFECTS_FOLDER));
+        }
+
+        ItemsManager itemsManager = this.getManager(ItemsManager.class);
+        if(itemsManager != null) {
+            itemsManager.generateRecipesFromLoadedItems();
         }
     }
 
@@ -205,6 +229,11 @@ public class ZItems extends ItemsPlugin {
         if (!file.exists()) {
             this.saveResource(fileName, false);
         }
+    }
+
+    @Override
+    public RecipesAPI getRecipesManager() {
+        return recipesManager;
     }
 
     @Override

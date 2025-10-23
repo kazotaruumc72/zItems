@@ -1,0 +1,14 @@
+package fr.traqueur.items.settings.models;
+
+import fr.traqueur.structura.api.Loadable;
+import org.bukkit.DyeColor;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
+
+public record PatternSettings(PatternType type, DyeColor color) implements Loadable {
+
+    public Pattern toPattern() {
+        return new Pattern(color, type);
+    }
+
+}

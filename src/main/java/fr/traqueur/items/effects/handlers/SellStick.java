@@ -4,7 +4,7 @@ import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.annotations.EffectMeta;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
-import fr.traqueur.items.api.effects.interactions.InteractionAction;
+import fr.traqueur.items.api.interactions.InteractionAction;
 import fr.traqueur.items.api.shop.ShopProvider;
 import fr.traqueur.items.effects.settings.SellStickSettings;
 import fr.traqueur.items.utils.ItemUtil;

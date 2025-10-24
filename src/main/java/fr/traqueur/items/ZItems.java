@@ -21,6 +21,7 @@ import fr.traqueur.items.hooks.SuperiorSkyBlockHook;
 import fr.traqueur.items.hooks.WorldGuardHook;
 import fr.traqueur.items.hooks.recipes.RecipesHook;
 import fr.traqueur.items.items.ZItemsManager;
+import fr.traqueur.items.items.listeners.CommandsListener;
 import fr.traqueur.items.registries.*;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.serialization.ZEffectDataType;
@@ -120,6 +121,8 @@ public class ZItems extends ItemsPlugin {
         ZEventsListener eventsListener = new ZEventsListener(this.dispatcher);
         eventsListener.registerDynamicListeners(this);
         Logger.info("<green>Event dispatching system initialized successfully!");
+
+        this.getServer().getPluginManager().registerEvents(new CommandsListener(this), this);
 
         this.registerManager(EffectsManager.class, new ZEffectsManager());
         ItemsManager manager = this.registerManager(ItemsManager.class, new ZItemsManager());

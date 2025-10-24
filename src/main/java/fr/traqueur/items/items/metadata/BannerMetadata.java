@@ -1,5 +1,6 @@
 package fr.traqueur.items.items.metadata;
 
+import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.MetadataMeta;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.structura.api.Loadable;
@@ -18,11 +19,12 @@ public record BannerMetadata(List<PatternSettings> patterns) implements ItemMeta
 
     @Override
     public void apply(ItemStack itemStack, @Nullable Player player) {
-        itemStack.editMeta(meta -> {
-            if (meta instanceof BannerMeta bannerMeta) {
-                bannerMeta.setPatterns(patterns.stream().map(PatternSettings::toPattern).toList());
-            }
+        boolean applied = itemStack.editMeta(BannerMeta.class, meta -> {
+            meta.setPatterns(patterns.stream().map(PatternSettings::toPattern).toList());
         });
+        if (!applied) {
+            Logger.severe("Failed to apply BannerMeta to ItemStack of type {}", itemStack.getType().name());
+        }
     }
 
     public record PatternSettings(PatternType type, DyeColor color) implements Loadable {

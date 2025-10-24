@@ -1,5 +1,6 @@
 package fr.traqueur.items.items.metadata;
 
+import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.MetadataMeta;
 import fr.traqueur.items.api.items.ItemMetadata;
 import org.bukkit.Color;
@@ -19,11 +20,11 @@ public record LeatherArmorMetadata(
 
     @Override
     public void apply(ItemStack itemStack, @Nullable Player player) {
-        if (!(itemStack.getItemMeta() instanceof LeatherArmorMeta meta)) {
-            return;
+        boolean applied = itemStack.editMeta(LeatherArmorMeta.class, meta -> {
+            meta.setColor(color);
+        });
+        if (!applied) {
+            Logger.severe("Failed to apply LeatherArmorMeta to ItemStack of type {}", itemStack.getType().name());
         }
-
-        meta.setColor(color);
-        itemStack.setItemMeta(meta);
     }
 }

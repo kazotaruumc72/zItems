@@ -1,5 +1,6 @@
 package fr.traqueur.items.items.metadata;
 
+import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.MetadataMeta;
 import fr.traqueur.items.api.items.ItemMetadata;
 import org.bukkit.entity.Player;
@@ -22,12 +23,12 @@ public record TrimMetadata(
 
     @Override
     public void apply(ItemStack itemStack, @Nullable Player player) {
-        if (!(itemStack.getItemMeta() instanceof ArmorMeta meta)) {
-            return;
+        boolean applied = itemStack.editMeta(ArmorMeta.class, meta -> {
+            ArmorTrim trim = new ArmorTrim(material, pattern);
+            meta.setTrim(trim);
+        });
+        if (!applied) {
+            Logger.severe("Failed to apply TrimMetadata to item: " + itemStack.getType().name());
         }
-
-        ArmorTrim trim = new ArmorTrim(material, pattern);
-        meta.setTrim(trim);
-        itemStack.setItemMeta(meta);
     }
 }

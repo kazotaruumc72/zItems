@@ -1,5 +1,6 @@
 package fr.traqueur.items.items.metadata;
 
+import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.MetadataMeta;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.items.settings.models.PotionEffectSettings;
@@ -31,24 +32,23 @@ public record PotionMetadata(
 
     @Override
     public void apply(ItemStack itemStack, @Nullable Player player) {
-        if (!(itemStack.getItemMeta() instanceof PotionMeta meta)) {
-            return;
-        }
-
-        if (color != null) {
-            meta.setColor(color);
-        }
-
-        if (basePotionType != null) {
-            meta.setBasePotionType(basePotionType);
-        }
-
-        if (customEffects != null && !customEffects.isEmpty()) {
-            for (PotionEffectSettings effectSetting : customEffects) {
-                meta.addCustomEffect(effectSetting.toPotionEffect(), true);
+        boolean applied = itemStack.editMeta(PotionMeta.class, meta -> {
+            if (color != null) {
+                meta.setColor(color);
             }
-        }
 
-        itemStack.setItemMeta(meta);
+            if (basePotionType != null) {
+                meta.setBasePotionType(basePotionType);
+            }
+
+            if (customEffects != null && !customEffects.isEmpty()) {
+                for (PotionEffectSettings effectSetting : customEffects) {
+                    meta.addCustomEffect(effectSetting.toPotionEffect(), true);
+                }
+            }
+        });
+        if (!applied) {
+            Logger.severe("Failed to apply PotionMeta to ItemStack of type {}", itemStack.getType().name());
+        }
     }
 }

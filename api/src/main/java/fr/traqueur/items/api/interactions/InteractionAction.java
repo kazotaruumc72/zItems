@@ -1,4 +1,4 @@
-package fr.traqueur.items.api.effects.interactions;
+package fr.traqueur.items.api.interactions;
 
 public enum InteractionAction {
     SHIFT_LEFT_CLICK,

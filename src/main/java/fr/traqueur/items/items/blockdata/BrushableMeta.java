@@ -1,0 +1,18 @@
+package fr.traqueur.items.items.blockdata;
+
+import fr.traqueur.items.api.blockdata.BlockDataMeta;
+import org.bukkit.block.data.Brushable;
+
+/**
+ * BlockData metadata for brushable blocks (suspicious sand/gravel).
+ * Sets the dusted level.
+ */
+public record BrushableMeta(int dusted) implements BlockDataMeta<Brushable> {
+
+    @Override
+    public void apply(Brushable blockData) {
+        if (dusted >= 0 && dusted <= blockData.getMaximumDusted()) {
+            blockData.setDusted(dusted);
+        }
+    }
+}

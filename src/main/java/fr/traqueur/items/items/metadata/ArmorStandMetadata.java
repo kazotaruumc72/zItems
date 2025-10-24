@@ -1,6 +1,7 @@
 package fr.traqueur.items.items.metadata;
 
 import com.destroystokyo.paper.inventory.meta.ArmorStandMeta;
+import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.MetadataMeta;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.structura.annotations.Options;
@@ -20,14 +21,15 @@ public record ArmorStandMetadata(
 
     @Override
     public void apply(ItemStack itemStack, @Nullable Player player) {
-        itemStack.editMeta(meta -> {
-            if (meta instanceof ArmorStandMeta armorStandMeta) {
-                armorStandMeta.setInvisible(invisible);
-                armorStandMeta.setSmall(small);
-                armorStandMeta.setNoBasePlate(noBasePlate);
-                armorStandMeta.setShowArms(arms);
-                armorStandMeta.setMarker(marker);
-            }
+        boolean applied = itemStack.editMeta(ArmorStandMeta.class, armorStandMeta -> {
+            armorStandMeta.setInvisible(invisible);
+            armorStandMeta.setSmall(small);
+            armorStandMeta.setNoBasePlate(noBasePlate);
+            armorStandMeta.setShowArms(arms);
+            armorStandMeta.setMarker(marker);
         });
+        if (!applied) {
+            Logger.severe("Failed to apply ArmorStandMeta to ItemStack of type {}", itemStack.getType().name());
+        }
     }
 }

@@ -3,7 +3,9 @@ package fr.traqueur.items.registries;
 import fr.traqueur.items.PlatformType;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
+import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
 import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.items.api.registries.ItemsRegistry;
@@ -22,9 +24,28 @@ public class ZItemsRegistry extends ItemsRegistry {
     public ZItemsRegistry(ItemsPlugin plugin) {
         super(plugin);
         Reflections reflections = ReflectionsCache.getInstance().getOrCreate(plugin, "fr.traqueur.items");
-        Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(MetadataMeta.class);
+
+        PolymorphicRegistry.create(BlockDataMeta.class, registry -> {
+            Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(BlockDataMetaMeta.class);
+            int count = 0;
+            for (Class<?> clazz : annotatedClasses) {
+                if (!BlockDataMeta.class.isAssignableFrom(clazz)) {
+                    Logger.warning("Class <yellow>{}<reset> is annotated with @BlockDataMetaMeta but does not implement BlockDataMeta. Skipping.",
+                            clazz.getSimpleName());
+                    continue;
+                }
+                BlockDataMetaMeta meta = clazz.getAnnotation(BlockDataMetaMeta.class);
+
+                //noinspection unchecked
+                registry.register(meta.value(), (Class<? extends BlockDataMeta<?>>) clazz);
+                count++;
+                Logger.debug("Registered BlockDataMeta type <aqua>{}<reset> with id <gold>{}<reset>.", clazz.getSimpleName(), meta.value());
+            }
+            Logger.info("Registered <gold>{}<reset> BlockDataMeta type(s).", count);
+        });
 
         PolymorphicRegistry.create(ItemMetadata.class, registry -> {
+            Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(MetadataMeta.class);
             int count = 0;
             for (Class<?> clazz : annotatedClasses) {
                 if (!ItemMetadata.class.isAssignableFrom(clazz)) {

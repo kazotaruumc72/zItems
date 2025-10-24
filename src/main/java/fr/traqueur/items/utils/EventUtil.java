@@ -22,7 +22,8 @@ public class EventUtil {
         if (allowedPlugins == null || allowedPlugins.isEmpty()) {
             return true;
         }
-        RegisteredListener[] listeners =  handlers.getRegisteredListeners();;
+        RegisteredListener[] listeners = handlers.getRegisteredListeners();
+        ;
         for (RegisteredListener listener : listeners) {
             if (!allowedPlugins.contains(listener.getPlugin().getName())) {
                 continue;
@@ -43,7 +44,7 @@ public class EventUtil {
      * Checks if a player can break a block at the given location.
      * This method checks all registered LocationAccess hooks.
      *
-     * @param player the player attempting to break the block
+     * @param player   the player attempting to break the block
      * @param location the location of the block
      * @return true if the player can break the block, false otherwise
      */

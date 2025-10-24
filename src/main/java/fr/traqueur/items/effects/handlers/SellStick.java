@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @EffectMeta(value = "SELL_STICK")
-public record SellStick(ItemsPlugin plugin) implements EffectHandler.SingleEventEffectHandler<SellStickSettings, PlayerInteractEvent> {
+public record SellStick(
+        ItemsPlugin plugin) implements EffectHandler.SingleEventEffectHandler<SellStickSettings, PlayerInteractEvent> {
 
     @Override
     public Class<PlayerInteractEvent> eventType() {
@@ -70,8 +71,10 @@ public record SellStick(ItemsPlugin plugin) implements EffectHandler.SingleEvent
 
     private InteractionAction getActionFromEvent(PlayerInteractEvent event, Player player) {
         return switch (event.getAction()) {
-            case RIGHT_CLICK_BLOCK, RIGHT_CLICK_AIR -> player.isSneaking() ? InteractionAction.SHIFT_RIGHT_CLICK : InteractionAction.RIGHT_CLICK;
-            case LEFT_CLICK_BLOCK, LEFT_CLICK_AIR -> player.isSneaking() ? InteractionAction.SHIFT_LEFT_CLICK : InteractionAction.LEFT_CLICK;
+            case RIGHT_CLICK_BLOCK, RIGHT_CLICK_AIR ->
+                    player.isSneaking() ? InteractionAction.SHIFT_RIGHT_CLICK : InteractionAction.RIGHT_CLICK;
+            case LEFT_CLICK_BLOCK, LEFT_CLICK_AIR ->
+                    player.isSneaking() ? InteractionAction.SHIFT_LEFT_CLICK : InteractionAction.LEFT_CLICK;
             default -> null;
         };
     }

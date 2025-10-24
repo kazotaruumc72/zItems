@@ -18,7 +18,7 @@ public class EnchantsApplicator implements EffectHandler.NoEventEffectHandler<En
                 error = true;
                 break;
             }
-            if(evolution < 0 && level + evolution < 0) {
+            if (evolution < 0 && level + evolution < 0) {
                 error = true;
                 break;
             }

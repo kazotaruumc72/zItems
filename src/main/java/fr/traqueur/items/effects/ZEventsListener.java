@@ -98,11 +98,9 @@ public class ZEventsListener implements Listener {
 
         for (EffectHandler<?> handler : handlersRegistry.getAll()) {
             switch (handler) {
-                case EffectHandler.SingleEventEffectHandler<?, ?> single ->
-                    eventTypes.add(single.eventType());
+                case EffectHandler.SingleEventEffectHandler<?, ?> single -> eventTypes.add(single.eventType());
 
-                case EffectHandler.MultiEventEffectHandler<?> multi ->
-                    eventTypes.addAll(multi.eventTypes());
+                case EffectHandler.MultiEventEffectHandler<?> multi -> eventTypes.addAll(multi.eventTypes());
 
                 case EffectHandler.NoEventEffectHandler<?> __ -> {
                     // NoEventHandlers don't listen to events
@@ -120,7 +118,7 @@ public class ZEventsListener implements Listener {
      * and registers a {@link RegisteredListener} that delegates to our
      * {@link #handleEvent(Event)} method.
      *
-     * @param plugin the plugin to register the listener with
+     * @param plugin    the plugin to register the listener with
      * @param eventType the event class to listen for
      * @return true if registration succeeded, false otherwise
      */
@@ -128,7 +126,7 @@ public class ZEventsListener implements Listener {
         // Check that an extractor exists for this event type
         if (!Registry.get(ExtractorsRegistry.class).has(eventType)) {
             Logger.warning("No ItemSourceExtractor for event type: <yellow>{}<reset>. Skipping listener registration.",
-                eventType.getSimpleName());
+                    eventType.getSimpleName());
             return false;
         }
 
@@ -141,11 +139,11 @@ public class ZEventsListener implements Listener {
 
             // Create a RegisteredListener with LOWEST priority (execute early, before most plugins)
             RegisteredListener registeredListener = new RegisteredListener(
-                this,
-                executor,
-                EventPriority.LOWEST,
-                plugin,
-                false  // ignoreCancelled = false (process even cancelled events)
+                    this,
+                    executor,
+                    EventPriority.LOWEST,
+                    plugin,
+                    false  // ignoreCancelled = false (process even cancelled events)
             );
 
             // Get the HandlerList for this event type and register our listener
@@ -157,7 +155,7 @@ public class ZEventsListener implements Listener {
 
         } catch (Exception e) {
             Logger.severe("Failed to register listener for event <red>{}<reset>: {}",
-                e, eventType.getSimpleName());
+                    e, eventType.getSimpleName());
             return false;
         }
     }
@@ -189,7 +187,7 @@ public class ZEventsListener implements Listener {
      * </ol>
      *
      * @param event the Bukkit event
-     * @param <E> the event type
+     * @param <E>   the event type
      */
     @SuppressWarnings("unchecked")
     private <E extends Event> void handleEvent(E event) {

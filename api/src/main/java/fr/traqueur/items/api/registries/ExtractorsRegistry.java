@@ -36,7 +36,7 @@ public interface ExtractorsRegistry extends Registry<Class<? extends Event>, Ite
      *   <li>Register the extractor for its event type</li>
      * </ol>
      *
-     * @param plugin the plugin instance (used for instantiation and classloader)
+     * @param plugin      the plugin instance (used for instantiation and classloader)
      * @param packageName the package to scan (e.g., "fr.traqueur.items.effects.extractors")
      */
     void scanPackage(JavaPlugin plugin, String packageName);

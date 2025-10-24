@@ -25,11 +25,11 @@ public class XPBoost implements EffectHandler.SingleEventEffectHandler<XPBoostSe
     public void handle(EffectContext context, XPBoostSettings settings) {
         BlockBreakEvent event = context.getEventAs(this.eventType());
 
-        if(settings.chanceToBoost() != -1 && ThreadLocalRandom.current().nextDouble(0, 100) > settings.chanceToBoost()) {
+        if (settings.chanceToBoost() != -1 && ThreadLocalRandom.current().nextDouble(0, 100) > settings.chanceToBoost()) {
             return;
         }
 
-        if(context.affectedBlocks().size() != 1) {
+        if (context.affectedBlocks().size() != 1) {
             int totalExp = context.affectedBlocks().stream().mapToInt(this::getBlockXP).sum();
             var currentBlock = event.getBlock();
             currentBlock.getWorld().spawn(currentBlock.getLocation(), ExperienceOrb.class, orb -> orb.setExperience(totalExp));

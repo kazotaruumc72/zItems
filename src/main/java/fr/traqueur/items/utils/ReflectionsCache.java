@@ -13,7 +13,7 @@ public final class ReflectionsCache {
     private static ReflectionsCache instance;
 
     private final Map<CacheKey, Reflections> cache;
-    
+
     private ReflectionsCache() {
         this.cache = new ConcurrentHashMap<>();
     }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package fr.traqueur.items.effects.exceptions;
 
@@ -9,7 +9,7 @@ package fr.traqueur.items.effects.exceptions;
  */
 public class ItemEnchantException extends Throwable {
 
-	public ItemEnchantException(String message) {
-		super(message);
-	}
+    public ItemEnchantException(String message) {
+        super(message);
+    }
 }

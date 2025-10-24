@@ -14,10 +14,11 @@ public abstract class ItemsPlugin extends JavaPlugin {
 
     /**
      * Register a manager with the plugin.
-     * @param clazz the interface/absract class of the manager
+     *
+     * @param clazz   the interface/absract class of the manager
      * @param manager the implementation manager instance
+     * @param <I>     the manager type
      * @return the manager instance
-     * @param <I> the manager type
      */
     public <I extends Manager> I registerManager(Class<I> clazz, I manager) {
         this.getServer().getServicesManager().register(clazz, manager, this, ServicePriority.Normal);
@@ -26,9 +27,10 @@ public abstract class ItemsPlugin extends JavaPlugin {
 
     /**
      * Get a manager instance of the plugin.
+     *
      * @param clazz the interface/abstract class of the manager
+     * @param <I>   the manager type
      * @return the manager instance
-     * @param <I> the manager type
      */
     public <I extends Manager> I getManager(Class<I> clazz) {
         var rsp = this.getServer().getServicesManager().getRegistration(clazz);

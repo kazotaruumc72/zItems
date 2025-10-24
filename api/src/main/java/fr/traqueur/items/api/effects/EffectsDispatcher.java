@@ -52,7 +52,7 @@ public interface EffectsDispatcher {
      * player.getInventory().addItem(customSword);
      * }</pre>
      *
-     * @param player the player context (can be null for some effects)
+     * @param player     the player context (can be null for some effects)
      * @param itemSource the ItemStack to apply effects to
      * @return the EffectContext after all handlers have executed, or null if no effects were found
      */
@@ -70,9 +70,9 @@ public interface EffectsDispatcher {
      * When {@code event} is {@code null}, only {@link EffectHandler.NoEventEffectHandler}s
      * will be executed (since {@code canApply(null)} returns {@code true} only for them).
      *
-     * @param player the player who triggered the event
+     * @param player     the player who triggered the event
      * @param itemSource the ItemStack that may contain effects
-     * @param event the Bukkit event that triggered this dispatch (or null for NoEventHandlers)
+     * @param event      the Bukkit event that triggered this dispatch (or null for NoEventHandlers)
      * @return the EffectContext after all handlers have executed, or null if no effects were found
      */
     EffectContext dispatch(Player player, ItemStack itemSource, Event event);

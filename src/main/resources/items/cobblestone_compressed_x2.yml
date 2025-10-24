@@ -1,0 +1,31 @@
+# Cobblestone Compressé x2
+# Crafté avec 9 Cobblestone Compressé x1
+id: "cobblestone_compressed_x2"
+material: COBBLESTONE
+display-name: "<gradient:#4F4F4F:#8F8F8F><bold>⬛⬛ Cobblestone Compressé x2</bold></gradient>"
+lore:
+  - "<gray>Une cobblestone extrêmement compressée"
+  - "<gray>Contient 81 cobblestones (9x9)"
+  - ""
+  - "<gold>💎 Peut être transformé en diamants!"
+  - "<yellow>⚠ Très précieux"
+custom-model-data: 2002
+hide-tooltip: false
+max-stack-size: 64
+enchantments:
+  - enchantment: protection
+    level: 1
+hide-enchantments: true
+
+recipe:
+  type: CRAFTING_SHAPED
+  group: compressed_blocks
+  category: BUILDING
+  pattern:
+    - "CCC"
+    - "CCC"
+    - "CCC"
+  amount: 1
+  ingredients:
+    - item: "zItems:cobblestone_compressed_x1"
+      sign: 'C'

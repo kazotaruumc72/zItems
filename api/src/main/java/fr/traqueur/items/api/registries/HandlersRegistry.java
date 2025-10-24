@@ -39,7 +39,7 @@ public interface HandlersRegistry extends Registry<String, EffectHandler<?>> {
      *   <li>Register the handler's settings class in the polymorphic registry</li>
      * </ol>
      *
-     * @param plugin the plugin instance (used for instantiation and classloader)
+     * @param plugin      the plugin instance (used for instantiation and classloader)
      * @param packageName the package to scan (e.g., "fr.traqueur.items.effects")
      */
     void scanPackage(JavaPlugin plugin, String packageName);

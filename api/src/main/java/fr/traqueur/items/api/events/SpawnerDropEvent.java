@@ -46,11 +46,11 @@ public class SpawnerDropEvent extends PlayerEvent implements Cancellable {
         return location;
     }
 
-    public void setItemStack(ItemStack itemStack) {
-        this.itemStack = itemStack;
-    }
-
     public ItemStack getItemStack() {
         return itemStack;
+    }
+
+    public void setItemStack(ItemStack itemStack) {
+        this.itemStack = itemStack;
     }
 }

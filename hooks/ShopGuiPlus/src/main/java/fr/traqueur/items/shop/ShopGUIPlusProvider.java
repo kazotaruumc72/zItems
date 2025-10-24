@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 public class ShopGUIPlusProvider extends ShopProvider {
     @Override
     public boolean sell(ItemsPlugin plugin, ItemStack item, int amount, double multiplier, OfflinePlayer player) {
-        if(!player.isOnline()) {
+        if (!player.isOnline()) {
             return false;
         }
         double price = ShopGuiPlusApi.getItemStackPriceSell(player.getPlayer(), item);

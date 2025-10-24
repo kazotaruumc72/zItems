@@ -24,8 +24,8 @@ public class PlayerInteractExtractor implements ItemSourceExtractor<PlayerIntera
     public ExtractionResult extract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         EquipmentSlot slot = event.getHand();
-        ItemStack item = slot == EquipmentSlot.HAND 
-                ? player.getInventory().getItemInMainHand() 
+        ItemStack item = slot == EquipmentSlot.HAND
+                ? player.getInventory().getItemInMainHand()
                 : player.getInventory().getItemInOffHand();
 
         return new ExtractionResult(player, item);

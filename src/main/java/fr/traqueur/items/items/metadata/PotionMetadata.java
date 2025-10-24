@@ -4,16 +4,10 @@ import fr.traqueur.items.api.annotations.MetadataMeta;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.items.settings.models.PotionEffectSettings;
 import fr.traqueur.structura.annotations.Options;
-import fr.traqueur.structura.annotations.defaults.DefaultBool;
-import fr.traqueur.structura.annotations.defaults.DefaultInt;
-import fr.traqueur.structura.api.Loadable;
 import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.Nullable;
 

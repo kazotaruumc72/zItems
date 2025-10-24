@@ -13,8 +13,7 @@ public enum ShopProviders {
 
     Z_SHOP("ZShop", ZShopProvider::new, 1),
     ECONOMY_SHOP_GUI("EconomyShopGUI", EconomyShopGUIProvider::new, 0),
-    SHOP_GUI_PLUS("ShopGUIPlus", ShopGUIPlusProvider::new, 0)
-    ;
+    SHOP_GUI_PLUS("ShopGUIPlus", ShopGUIPlusProvider::new, 0);
 
     public static ShopProviders FOUND_PROVIDER;
 
@@ -32,7 +31,7 @@ public enum ShopProviders {
         AtomicBoolean result = new AtomicBoolean(false);
         Stream.of(ShopProviders.values()).sorted(Comparator.comparingInt(sp -> sp.priority)).forEach(shopProvider -> {
             Logger.debug("Checking shop provider: " + shopProvider.pluginName());
-            if(shopProvider.isEnable()) {
+            if (shopProvider.isEnable()) {
                 ShopProvider.register(shopProvider.supplier.get());
                 FOUND_PROVIDER = shopProvider;
                 result.set(true);
@@ -48,7 +47,6 @@ public enum ShopProviders {
     private boolean isEnable() {
         return Bukkit.getPluginManager().getPlugin(pluginName) != null;
     }
-
 
 
 }

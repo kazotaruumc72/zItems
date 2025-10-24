@@ -22,10 +22,10 @@ public class Keys {
 
     public static final DataKey<String> ITEM_ID = new DataKey<>(PersistentDataType.STRING);
     public static final DataKey<List<Effect>> EFFECTS = new DataKey<>(PersistentDataType.LIST.listTypeFrom(EffectDataType.INSTANCE));
-
-    private Keys() {}
-
     private static ItemsPlugin PLUGIN;
+
+    private Keys() {
+    }
 
     /**
      * Initializes the Keys registry with the given plugin instance.
@@ -40,6 +40,7 @@ public class Keys {
 
     /**
      * Generic typed persistent data key that automatically resolves its name from the static field name.
+     *
      * @param <T> the type of data this key stores
      */
     public static class DataKey<T> {
@@ -106,6 +107,7 @@ public class Keys {
 
         /**
          * Retrieves the value associated with this key from the given {@link PersistentDataContainer}.
+         *
          * @param container the {@link PersistentDataContainer} from which to retrieve the value
          * @return an {@link Optional} containing the value if it exists, or empty if it does not
          */
@@ -116,7 +118,8 @@ public class Keys {
         /**
          * Retrieves the value associated with this key from the given {@link PersistentDataContainer}.
          * If the value does not exist, the provided default value is returned.
-         * @param container the {@link PersistentDataContainer} from which to retrieve the value
+         *
+         * @param container    the {@link PersistentDataContainer} from which to retrieve the value
          * @param defaultValue the default value to return if the key does not exist
          * @return the value associated with this key, or the default value if it does not exist
          */
@@ -126,8 +129,9 @@ public class Keys {
 
         /**
          * Sets the value associated with this key in the given {@link PersistentDataContainer}.
+         *
          * @param container the {@link PersistentDataContainer} in which to store the value
-         * @param value the value to store
+         * @param value     the value to store
          */
         public void set(PersistentDataContainer container, T value) {
             container.set(getNamespacedKey(), type, value);

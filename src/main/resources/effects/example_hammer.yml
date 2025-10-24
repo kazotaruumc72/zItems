@@ -2,7 +2,7 @@
 # Break blocks in a 3x3 area
 id: "super_hammer"
 type: "HAMMER"
-materials:             # List of materials that can be broken (whitelist)
+materials: # List of materials that can be broken (whitelist)
   - STONE
   - COBBLESTONE
   - DEEPSLATE

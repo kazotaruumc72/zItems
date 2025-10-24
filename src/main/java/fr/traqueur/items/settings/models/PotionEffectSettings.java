@@ -8,25 +8,25 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public record PotionEffectSettings(
-            PotionEffectType type,
-            int duration,
+        PotionEffectType type,
+        int duration,
 
-            @Options(optional = true)
-            @DefaultInt(0)
-            int amplifier,
+        @Options(optional = true)
+        @DefaultInt(0)
+        int amplifier,
 
-            @Options(optional = true)
-            @DefaultBool(false)
-            boolean ambient,
+        @Options(optional = true)
+        @DefaultBool(false)
+        boolean ambient,
 
-            @Options(optional = true)
-            @DefaultBool(true)
-            boolean showParticles,
+        @Options(optional = true)
+        @DefaultBool(true)
+        boolean showParticles,
 
-            @Options(optional = true)
-            @DefaultBool(true)
-            boolean showIcon
-    ) implements Loadable {
+        @Options(optional = true)
+        @DefaultBool(true)
+        boolean showIcon
+) implements Loadable {
 
 
     public PotionEffect toPotionEffect() {
@@ -40,4 +40,4 @@ public record PotionEffectSettings(
         );
     }
 
-    }
+}

@@ -13,10 +13,12 @@ public @interface MetadataMeta {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
-    @interface PaperMetadata { }
+    @interface PaperMetadata {
+    }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
-    @interface SpigotMetadata { }
+    @interface SpigotMetadata {
+    }
 
 }

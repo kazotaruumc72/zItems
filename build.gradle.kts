@@ -68,7 +68,7 @@ allprojects {
         compileOnly("net.kyori:adventure-platform-bukkit:4.3.4")
 
         /* Libraries */
-        implementation("com.github.Traqueur-dev:RecipesAPI:feat~player-dynamic-SNAPSHOT")
+        implementation("com.github.Traqueur-dev:RecipesAPI:3.1.0")
         implementation("com.github.Traqueur-dev:Structura:1.4.0")
         implementation("com.github.Traqueur-dev.CommandsAPI:platform-spigot:4.2.3")
         compileOnly("org.reflections:reflections:0.10.2")

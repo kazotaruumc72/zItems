@@ -4,8 +4,9 @@ import fr.traqueur.items.PlatformType;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.items.Item;
-import fr.traqueur.items.api.settings.ItemSettings;
 import fr.traqueur.items.api.managers.EffectsManager;
+import fr.traqueur.items.api.settings.ItemSettings;
+import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.utils.ItemUtil;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.api.Loadable;
@@ -67,7 +68,7 @@ public record ZItem(String id, @Options(inline = true) ItemSettings settings) im
             }
 
             if (settings.customModelData() > 0) {
-                if(PlatformType.isPaper()) {
+                if (PlatformType.isPaper()) {
                     meta.getCustomModelDataComponent()
                             .setFloats(List.of((float) settings.customModelData()));
                 } else {
@@ -83,7 +84,7 @@ public record ZItem(String id, @Options(inline = true) ItemSettings settings) im
                 meta.setMaxStackSize(settings.maxStackSize());
             }
 
-            if(settings.rarity() != null) {
+            if (settings.rarity() != null) {
                 meta.setRarity(settings.rarity());
             }
 
@@ -91,13 +92,13 @@ public record ZItem(String id, @Options(inline = true) ItemSettings settings) im
                 meta.addItemFlags(settings.flags().toArray(ItemFlag[]::new));
             }
 
-            if(meta instanceof Repairable repairable) {
-                if(settings.repairCost() >= 0) {
+            if (meta instanceof Repairable repairable) {
+                if (settings.repairCost() >= 0) {
                     repairable.setRepairCost(settings.repairCost());
                 }
             }
 
-            if(settings.damageTypeResistance() != null) {
+            if (settings.damageTypeResistance() != null) {
                 meta.setDamageResistant(settings.damageTypeResistance());
             }
 
@@ -117,6 +118,10 @@ public record ZItem(String id, @Options(inline = true) ItemSettings settings) im
                 metadata.apply(itemStack, player);
             }
         }
+
+        itemStack.editPersistentDataContainer(container -> {
+            Keys.ITEM_ID.set(container, id);
+        });
 
         return itemStack;
     }

@@ -83,7 +83,7 @@ public class ZItems extends ItemsPlugin {
         if (!ShopProviders.initialize()) {
             Logger.severe("No shop provider found! Disabling plugin.");
             Logger.info("Available shop providers:");
-            for (ShopProviders shopProviders: ShopProviders.values()) {
+            for (ShopProviders shopProviders : ShopProviders.values()) {
                 Logger.info("- <gold>{}", shopProviders.pluginName());
             }
             this.getServer().getPluginManager().disablePlugin(this);
@@ -156,7 +156,8 @@ public class ZItems extends ItemsPlugin {
         CustomReaderRegistry.getInstance().register(EquipmentSlotGroup.class, new EquipmentSlotGroupReader());
         CustomReaderRegistry.getInstance().register(Attribute.class, new AttributeReader());
         CustomReaderRegistry.getInstance().register(Enchantment.class, new EnchantmentReader());
-        CustomReaderRegistry.getInstance().register(new TypeToken<>() {}, new TagReader());
+        CustomReaderRegistry.getInstance().register(new TypeToken<>() {
+        }, new TagReader());
         CustomReaderRegistry.getInstance().register(Component.class, new ComponentReader());
         CustomReaderRegistry.getInstance().register(Effect.class, new EffectReader());
         CustomReaderRegistry.getInstance().register(PotionEffectType.class, new PotionEffectTypeReader());
@@ -165,7 +166,8 @@ public class ZItems extends ItemsPlugin {
         CustomReaderRegistry.getInstance().register(TrimMaterial.class, new TrimMaterialReader());
         CustomReaderRegistry.getInstance().register(TrimPattern.class, new TrimPatternReader());
         CustomReaderRegistry.getInstance().register(Sound.class, new SoundReader());
-        CustomReaderRegistry.getInstance().register(new TypeToken<>() {}, new DamageTypeReader());
+        CustomReaderRegistry.getInstance().register(new TypeToken<>() {
+        }, new DamageTypeReader());
     }
 
     @Override
@@ -197,16 +199,16 @@ public class ZItems extends ItemsPlugin {
         }
 
         ItemsRegistry registry = Registry.get(ItemsRegistry.class);
-        if(registry != null) {
+        if (registry != null) {
             registry.loadFromFolder(this.getDataPath().resolve(ITEMS_FOLDER));
         }
         EffectsRegistry effectsRegistry = Registry.get(EffectsRegistry.class);
-        if(effectsRegistry != null) {
+        if (effectsRegistry != null) {
             effectsRegistry.loadFromFolder(this.getDataPath().resolve(EFFECTS_FOLDER));
         }
 
         ItemsManager itemsManager = this.getManager(ItemsManager.class);
-        if(itemsManager != null) {
+        if (itemsManager != null) {
             itemsManager.generateRecipesFromLoadedItems();
         }
     }

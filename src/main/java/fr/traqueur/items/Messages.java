@@ -17,7 +17,8 @@ public enum Messages implements Loadable {
 
     ITEM_GIVEN("<green>Given <yellow><amount>x <item></yellow> to <aqua><player></aqua>."),
     ITEM_RECEIVED("<green>You received <yellow><amount>x <item></yellow>."),
-    ITEM_GIVE_INVALID_AMOUNT("<red>Invalid amount! Amount must be greater than 0."),;
+    ITEM_GIVE_INVALID_AMOUNT("<red>Invalid amount! Amount must be greater than 0."),
+    ;
 
     private final String rawMessage;
 
@@ -53,7 +54,7 @@ public enum Messages implements Loadable {
      * )
      * }</pre>
      *
-     * @param sender the command sender
+     * @param sender       the command sender
      * @param placeholders the placeholders to replace
      */
     public void send(CommandSender sender, TagResolver... placeholders) {

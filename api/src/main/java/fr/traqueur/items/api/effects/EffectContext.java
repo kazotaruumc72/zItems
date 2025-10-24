@@ -10,7 +10,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-public record EffectContext(Player executor, ItemStack itemSource, Event event,  Set<Block> affectedBlocks, List<ItemStack> drops) {
+public record EffectContext(Player executor, ItemStack itemSource, Event event, Set<Block> affectedBlocks,
+                            List<ItemStack> drops) {
 
     public <T extends Event> T getEventAs(Class<T> eventClass) {
         if (eventClass.isInstance(event)) {

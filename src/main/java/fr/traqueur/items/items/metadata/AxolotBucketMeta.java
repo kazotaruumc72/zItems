@@ -14,7 +14,7 @@ public record AxolotBucketMeta(Axolotl.Variant variant) implements ItemMetadata 
     @Override
     public void apply(ItemStack itemStack, @Nullable Player player) {
         itemStack.editMeta(meta -> {
-            if(meta instanceof AxolotlBucketMeta axolotlBucketMeta) {
+            if (meta instanceof AxolotlBucketMeta axolotlBucketMeta) {
                 axolotlBucketMeta.setVariant(variant);
             }
         });

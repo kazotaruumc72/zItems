@@ -9,11 +9,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class ZEffectDataType extends EffectDataType {
 
+    private ZEffectDataType() {
+    }
+
     public static void initialize() {
         EffectDataType.INSTANCE = new ZEffectDataType();
     }
-
-    private ZEffectDataType() {}
 
     @Override
     public @NotNull String toPrimitive(@NotNull Effect complex, @NotNull PersistentDataAdapterContext context) {

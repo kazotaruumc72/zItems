@@ -3,9 +3,7 @@ package fr.traqueur.items.registries;
 import fr.traqueur.items.PlatformType;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.annotations.ExtractorMeta;
 import fr.traqueur.items.api.annotations.MetadataMeta;
-import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.items.api.registries.ItemsRegistry;
@@ -15,36 +13,14 @@ import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.registries.PolymorphicRegistry;
 import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
-import org.reflections.util.ConfigurationBuilder;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Stream;
 
 public class ZItemsRegistry extends ItemsRegistry {
 
-    private static final String[] EXAMPLE_FILES = {
-        "example_super_sword.yml",
-        "example_hammer_pickaxe.yml",
-        "example_strength_sword.yml",
-        "example_auto_sell_pickaxe.yml",
-        "example_farming_hoe.yml",
-        "example_legendary_axe.yml",
-        "example_simple_stick.yml",
-        "example_golden_apple.yml",
-        "example_leather_armor.yml",
-        "example_custom_potion.yml",
-        "example_trimmed_armor.yml"
-    };
-
     public ZItemsRegistry(ItemsPlugin plugin) {
-        super(plugin, EXAMPLE_FILES);
+        super(plugin);
         Reflections reflections = ReflectionsCache.getInstance().getOrCreate(plugin, "fr.traqueur.items");
         Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(MetadataMeta.class);
 

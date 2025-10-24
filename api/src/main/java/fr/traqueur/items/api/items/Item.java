@@ -30,10 +30,10 @@ public interface Item {
     ItemSettings settings();
 
     default Component representativeName() {
-        if(settings().displayName() == null  && settings().itemName() == null) {
+        if (settings().displayName() == null && settings().itemName() == null) {
             return Component.text(id());
         }
-        if(settings().displayName() != null) {
+        if (settings().displayName() != null) {
             return settings().displayName();
         } else {
             return settings().itemName();

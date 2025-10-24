@@ -11,7 +11,8 @@ import org.bukkit.attribute.AttributeModifier;
 import java.util.UUID;
 
 @EffectMeta(value = "ATTRIBUTES_APPLICATOR")
-public record AttributesApplicator(ItemsPlugin plugin) implements EffectHandler.NoEventEffectHandler<AttributesSettings> {
+public record AttributesApplicator(
+        ItemsPlugin plugin) implements EffectHandler.NoEventEffectHandler<AttributesSettings> {
 
     @Override
     public void handle(EffectContext context, AttributesSettings settings) {
@@ -29,7 +30,7 @@ public record AttributesApplicator(ItemsPlugin plugin) implements EffectHandler.
 
     @Override
     public int priority() {
-         return 1;
+        return 1;
     }
 
     @Override

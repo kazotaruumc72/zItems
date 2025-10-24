@@ -10,6 +10,8 @@ import java.util.List;
 
 public record AttributesSettings(List<AttributeSetting> attributes) implements EffectSettings {
 
-    public record AttributeSetting(Attribute attribute, AttributeModifier.Operation operation, double amount, EquipmentSlotGroup slot) implements Loadable { }
+    public record AttributeSetting(Attribute attribute, AttributeModifier.Operation operation, double amount,
+                                   EquipmentSlotGroup slot) implements Loadable {
+    }
 
 }

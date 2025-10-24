@@ -12,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -20,9 +19,6 @@ import java.util.Map;
  * Automatically detects Paper (native Adventure) vs Spigot (Adventure Platform wrapper).
  */
 public class MessageUtil {
-
-    private static BukkitAudiences bukkitAudiences;
-    private static MiniMessage miniMessage;
 
     /**
      * Legacy Minecraft color codes mapping to MiniMessage tags.
@@ -50,6 +46,8 @@ public class MessageUtil {
             Map.entry("&o", "<italic>"),
             Map.entry("&r", "<reset>")
     );
+    private static BukkitAudiences bukkitAudiences;
+    private static MiniMessage miniMessage;
 
     /**
      * Initializes the MessageUtil with the plugin instance.
@@ -170,7 +168,7 @@ public class MessageUtil {
      * );
      * }</pre>
      *
-     * @param message The message to parse
+     * @param message      The message to parse
      * @param placeholders The TagResolvers for placeholder replacement
      * @return The parsed Component with placeholders replaced
      */

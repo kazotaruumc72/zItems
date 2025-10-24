@@ -10,8 +10,6 @@ import fr.traqueur.items.utils.ReflectionsCache;
 import fr.traqueur.structura.registries.PolymorphicRegistry;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
-import org.reflections.util.ConfigurationBuilder;
 
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -128,6 +126,7 @@ public class ZHandlersRegistry implements HandlersRegistry {
      * Registers a single effect handler class.
      * Tries to instantiate using a constructor with ItemsPlugin parameter first,
      * then falls back to a no-args constructor if not available.
+     *
      * @return true if successfully registered, false otherwise
      */
     private boolean registerEffectHandler(Class<? extends EffectHandler<?>> clazz) {
@@ -179,8 +178,8 @@ public class ZHandlersRegistry implements HandlersRegistry {
                 return clazz.getDeclaredConstructor().newInstance();
             } catch (NoSuchMethodException ex) {
                 throw new NoSuchMethodException(
-                    "Effect handler " + clazz.getSimpleName() +
-                    " must have either a no-args constructor or a constructor with ItemsPlugin parameter."
+                        "Effect handler " + clazz.getSimpleName() +
+                                " must have either a no-args constructor or a constructor with ItemsPlugin parameter."
                 );
             }
         }

@@ -29,7 +29,7 @@ public class InfiniteBucket implements EffectHandler.MultiEventEffectHandler<Emp
 
     @Override
     public void handle(EffectContext context, EmptySettings settings) {
-        if(!eventTypes().contains(context.event().getClass())) {
+        if (!eventTypes().contains(context.event().getClass())) {
             throw new IllegalArgumentException("Unsupported event type: " + context.event().getClass());
         }
 
@@ -52,7 +52,7 @@ public class InfiniteBucket implements EffectHandler.MultiEventEffectHandler<Emp
 
     private void handleBucketEmpty(PlayerBucketEmptyEvent event) {
         Material bucketType = event.getBucket();
-        if(FORBIDDEN_MATERIALS.contains(bucketType)) {
+        if (FORBIDDEN_MATERIALS.contains(bucketType)) {
             return;
         }
         event.setCancelled(true);

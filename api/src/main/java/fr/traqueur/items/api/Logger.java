@@ -6,11 +6,9 @@ import java.util.Map;
 public class Logger {
 
 
-    private static org.slf4j.Logger LOGGER;
-
-    private static boolean DEBUG = false;
-
     private static final Map<String, String> ANSI_COLORS = new HashMap<>();
+    private static org.slf4j.Logger LOGGER;
+    private static boolean DEBUG = false;
 
     static {
         ANSI_COLORS.put("<black>", "\u001B[0;30m");

@@ -8,6 +8,11 @@ import java.util.List;
 
 public record EnchantsSettings(List<EnchantSetting> enchantments) implements EffectSettings {
 
+    public enum Evolution {
+        INCREASE,
+        DECREASE
+    }
+
     public record EnchantSetting(Enchantment enchantment, Evolution evolution, int level) implements Loadable {
 
         public int computeEvolutionValue() {
@@ -17,11 +22,6 @@ public record EnchantsSettings(List<EnchantSetting> enchantments) implements Eff
             };
         }
 
-    }
-
-    public enum Evolution {
-        INCREASE,
-        DECREASE
     }
 
 }

@@ -20,8 +20,8 @@ public class EntityDropItemExtractor implements ItemSourceExtractor<EntityDropIt
     @Override
     public ExtractionResult extract(EntityDropItemEvent event) {
         EntityDamageEvent lastDamage = event.getEntity().getLastDamageCause();
-        if(lastDamage instanceof EntityDamageByEntityEvent entityDamageByEntityEvent) {
-            if(entityDamageByEntityEvent.getDamager() instanceof Player player) {
+        if (lastDamage instanceof EntityDamageByEntityEvent entityDamageByEntityEvent) {
+            if (entityDamageByEntityEvent.getDamager() instanceof Player player) {
                 ItemStack item = player.getInventory().getItemInMainHand();
                 return new ExtractionResult(player, item);
             }

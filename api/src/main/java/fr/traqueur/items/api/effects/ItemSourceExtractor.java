@@ -31,7 +31,7 @@ public interface ItemSourceExtractor<E extends Event> {
      * Represents the result of an extraction: the player who triggered the event
      * and the ItemStack that should be checked for effects.
      *
-     * @param player the player who triggered the event
+     * @param player     the player who triggered the event
      * @param itemSource the ItemStack that may contain effects
      */
     record ExtractionResult(Player player, ItemStack itemSource) {
@@ -43,8 +43,8 @@ public interface ItemSourceExtractor<E extends Event> {
          */
         public boolean isValid() {
             return player != null
-                && itemSource != null
-                && !itemSource.getType().isAir();
+                    && itemSource != null
+                    && !itemSource.getType().isAir();
         }
     }
 }

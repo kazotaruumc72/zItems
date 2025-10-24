@@ -2,8 +2,6 @@ package fr.traqueur.items.settings.readers;
 
 import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.readers.Reader;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;

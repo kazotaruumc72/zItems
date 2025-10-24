@@ -11,16 +11,6 @@ import java.util.Set;
  */
 public sealed interface EffectHandler<T extends EffectSettings> permits EffectHandler.MultiEventEffectHandler, EffectHandler.NoEventEffectHandler, EffectHandler.SingleEventEffectHandler {
 
-    non-sealed interface MultiEventEffectHandler<T extends EffectSettings> extends EffectHandler<T> {
-        Set<Class<? extends Event>> eventTypes();
-    }
-
-    non-sealed interface SingleEventEffectHandler<T extends EffectSettings, E extends Event> extends EffectHandler<T> {
-        Class<E> eventType();
-    }
-
-    non-sealed interface NoEventEffectHandler<T extends EffectSettings> extends EffectHandler<T> { }
-
     void handle(EffectContext context, T settings);
 
     int priority();
@@ -29,11 +19,23 @@ public sealed interface EffectHandler<T extends EffectSettings> permits EffectHa
 
     default boolean canApply(Event event) {
         return switch (this) {
-            case SingleEventEffectHandler<?,?> singleEventEffectHandler -> singleEventEffectHandler.eventType().isInstance(event);
+            case SingleEventEffectHandler<?, ?> singleEventEffectHandler ->
+                    singleEventEffectHandler.eventType().isInstance(event);
             case MultiEventEffectHandler<?> multiEventEffectHandler ->
                     multiEventEffectHandler.eventTypes().stream().anyMatch(type -> type.isInstance(event));
             case NoEventEffectHandler<?> __ -> event == null;
         };
+    }
+
+    non-sealed interface MultiEventEffectHandler<T extends EffectSettings> extends EffectHandler<T> {
+        Set<Class<? extends Event>> eventTypes();
+    }
+
+    non-sealed interface SingleEventEffectHandler<T extends EffectSettings, E extends Event> extends EffectHandler<T> {
+        Class<E> eventType();
+    }
+
+    non-sealed interface NoEventEffectHandler<T extends EffectSettings> extends EffectHandler<T> {
     }
 
 }

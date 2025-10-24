@@ -2,7 +2,10 @@ package fr.traqueur.items.items.metadata;
 
 import fr.traqueur.items.api.annotations.MetadataMeta;
 import fr.traqueur.items.api.items.ItemMetadata;
-import fr.traqueur.items.settings.models.PatternSettings;
+import fr.traqueur.structura.api.Loadable;
+import org.bukkit.DyeColor;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
@@ -21,4 +24,13 @@ public record BannerMetadata(List<PatternSettings> patterns) implements ItemMeta
             }
         });
     }
+
+    public record PatternSettings(PatternType type, DyeColor color) implements Loadable {
+
+        public Pattern toPattern() {
+            return new Pattern(color, type);
+        }
+
+    }
+
 }

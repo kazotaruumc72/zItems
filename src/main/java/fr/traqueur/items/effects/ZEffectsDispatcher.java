@@ -35,7 +35,7 @@ public class ZEffectsDispatcher implements EffectsDispatcher {
             // Only execute if this is a NoEventHandler (canApply returns true for null event)
             if (!handler.canApply(null)) {
                 Logger.debug("Handler {} is not a NoEventHandler, skipping",
-                    handler.getClass().getSimpleName());
+                        handler.getClass().getSimpleName());
                 return;
             }
             try {
@@ -56,22 +56,22 @@ public class ZEffectsDispatcher implements EffectsDispatcher {
         }
 
         Logger.debug("Dispatching {} effect(s) for event <aqua>{}<reset>",
-            effects.size(), event != null ? event.getEventName() : "NoEvent");
+                effects.size(), event != null ? event.getEventName() : "NoEvent");
 
         // 2. Create the shared context
         EffectContext context = new EffectContext(
-            player,
-            itemSource,
-            event,
-            new HashSet<>(), // affectedBlocks
-            new ArrayList<>() // drops
+                player,
+                itemSource,
+                event,
+                new HashSet<>(), // affectedBlocks
+                new ArrayList<>() // drops
         );
 
         // 3. Collect all applicable handlers
         List<HandlerExecution> executions = collectApplicableHandlers(effects, event);
         if (executions.isEmpty()) {
             Logger.debug("No applicable handlers found for event {}",
-                event != null ? event.getEventName() : "NoEvent");
+                    event != null ? event.getEventName() : "NoEvent");
             return context;
         }
 
@@ -86,7 +86,7 @@ public class ZEffectsDispatcher implements EffectsDispatcher {
                 executeHandler(execution.handler, context, execution.settings);
             } catch (Exception e) {
                 Logger.severe("Error executing handler <red>{}<reset> for effect <yellow>{}<reset>: {}",
-                    e, execution.handler.getClass().getSimpleName(), execution.effectId);
+                        e, execution.handler.getClass().getSimpleName(), execution.effectId);
             }
         }
 
@@ -103,7 +103,7 @@ public class ZEffectsDispatcher implements EffectsDispatcher {
      * </ul>
      *
      * @param effects the list of effects from the item
-     * @param event the event to check applicability against
+     * @param event   the event to check applicability against
      * @return a list of handler executions
      */
     private List<HandlerExecution> collectApplicableHandlers(List<Effect> effects, Event event) {
@@ -121,7 +121,7 @@ public class ZEffectsDispatcher implements EffectsDispatcher {
             // Check if the handler can apply to this event
             if (!handler.canApply(event)) {
                 Logger.debug("Handler {} cannot apply to event {}",
-                    handler.getClass().getSimpleName(), event != null ? event.getEventName() : "NoEvent");
+                        handler.getClass().getSimpleName(), event != null ? event.getEventName() : "NoEvent");
                 continue;
             }
 
@@ -134,10 +134,10 @@ public class ZEffectsDispatcher implements EffectsDispatcher {
     /**
      * Executes a single handler with type-safe settings.
      *
-     * @param handler the handler to execute
-     * @param context the shared context
+     * @param handler  the handler to execute
+     * @param context  the shared context
      * @param settings the settings for this effect
-     * @param <T> the settings type
+     * @param <T>      the settings type
      */
     private <T extends EffectSettings> void executeHandler(
             EffectHandler<T> handler,
@@ -145,13 +145,13 @@ public class ZEffectsDispatcher implements EffectsDispatcher {
             EffectSettings settings) {
 
         Logger.debug("Executing handler: <aqua>{}<reset> [priority={}]",
-            handler.getClass().getSimpleName(), handler.priority());
+                handler.getClass().getSimpleName(), handler.priority());
 
-        if(!handler.settingsType().isInstance(settings)) {
+        if (!handler.settingsType().isInstance(settings)) {
             Logger.severe("Settings type mismatch for handler {}: expected {}, got {}",
-                handler.getClass().getSimpleName(),
-                handler.settingsType().getSimpleName(),
-                settings.getClass().getSimpleName());
+                    handler.getClass().getSimpleName(),
+                    handler.settingsType().getSimpleName(),
+                    settings.getClass().getSimpleName());
             return;
         }
 
@@ -162,12 +162,13 @@ public class ZEffectsDispatcher implements EffectsDispatcher {
      * Internal record to hold handler execution data.
      *
      * @param effectId the ID of the effect
-     * @param handler the handler to execute
+     * @param handler  the handler to execute
      * @param settings the settings for this execution
      */
     private record HandlerExecution(
-        String effectId,
-        EffectHandler<?> handler,
-        EffectSettings settings
-    ) {}
+            String effectId,
+            EffectHandler<?> handler,
+            EffectSettings settings
+    ) {
+    }
 }

@@ -6,7 +6,6 @@ import fr.traqueur.items.settings.models.PotionEffectSettings;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultBool;
 import fr.traqueur.structura.annotations.defaults.DefaultDouble;
-import fr.traqueur.structura.annotations.defaults.DefaultInt;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Consumable;
 import io.papermc.paper.datacomponent.item.FoodProperties;
@@ -36,14 +35,14 @@ public record FoodMetadata(
         @Options(optional = true) Sound sound,
         @Options(optional = true) @DefaultDouble(-1) double cooldownSeconds,
         @Options(optional = true) String groupCooldown
-        ) implements ItemMetadata {
+) implements ItemMetadata {
 
 
     @Override
     public void apply(ItemStack itemStack, @Nullable Player player) {
         Consumable.Builder builder = null;
 
-        if(effects != null && !effects.isEmpty()) {
+        if (effects != null && !effects.isEmpty()) {
             List<PotionEffect> potionEffects = effects.stream()
                     .map(PotionEffectSettings::toPotionEffect)
                     .toList();
@@ -51,22 +50,22 @@ public record FoodMetadata(
                     .addEffect(ConsumeEffect.applyStatusEffects(potionEffects, 1.0f));
         }
 
-        if(eatSeconds > 0) {
-            if(builder == null) {
+        if (eatSeconds > 0) {
+            if (builder == null) {
                 builder = Consumable.consumable();
             }
             builder.consumeSeconds((float) eatSeconds);
         }
 
-        if(animation != null) {
-            if(builder == null) {
+        if (animation != null) {
+            if (builder == null) {
                 builder = Consumable.consumable();
             }
             builder.animation(animation);
         }
 
-        if(sound != null) {
-            if(builder == null) {
+        if (sound != null) {
+            if (builder == null) {
                 builder = Consumable.consumable();
             }
             Key key = RegistryAccess.registryAccess().getRegistry(RegistryKey.SOUND_EVENT).getKey(sound);
@@ -75,13 +74,13 @@ public record FoodMetadata(
             }
         }
 
-        if(builder != null) {
+        if (builder != null) {
             itemStack.setData(DataComponentTypes.CONSUMABLE, builder.build());
         }
 
-        if(cooldownSeconds > 0) {
+        if (cooldownSeconds > 0) {
             UseCooldown.Builder useCoolDownBuilder = UseCooldown.useCooldown((float) cooldownSeconds);
-            if(groupCooldown != null && !groupCooldown.isEmpty()) {
+            if (groupCooldown != null && !groupCooldown.isEmpty()) {
                 useCoolDownBuilder.cooldownGroup(Key.key(groupCooldown));
             }
             itemStack.setData(DataComponentTypes.USE_COOLDOWN, useCoolDownBuilder.build());

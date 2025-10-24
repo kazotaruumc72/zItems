@@ -299,11 +299,11 @@ public class FarmingHoe implements EffectHandler.MultiEventEffectHandler<Farming
         if (block == null) return false;
         Material type = block.getType();
         return type == Material.DIRT ||
-               type == Material.GRASS_BLOCK ||
-               type == Material.PODZOL ||
-               type == Material.MYCELIUM ||
-               type == Material.ROOTED_DIRT ||
-               type == Material.DIRT_PATH;
+                type == Material.GRASS_BLOCK ||
+                type == Material.PODZOL ||
+                type == Material.MYCELIUM ||
+                type == Material.ROOTED_DIRT ||
+                type == Material.DIRT_PATH;
     }
 
     @Override

@@ -1,0 +1,27 @@
+# Cobblestone Compressé x1
+# Crafté avec 9 cobblestones normales
+id: "cobblestone_compressed_x1"
+material: COBBLESTONE
+display-name: "<gradient:#7F7F7F:#A0A0A0><bold>⬛ Cobblestone Compressé x1</bold></gradient>"
+lore:
+  - "<gray>Une cobblestone ultra-compressée"
+  - "<gray>Contient 9 cobblestones"
+  - ""
+  - "<yellow>⚡ Peut être compressé davantage"
+custom-model-data: 2001
+hide-tooltip: false
+max-stack-size: 64
+
+recipe:
+  type: CRAFTING_SHAPED
+  group: compressed_blocks
+  category: BUILDING
+  pattern:
+    - "CCC"
+    - "CCC"
+    - "CCC"
+  amount: 1
+  ingredients:
+    - item: "item:cobblestone"
+      sign: 'C'
+      strict: true

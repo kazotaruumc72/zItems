@@ -11,16 +11,17 @@ import org.bukkit.persistence.PersistentDataContainer;
 
 public class ZItemIngredient extends Ingredient {
 
-    private final Item item;
+    private final String id;
+    private Item item;
 
     public ZItemIngredient(String id, Character sign) {
         super(sign);
-        this.item = Registry.get(ItemsRegistry.class).getById(id);
+        this.id = id;
     }
 
     @Override
     public boolean isSimilar(ItemStack item) {
-        if(item == null) return false;
+        if (item == null) return false;
         if (!item.hasItemMeta()) return false;
         PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
         return Keys.ITEM_ID.get(container).map(id -> this.item.id().equals(id)).orElse(false);
@@ -28,6 +29,9 @@ public class ZItemIngredient extends Ingredient {
 
     @Override
     public RecipeChoice choice() {
+        if (this.item == null) {
+            this.item = Registry.get(ItemsRegistry.class).getById(id);
+        }
         return new RecipeChoice.MaterialChoice(this.item.settings().material());
     }
 }

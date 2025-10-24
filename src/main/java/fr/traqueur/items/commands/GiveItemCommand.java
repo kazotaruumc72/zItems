@@ -45,17 +45,17 @@ public class GiveItemCommand extends Command<@NotNull ItemsPlugin> {
 
         // Send success messages
         Messages.ITEM_GIVEN.send(
-            sender,
-            Placeholder.parsed("player", target.getName()),
-            Placeholder.component("item", item.representativeName()),
-            Placeholder.parsed("amount", String.valueOf(amount))
+                sender,
+                Placeholder.parsed("player", target.getName()),
+                Placeholder.component("item", item.representativeName()),
+                Placeholder.parsed("amount", String.valueOf(amount))
         );
 
         if (!sender.equals(target)) {
             Messages.ITEM_RECEIVED.send(
-                target,
-                Placeholder.component("item", item.representativeName()),
-                Placeholder.parsed("amount", String.valueOf(amount))
+                    target,
+                    Placeholder.component("item", item.representativeName()),
+                    Placeholder.parsed("amount", String.valueOf(amount))
             );
         }
     }

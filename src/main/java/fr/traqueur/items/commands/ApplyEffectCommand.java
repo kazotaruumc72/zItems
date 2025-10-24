@@ -35,8 +35,8 @@ public class ApplyEffectCommand extends Command<@NotNull ItemsPlugin> {
         EffectsManager manager = this.getPlugin().getManager(EffectsManager.class);
         manager.applyEffect(player, item, effect);
         Messages.EFFECT_APPLIED.send(
-            player,
-            Placeholder.parsed("effect", effect.id())
+                player,
+                Placeholder.parsed("effect", effect.id())
         );
     }
 }

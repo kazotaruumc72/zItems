@@ -2,19 +2,18 @@ package fr.traqueur.items.api.registries;
 
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.MutableClassToInstanceMap;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
 public interface Registry<ID, T> {
 
-    ClassToInstanceMap<Registry<?,?>> INSTANCES = MutableClassToInstanceMap.create();
+    ClassToInstanceMap<Registry<?, ?>> INSTANCES = MutableClassToInstanceMap.create();
 
-    static <T extends Registry<?,?>> T get(Class<T> clazz) {
+    static <T extends Registry<?, ?>> T get(Class<T> clazz) {
         return INSTANCES.getInstance(clazz);
     }
 
-    static <T extends Registry<?,?>> void register(Class<T> clazz, T instance) {
+    static <T extends Registry<?, ?>> void register(Class<T> clazz, T instance) {
         INSTANCES.putInstance(clazz, instance);
     }
 

@@ -37,7 +37,7 @@ public class ZHooksRegistry implements HooksRegistry {
         for (Map.Entry<String, Hook> stringHookEntry : this.hooks.entrySet()) {
             String hookName = stringHookEntry.getKey();
             Hook hook = stringHookEntry.getValue();
-            if(Bukkit.getPluginManager().getPlugin(hookName) == null) {
+            if (Bukkit.getPluginManager().getPlugin(hookName) == null) {
                 Logger.debug("Hook " + hookName + " not found, skipping...");
                 continue;
             }

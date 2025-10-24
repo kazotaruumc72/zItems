@@ -6,12 +6,9 @@ import fr.traqueur.items.api.annotations.ExtractorMeta;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import fr.traqueur.items.api.registries.ExtractorsRegistry;
 import fr.traqueur.items.utils.ReflectionsCache;
-import javassist.tools.reflect.Reflection;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
-import org.reflections.util.ConfigurationBuilder;
 
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -98,6 +95,7 @@ public class ZExtractorsRegistry implements ExtractorsRegistry {
      * Registers a single extractor class.
      * Tries to instantiate using a constructor with ItemsPlugin parameter first,
      * then falls back to a no-args constructor if not available.
+     *
      * @return true if successfully registered, false otherwise
      */
     private boolean registerExtractor(Class<? extends ItemSourceExtractor<?>> clazz) {
@@ -146,8 +144,8 @@ public class ZExtractorsRegistry implements ExtractorsRegistry {
                 return clazz.getDeclaredConstructor().newInstance();
             } catch (NoSuchMethodException ex) {
                 throw new NoSuchMethodException(
-                    "ItemSourceExtractor " + clazz.getSimpleName() +
-                    " must have either a no-args constructor or a constructor with ItemsPlugin parameter."
+                        "ItemSourceExtractor " + clazz.getSimpleName() +
+                                " must have either a no-args constructor or a constructor with ItemsPlugin parameter."
                 );
             }
         }

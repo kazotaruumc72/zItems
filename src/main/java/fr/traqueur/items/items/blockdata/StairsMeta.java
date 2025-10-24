@@ -1,5 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
+import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.Stairs;
 
@@ -7,6 +8,7 @@ import org.bukkit.block.data.type.Stairs;
  * BlockData metadata for stairs blocks.
  * Sets the stairs shape.
  */
+@BlockDataMetaMeta("stairs")
 public record StairsMeta(Stairs.Shape shape) implements BlockDataMeta<Stairs> {
 
     @Override

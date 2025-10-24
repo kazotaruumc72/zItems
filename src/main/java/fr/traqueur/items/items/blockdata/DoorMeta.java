@@ -1,5 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
+import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.Door;
 
@@ -7,6 +8,7 @@ import org.bukkit.block.data.type.Door;
  * BlockData metadata for door blocks.
  * Sets the door hinge side.
  */
+@BlockDataMetaMeta("door")
 public record DoorMeta(Door.Hinge hinge) implements BlockDataMeta<Door> {
 
     @Override

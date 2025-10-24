@@ -1,5 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
+import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Wall;
@@ -10,6 +11,7 @@ import java.util.Map;
  * BlockData metadata for wall blocks.
  * Sets whether the wall has a post and the height of each side.
  */
+@BlockDataMetaMeta("wall")
 public record WallMeta(boolean up, Map<BlockFace, Wall.Height> heights) implements BlockDataMeta<Wall> {
 
     @Override

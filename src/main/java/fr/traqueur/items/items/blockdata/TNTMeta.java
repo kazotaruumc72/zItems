@@ -1,5 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
+import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.TNT;
 
@@ -7,6 +8,7 @@ import org.bukkit.block.data.type.TNT;
  * BlockData metadata for TNT blocks.
  * Sets whether the TNT is unstable.
  */
+@BlockDataMetaMeta("tnt")
 public record TNTMeta(boolean unstable) implements BlockDataMeta<TNT> {
 
     @Override

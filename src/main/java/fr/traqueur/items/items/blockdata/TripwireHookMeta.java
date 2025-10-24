@@ -1,5 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
+import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.TripwireHook;
 
@@ -7,6 +8,7 @@ import org.bukkit.block.data.type.TripwireHook;
  * BlockData metadata for tripwire hook blocks.
  * Sets attached and powered state.
  */
+@BlockDataMetaMeta("tripwire-hook")
 public record TripwireHookMeta(boolean attached, boolean powered) implements BlockDataMeta<TripwireHook> {
 
     @Override

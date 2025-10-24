@@ -10,7 +10,7 @@ import org.bukkit.block.data.BlockData;
  *
  * @param <T> the specific BlockData type
  */
-@Polymorphic(inline = true)
+@Polymorphic(useKey = true)
 public interface BlockDataMeta<T extends BlockData> extends Loadable {
 
     /**

@@ -1,5 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
+import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.MultipleFacing;
@@ -10,6 +11,7 @@ import java.util.Map;
  * BlockData metadata for multiple facing blocks (fences, glass panes, etc.).
  * Sets which faces are connected.
  */
+@BlockDataMetaMeta("multiple-facing")
 public record MultipleFacingMeta(Map<BlockFace, Boolean> faces) implements BlockDataMeta<MultipleFacing> {
 
     @Override

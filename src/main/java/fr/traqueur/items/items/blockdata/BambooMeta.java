@@ -1,5 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
+import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.Bamboo;
 
@@ -7,6 +8,7 @@ import org.bukkit.block.data.type.Bamboo;
  * BlockData metadata for bamboo blocks.
  * Sets the bamboo leaves type.
  */
+@BlockDataMetaMeta("bamboo")
 public record BambooMeta(Bamboo.Leaves leaves) implements BlockDataMeta<Bamboo> {
 
     @Override

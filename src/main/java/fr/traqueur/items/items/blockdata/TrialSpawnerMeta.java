@@ -1,5 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
+import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.TrialSpawner;
 
@@ -7,6 +8,7 @@ import org.bukkit.block.data.type.TrialSpawner;
  * BlockData metadata for trial spawner blocks.
  * Sets the spawner state and ominous flag.
  */
+@BlockDataMetaMeta("trial-spawner")
 public record TrialSpawnerMeta(TrialSpawner.State state, boolean ominous) implements BlockDataMeta<TrialSpawner> {
 
     @Override

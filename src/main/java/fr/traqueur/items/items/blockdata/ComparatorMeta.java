@@ -1,5 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
+import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.Comparator;
 
@@ -7,6 +8,7 @@ import org.bukkit.block.data.type.Comparator;
  * BlockData metadata for comparator blocks.
  * Sets the comparator mode.
  */
+@BlockDataMetaMeta("comparator")
 public record ComparatorMeta(Comparator.Mode mode) implements BlockDataMeta<Comparator> {
 
     @Override

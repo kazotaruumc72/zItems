@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.SeaPickle;
 
@@ -8,7 +8,7 @@ import org.bukkit.block.data.type.SeaPickle;
  * BlockData metadata for sea pickle blocks.
  * Sets the number of pickles.
  */
-@BlockDataMetaMeta("sea-pickle")
+@AutoBlockDataMeta("sea-pickle")
 public record SeaPickleMeta(int pickles) implements BlockDataMeta<SeaPickle> {
 
     @Override

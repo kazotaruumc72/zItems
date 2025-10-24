@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.Brushable;
 
@@ -8,7 +8,7 @@ import org.bukkit.block.data.Brushable;
  * BlockData metadata for brushable blocks (suspicious sand/gravel).
  * Sets the dusted level.
  */
-@BlockDataMetaMeta("brushable")
+@AutoBlockDataMeta("brushable")
 public record BrushableMeta(int dusted) implements BlockDataMeta<Brushable> {
 
     @Override

@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface EffectMeta {
+public @interface AutoEffect {
 
     /**
      * The unique identifier for this effect.

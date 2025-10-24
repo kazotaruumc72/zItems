@@ -1,7 +1,7 @@
 package fr.traqueur.items.effects.handlers;
 
 import fr.traqueur.items.api.ItemsPlugin;
-import fr.traqueur.items.api.annotations.EffectMeta;
+import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.interactions.InteractionAction;
@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-@EffectMeta(value = "SELL_STICK")
+@AutoEffect(value = "SELL_STICK")
 public record SellStick(
         ItemsPlugin plugin) implements EffectHandler.SingleEventEffectHandler<SellStickSettings, PlayerInteractEvent> {
 

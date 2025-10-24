@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.Cake;
 
@@ -8,7 +8,7 @@ import org.bukkit.block.data.type.Cake;
  * BlockData metadata for cake blocks.
  * Sets how many bites have been taken.
  */
-@BlockDataMetaMeta("cake")
+@AutoBlockDataMeta("cake")
 public record CakeMeta(int bites) implements BlockDataMeta<Cake> {
 
     @Override

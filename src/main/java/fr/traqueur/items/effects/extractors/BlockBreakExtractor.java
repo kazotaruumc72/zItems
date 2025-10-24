@@ -1,6 +1,6 @@
 package fr.traqueur.items.effects.extractors;
 
-import fr.traqueur.items.api.annotations.ExtractorMeta;
+import fr.traqueur.items.api.annotations.AutoExtractor;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
  * This is typically used for tools like pickaxes with effects like
  * Vein Mining, Hammer, or Auto Sell.
  */
-@ExtractorMeta(BlockBreakEvent.class)
+@AutoExtractor(BlockBreakEvent.class)
 public class BlockBreakExtractor implements ItemSourceExtractor<BlockBreakEvent> {
 
     @Override

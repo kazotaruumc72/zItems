@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.metadata;
 
-import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultBool;
@@ -16,8 +16,8 @@ import org.jetbrains.annotations.Nullable;
  * Food metadata configuration for consumable items.
  * Discriminator key: "food"
  */
-@MetadataMeta("food")
-@MetadataMeta.SpigotMetadata
+@AutoMetadata("food")
+@AutoMetadata.SpigotMetadata
 public record LegacyFoodMetadata(
         @DefaultInt(4) int nutrition,
 

@@ -1,6 +1,6 @@
 package fr.traqueur.items.effects.handlers;
 
-import fr.traqueur.items.api.annotations.EffectMeta;
+import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.effects.settings.HammerSettings;
@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-@EffectMeta(value = "HAMMER")
+@AutoEffect(value = "HAMMER")
 public class Hammer implements EffectHandler.SingleEventEffectHandler<HammerSettings, BlockBreakEvent> {
 
     @Override

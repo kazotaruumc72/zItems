@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.Rail;
 
@@ -8,7 +8,7 @@ import org.bukkit.block.data.Rail;
  * BlockData metadata for rail blocks.
  * Sets the rail shape.
  */
-@BlockDataMetaMeta("rail")
+@AutoBlockDataMeta("rail")
 public record RailMeta(Rail.Shape shape) implements BlockDataMeta<Rail> {
 
     @Override

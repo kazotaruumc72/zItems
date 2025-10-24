@@ -2,7 +2,7 @@ package fr.traqueur.items.registries;
 
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.annotations.ExtractorMeta;
+import fr.traqueur.items.api.annotations.AutoExtractor;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import fr.traqueur.items.api.registries.ExtractorsRegistry;
 import fr.traqueur.items.utils.ReflectionsCache;
@@ -63,7 +63,7 @@ public class ZExtractorsRegistry implements ExtractorsRegistry {
         try {
             Reflections reflections = ReflectionsCache.getInstance().getOrCreate(plugin, packageName);
 
-            Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(ExtractorMeta.class);
+            Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(AutoExtractor.class);
 
             int count = 0;
             for (Class<?> clazz : annotatedClasses) {
@@ -105,7 +105,7 @@ public class ZExtractorsRegistry implements ExtractorsRegistry {
         }
 
         try {
-            ExtractorMeta meta = clazz.getAnnotation(ExtractorMeta.class);
+            AutoExtractor meta = clazz.getAnnotation(AutoExtractor.class);
             Class<? extends Event> eventType = meta.value();
 
             if (this.extractors.containsKey(eventType)) {

@@ -1,6 +1,6 @@
 package fr.traqueur.items.effects.handlers;
 
-import fr.traqueur.items.api.annotations.EffectMeta;
+import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.effects.settings.EmptySettings;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Set;
 
-@EffectMeta(value = "INFINITE_BUCKET")
+@AutoEffect(value = "INFINITE_BUCKET")
 public class InfiniteBucket implements EffectHandler.MultiEventEffectHandler<EmptySettings> {
 
     private static final List<Material> FORBIDDEN_MATERIALS = List.of(

@@ -1,6 +1,6 @@
 package fr.traqueur.items.effects.handlers;
 
-import fr.traqueur.items.api.annotations.EffectMeta;
+import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.effects.settings.XPBoostSettings;
@@ -11,7 +11,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-@EffectMeta(value = "XP_BOOST")
+@AutoEffect(value = "XP_BOOST")
 public class XPBoost implements EffectHandler.SingleEventEffectHandler<XPBoostSettings, BlockBreakEvent> {
 
     private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();

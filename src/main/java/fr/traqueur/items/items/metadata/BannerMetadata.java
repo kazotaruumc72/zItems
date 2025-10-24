@@ -1,7 +1,7 @@
 package fr.traqueur.items.items.metadata;
 
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.structura.api.Loadable;
 import org.bukkit.DyeColor;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-@MetadataMeta("banner")
+@AutoMetadata("banner")
 public record BannerMetadata(List<PatternSettings> patterns) implements ItemMetadata {
 
     @Override

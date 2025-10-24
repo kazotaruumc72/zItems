@@ -1,7 +1,7 @@
 package fr.traqueur.items.items.metadata;
 
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.items.settings.models.PotionEffectSettings;
 import fr.traqueur.structura.annotations.Options;
@@ -18,7 +18,7 @@ import java.util.List;
  * Potion metadata configuration for potions and tipped arrows.
  * Discriminator key: "potion"
  */
-@MetadataMeta("potion")
+@AutoMetadata("potion")
 public record PotionMetadata(
         @Options(optional = true)
         Color color,

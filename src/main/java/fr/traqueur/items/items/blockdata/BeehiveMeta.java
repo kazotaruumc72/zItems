@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.Beehive;
 
@@ -8,7 +8,7 @@ import org.bukkit.block.data.type.Beehive;
  * BlockData metadata for beehive blocks.
  * Sets the honey level.
  */
-@BlockDataMetaMeta("beehive")
+@AutoBlockDataMeta("beehive")
 public record BeehiveMeta(int honeyLevel) implements BlockDataMeta<Beehive> {
 
     @Override

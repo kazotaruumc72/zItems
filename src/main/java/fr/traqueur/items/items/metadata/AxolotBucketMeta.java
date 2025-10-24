@@ -1,7 +1,7 @@
 package fr.traqueur.items.items.metadata;
 
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.items.ItemMetadata;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Player;
@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
 import org.jetbrains.annotations.Nullable;
 
-@MetadataMeta("axolot-bucket")
+@AutoMetadata("axolot-bucket")
 public record AxolotBucketMeta(Axolotl.Variant variant) implements ItemMetadata {
 
     @Override

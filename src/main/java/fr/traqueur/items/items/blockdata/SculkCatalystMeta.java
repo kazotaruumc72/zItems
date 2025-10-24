@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.SculkCatalyst;
 
@@ -8,7 +8,7 @@ import org.bukkit.block.data.type.SculkCatalyst;
  * BlockData metadata for sculk catalyst blocks.
  * Sets the bloom state.
  */
-@BlockDataMetaMeta("sculk-catalyst")
+@AutoBlockDataMeta("sculk-catalyst")
 public record SculkCatalystMeta(boolean bloom) implements BlockDataMeta<SculkCatalyst> {
 
     @Override

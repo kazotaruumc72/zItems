@@ -1,6 +1,6 @@
 package fr.traqueur.items.effects.extractors;
 
-import fr.traqueur.items.api.annotations.ExtractorMeta;
+import fr.traqueur.items.api.annotations.AutoExtractor;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
  * Extracts the item in the player's main hand when an entity drops an item.
  * This checks the last damage cause to find the player who caused the drop.
  */
-@ExtractorMeta(EntityDropItemEvent.class)
+@AutoExtractor(EntityDropItemEvent.class)
 public class EntityDropItemExtractor implements ItemSourceExtractor<EntityDropItemEvent> {
 
     @Override

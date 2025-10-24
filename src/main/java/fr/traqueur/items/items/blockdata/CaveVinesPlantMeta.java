@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.CaveVinesPlant;
 
@@ -8,7 +8,7 @@ import org.bukkit.block.data.type.CaveVinesPlant;
  * BlockData metadata for cave vines plant blocks.
  * Sets whether the vines have berries.
  */
-@BlockDataMetaMeta("cave-vines-plant")
+@AutoBlockDataMeta("cave-vines-plant")
 public record CaveVinesPlantMeta(boolean berries) implements BlockDataMeta<CaveVinesPlant> {
 
     @Override

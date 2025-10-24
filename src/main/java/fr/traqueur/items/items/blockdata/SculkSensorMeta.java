@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.SculkSensor;
 
@@ -8,7 +8,7 @@ import org.bukkit.block.data.type.SculkSensor;
  * BlockData metadata for sculk sensor blocks.
  * Sets the sensor phase.
  */
-@BlockDataMetaMeta("sculk-sensor")
+@AutoBlockDataMeta("sculk-sensor")
 public record SculkSensorMeta(SculkSensor.Phase phase) implements BlockDataMeta<SculkSensor> {
 
     @Override

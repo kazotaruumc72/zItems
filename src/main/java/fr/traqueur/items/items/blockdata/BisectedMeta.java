@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.Bisected;
 
@@ -8,7 +8,7 @@ import org.bukkit.block.data.Bisected;
  * BlockData metadata for bisected blocks (doors, plants, etc.).
  * Sets which half of the block this is.
  */
-@BlockDataMetaMeta("bisected")
+@AutoBlockDataMeta("bisected")
 public record BisectedMeta(Bisected.Half half) implements BlockDataMeta<Bisected> {
 
     @Override

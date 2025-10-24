@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.metadata;
 
-import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.structura.annotations.Options;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -12,8 +12,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-@MetadataMeta("custom-model")
-@MetadataMeta.PaperMetadata
+@AutoMetadata("custom-model")
+@AutoMetadata.PaperMetadata
 public record CustomModelMetadata(
         @Options(optional = true) List<Color> colors,
         @Options(optional = true) List<Double> floats,

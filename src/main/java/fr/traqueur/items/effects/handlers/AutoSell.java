@@ -1,7 +1,7 @@
 package fr.traqueur.items.effects.handlers;
 
 import fr.traqueur.items.api.ItemsPlugin;
-import fr.traqueur.items.api.annotations.EffectMeta;
+import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.shop.ShopProvider;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@EffectMeta(value = "AUTO_SELL")
+@AutoEffect(value = "AUTO_SELL")
 public record AutoSell(ItemsPlugin plugin) implements EffectHandler.MultiEventEffectHandler<AutoSellSettings> {
 
     @Override

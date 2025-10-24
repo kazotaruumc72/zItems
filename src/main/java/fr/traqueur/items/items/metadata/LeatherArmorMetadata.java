@@ -1,7 +1,7 @@
 package fr.traqueur.items.items.metadata;
 
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.items.ItemMetadata;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * Leather armor metadata configuration for dyeable armor.
  * Discriminator key: "leather-armor"
  */
-@MetadataMeta("leather-armor")
+@AutoMetadata("leather-armor")
 public record LeatherArmorMetadata(
         Color color
 ) implements ItemMetadata {

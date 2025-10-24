@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.Hangable;
 
@@ -8,7 +8,7 @@ import org.bukkit.block.data.Hangable;
  * BlockData metadata for hangable blocks (lanterns, etc.).
  * Sets whether the block is hanging.
  */
-@BlockDataMetaMeta("hangable")
+@AutoBlockDataMeta("hangable")
 public record HangableMeta(boolean hanging) implements BlockDataMeta<Hangable> {
 
     @Override

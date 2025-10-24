@@ -1,7 +1,7 @@
 package fr.traqueur.items.items.metadata;
 
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.items.ItemMetadata;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  * Armor trim metadata configuration.
  * Discriminator key: "trim"
  */
-@MetadataMeta("trim")
+@AutoMetadata("trim")
 public record TrimMetadata(
         TrimMaterial material,
         TrimPattern pattern

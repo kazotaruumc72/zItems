@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.Snow;
 
@@ -8,7 +8,7 @@ import org.bukkit.block.data.type.Snow;
  * BlockData metadata for snow blocks.
  * Sets the number of layers.
  */
-@BlockDataMetaMeta("snow")
+@AutoBlockDataMeta("snow")
 public record SnowMeta(int layers) implements BlockDataMeta<Snow> {
 
     @Override

@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.type.Scaffolding;
 
@@ -8,7 +8,7 @@ import org.bukkit.block.data.type.Scaffolding;
  * BlockData metadata for scaffolding blocks.
  * Sets the bottom state and distance.
  */
-@BlockDataMetaMeta("scaffolding")
+@AutoBlockDataMeta("scaffolding")
 public record ScaffoldingMeta(boolean bottom, int distance) implements BlockDataMeta<Scaffolding> {
 
     @Override

@@ -1,7 +1,7 @@
 package fr.traqueur.items.effects.handlers;
 
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.annotations.EffectMeta;
+import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.effects.settings.FarmingHoeSettings;
@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-@EffectMeta(value = "FARMING_HOE")
+@AutoEffect(value = "FARMING_HOE")
 public class FarmingHoe implements EffectHandler.MultiEventEffectHandler<FarmingHoeSettings> {
 
     private static final Map<Material, Material> SEED_TO_CROP = Map.of(

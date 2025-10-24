@@ -1,6 +1,6 @@
 package fr.traqueur.items.effects.handlers;
 
-import fr.traqueur.items.api.annotations.EffectMeta;
+import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.effects.settings.VeinMinerSettings;
@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-@EffectMeta(value = "VEIN_MINING")
+@AutoEffect(value = "VEIN_MINING")
 public class VeinMiner implements EffectHandler.SingleEventEffectHandler<VeinMinerSettings, BlockBreakEvent> {
 
     @Override

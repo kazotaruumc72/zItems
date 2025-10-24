@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.metadata;
 
-import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.items.ItemMetadata;
 import io.papermc.paper.block.BlockPredicate;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -18,8 +18,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-@MetadataMeta("can-place-on")
-@MetadataMeta.PaperMetadata
+@AutoMetadata("can-place-on")
+@AutoMetadata.PaperMetadata
 public record CanPlaceOnMetadata(List<Material> blocks) implements ItemMetadata {
 
     @Override

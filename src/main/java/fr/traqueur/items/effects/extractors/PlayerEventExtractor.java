@@ -1,6 +1,6 @@
 package fr.traqueur.items.effects.extractors;
 
-import fr.traqueur.items.api.annotations.ExtractorMeta;
+import fr.traqueur.items.api.annotations.AutoExtractor;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEvent;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
  * Specific extractors (like {@link PlayerInteractExtractor}) can override this
  * behavior for events that have more specific item sources.
  */
-@ExtractorMeta(PlayerEvent.class)
+@AutoExtractor(PlayerEvent.class)
 public class PlayerEventExtractor implements ItemSourceExtractor<PlayerEvent> {
 
     @Override

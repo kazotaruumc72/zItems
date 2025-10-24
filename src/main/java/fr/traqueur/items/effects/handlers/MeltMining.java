@@ -1,6 +1,6 @@
 package fr.traqueur.items.effects.handlers;
 
-import fr.traqueur.items.api.annotations.EffectMeta;
+import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.effects.settings.EmptySettings;
@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
-@EffectMeta(value = "MELT_MINING")
+@AutoEffect(value = "MELT_MINING")
 public class MeltMining implements EffectHandler.SingleEventEffectHandler<EmptySettings, BlockBreakEvent> {
 
     private static final Map<Material, FurnaceRecipe> CACHES = new HashMap<>();

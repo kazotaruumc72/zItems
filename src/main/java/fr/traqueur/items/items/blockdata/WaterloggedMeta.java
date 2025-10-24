@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import org.bukkit.block.data.Waterlogged;
 
@@ -8,7 +8,7 @@ import org.bukkit.block.data.Waterlogged;
  * BlockData metadata for waterlogged blocks.
  * Sets whether the block is waterlogged.
  */
-@BlockDataMetaMeta("waterlogged")
+@AutoBlockDataMeta("waterlogged")
 public record WaterloggedMeta(boolean waterlogged) implements BlockDataMeta<Waterlogged> {
 
     @Override

@@ -3,8 +3,8 @@ package fr.traqueur.items.registries;
 import fr.traqueur.items.PlatformType;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
-import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
+import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.items.ItemMetadata;
@@ -26,7 +26,7 @@ public class ZItemsRegistry extends ItemsRegistry {
         Reflections reflections = ReflectionsCache.getInstance().getOrCreate(plugin, "fr.traqueur.items");
 
         PolymorphicRegistry.create(BlockDataMeta.class, registry -> {
-            Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(BlockDataMetaMeta.class);
+            Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(AutoBlockDataMeta.class);
             int count = 0;
             for (Class<?> clazz : annotatedClasses) {
                 if (!BlockDataMeta.class.isAssignableFrom(clazz)) {
@@ -34,7 +34,7 @@ public class ZItemsRegistry extends ItemsRegistry {
                             clazz.getSimpleName());
                     continue;
                 }
-                BlockDataMetaMeta meta = clazz.getAnnotation(BlockDataMetaMeta.class);
+                AutoBlockDataMeta meta = clazz.getAnnotation(AutoBlockDataMeta.class);
 
                 //noinspection unchecked
                 registry.register(meta.value(), (Class<? extends BlockDataMeta<?>>) clazz);
@@ -45,7 +45,7 @@ public class ZItemsRegistry extends ItemsRegistry {
         });
 
         PolymorphicRegistry.create(ItemMetadata.class, registry -> {
-            Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(MetadataMeta.class);
+            Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(AutoMetadata.class);
             int count = 0;
             for (Class<?> clazz : annotatedClasses) {
                 if (!ItemMetadata.class.isAssignableFrom(clazz)) {
@@ -53,10 +53,10 @@ public class ZItemsRegistry extends ItemsRegistry {
                             clazz.getSimpleName());
                     continue;
                 }
-                MetadataMeta meta = clazz.getAnnotation(MetadataMeta.class);
+                AutoMetadata meta = clazz.getAnnotation(AutoMetadata.class);
 
-                boolean paperOnly = clazz.isAnnotationPresent(MetadataMeta.PaperMetadata.class);
-                boolean spigotOnly = clazz.isAnnotationPresent(MetadataMeta.SpigotMetadata.class);
+                boolean paperOnly = clazz.isAnnotationPresent(AutoMetadata.PaperMetadata.class);
+                boolean spigotOnly = clazz.isAnnotationPresent(AutoMetadata.SpigotMetadata.class);
                 if (spigotOnly && PlatformType.isPaper()) {
                     Logger.debug("Skipping registration of ItemMetadata type <aqua>{}<reset> as it is Spigot-only.", clazz.getSimpleName());
                     continue;

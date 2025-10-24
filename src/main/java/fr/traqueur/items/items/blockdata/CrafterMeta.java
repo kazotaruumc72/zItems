@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.blockdata;
 
-import fr.traqueur.items.api.annotations.BlockDataMetaMeta;
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import fr.traqueur.structura.annotations.Options;
 import org.bukkit.block.Orientation;
@@ -10,7 +10,7 @@ import org.bukkit.block.data.type.Crafter;
  * BlockData metadata for crafter blocks.
  * Sets crafting state, triggered state, and orientation.
  */
-@BlockDataMetaMeta("crafter")
+@AutoBlockDataMeta("crafter")
 public record CrafterMeta(
         boolean crafting,
         boolean triggered,

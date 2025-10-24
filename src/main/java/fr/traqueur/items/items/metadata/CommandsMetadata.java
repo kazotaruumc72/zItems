@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.metadata;
 
-import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.interactions.InteractionAction;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.structura.annotations.Options;
@@ -17,7 +17,7 @@ import java.util.List;
  * Metadata for item commands.
  * Allows executing commands when a player interacts with an item.
  */
-@MetadataMeta("commands")
+@AutoMetadata("commands")
 public record CommandsMetadata(
         List<ItemCommand> commands,
         @Options(optional = true) @DefaultBool(false) boolean needConfirmation

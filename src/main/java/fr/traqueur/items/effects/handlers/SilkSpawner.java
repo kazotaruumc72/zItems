@@ -1,6 +1,6 @@
 package fr.traqueur.items.effects.handlers;
 
-import fr.traqueur.items.api.annotations.EffectMeta;
+import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.events.SpawnerDropEvent;
@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.jetbrains.annotations.NotNull;
 
-@EffectMeta(value = "SILK_SPAWNER")
+@AutoEffect(value = "SILK_SPAWNER")
 public class SilkSpawner implements EffectHandler.SingleEventEffectHandler<EmptySettings, BlockBreakEvent> {
     @Override
     public Class<BlockBreakEvent> eventType() {

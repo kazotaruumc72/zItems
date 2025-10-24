@@ -1,16 +1,14 @@
 package fr.traqueur.items.items.metadata;
 
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.blockdata.BlockDataMeta;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.structura.annotations.Options;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockStateMeta;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -20,7 +18,7 @@ import java.util.List;
  * Allows configuring BlockData properties for block items.
  * Discriminator key: "block-data"
  */
-@MetadataMeta("block-data")
+@AutoMetadata("block-data")
 public record BlockDataMetadata(
         @Options(optional = true) List<BlockDataMeta<?>> settings
 ) implements ItemMetadata {

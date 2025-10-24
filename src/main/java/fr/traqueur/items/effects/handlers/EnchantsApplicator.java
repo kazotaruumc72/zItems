@@ -1,11 +1,11 @@
 package fr.traqueur.items.effects.handlers;
 
-import fr.traqueur.items.api.annotations.EffectMeta;
+import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.effects.settings.EnchantsSettings;
 
-@EffectMeta(value = "ENCHANTS_APPLICATOR")
+@AutoEffect(value = "ENCHANTS_APPLICATOR")
 public class EnchantsApplicator implements EffectHandler.NoEventEffectHandler<EnchantsSettings> {
 
     @Override

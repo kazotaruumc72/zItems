@@ -1,6 +1,6 @@
 package fr.traqueur.items.effects.handlers;
 
-import fr.traqueur.items.api.annotations.EffectMeta;
+import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.effects.settings.EmptySettings;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@EffectMeta(value = "ABSORPTION")
+@AutoEffect(value = "ABSORPTION")
 public class Absorption implements EffectHandler.MultiEventEffectHandler<EmptySettings> {
 
     @Override

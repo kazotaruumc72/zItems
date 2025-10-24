@@ -1,6 +1,6 @@
 package fr.traqueur.items.items.metadata;
 
-import fr.traqueur.items.api.annotations.MetadataMeta;
+import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.items.settings.models.PotionEffectSettings;
 import fr.traqueur.structura.annotations.Options;
@@ -23,8 +23,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-@MetadataMeta("food")
-@MetadataMeta.PaperMetadata
+@AutoMetadata("food")
+@AutoMetadata.PaperMetadata
 public record FoodMetadata(
         int nutrition,
         double saturation,

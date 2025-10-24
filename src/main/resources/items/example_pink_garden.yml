@@ -1,0 +1,23 @@
+# Pink Petals Garden - Jardin complet de pétales roses
+id: "pink_garden_complete"
+material: PINK_PETALS
+display-name: "<gradient:#FFB6D9:#FF69B4:#FF1493><bold>🌸 Jardin de Pétales Roses</bold></gradient>"
+lore:
+  - "<gray>Un magnifique arrangement floral complet"
+  - ""
+  - "<light_purple>🌸 Composition:"
+  - "  <pink>• 4 fleurs roses (maximum)"
+  - "  <light_purple>• Disposition harmonieuse"
+  - "  <gold>• Parfum enchanteur"
+  - ""
+  - "<gold>✨ Collection: Jardins Enchantés"
+  - ""
+  - "<yellow>Parfait pour décorer les sentiers"
+  - "<dark_gray>Attire les abeilles et papillons"
+custom-model-data: 3011
+metadata:
+  block-data:
+    pink-petals:
+      flower-amount: 4  # Maximum flowers
+    directional:
+      facing: SOUTH     # Aesthetic orientation

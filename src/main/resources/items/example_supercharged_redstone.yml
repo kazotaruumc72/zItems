@@ -1,0 +1,23 @@
+# Supercharged Comparator - Comparateur de redstone surpuissant
+id: "supercharged_comparator"
+material: COMPARATOR
+display-name: "<gradient:#FF0000:#8B0000><bold>⚡ Comparateur Surpuissant</bold></gradient>"
+lore:
+  - "<gray>Un comparateur modifié par la magie rouge"
+  - ""
+  - "<light_purple>⚡ Caractéristiques:"
+  - "  <red>• Puissance maximale (15/15)"
+  - "  <gold>• Mode soustracteur"
+  - "  <aqua>• Surcharge arcanique"
+  - ""
+  - "<gold>🔧 Pour les maîtres de la redstone"
+  - ""
+  - "<dark_gray>Attention: Peut causer des explosions dimensionnelles"
+custom-model-data: 3006
+metadata:
+  block-data:
+    comparator:
+      mode: SUBTRACT
+    analogue-powerable:
+      power: 15   # Max power
+      max: true   # Ensure maximum power

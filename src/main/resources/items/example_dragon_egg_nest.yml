@@ -1,0 +1,24 @@
+# Dragon Egg Nest - Nid d'œufs de tortue prêt à éclore
+id: "dragon_egg_nest"
+material: TURTLE_EGG
+display-name: "<gradient:#90EE90:#228B22><bold>🥚 Nid d'Œufs Enchantés</bold></gradient>"
+lore:
+  - "<gray>Un nid contenant de précieux œufs"
+  - ""
+  - "<light_purple>🥚 Configuration:"
+  - "  <green>• 4 œufs empilés"
+  - "  <yellow>• Prêts à éclore"
+  - "  <aqua>• Protection magique"
+  - ""
+  - "<gold>🐢 Créatures à naître: Tortues Marines"
+  - ""
+  - "<yellow>Place-les près de l'eau pour l'éclosion"
+  - "<dark_gray>Temps d'éclosion réduit de 50%"
+custom-model-data: 3009
+metadata:
+  block-data:
+    turtle-egg:
+      eggs: 4      # Maximum eggs in one block
+    hatchable:
+      hatch: 2     # Almost ready to hatch
+      max: false

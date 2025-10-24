@@ -1,0 +1,21 @@
+# Rainbow Candles - Bougies arc-en-ciel empilées
+id: "rainbow_candles"
+material: CANDLE
+display-name: "<gradient:#FF0000:#FF7F00:#FFFF00:#00FF00:#0000FF:#4B0082:#9400D3>🕯 Bougies Arc-en-ciel</gradient>"
+lore:
+  - "<gray>Un arrangement magique de bougies colorées"
+  - ""
+  - "<light_purple>🕯 Configuration:"
+  - "  <pink>• 4 bougies empilées"
+  - "  <gold>• Allumées et prêtes"
+  - "  <aqua>• Éclairage maximal"
+  - ""
+  - "<gold>✨ Crée une ambiance festive!"
+  - ""
+  - "<yellow>Parfait pour les décorations d'événements"
+custom-model-data: 3005
+metadata:
+  block-data:
+    candle:
+      candles: 4  # Maximum stack of candles
+      lit: true   # Pre-lit

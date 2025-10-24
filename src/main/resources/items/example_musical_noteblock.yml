@@ -1,0 +1,20 @@
+# Musical Note Block - Note block pré-configuré pour jouer une note spécifique
+id: "musical_noteblock_epic"
+material: NOTE_BLOCK
+display-name: "<gradient:#9400D3:#FF1493><bold>🎵 Note Block - Accord Épique</bold></gradient>"
+lore:
+  - "<gray>Un bloc musical accordé parfaitement"
+  - ""
+  - "<light_purple>🎵 Configuration:"
+  - "  <pink>• Instrument: PIANO"
+  - "  <pink>• Note: Do aigu (Note 12)"
+  - ""
+  - "<gold>🎼 Créé par le Maestro dimensionnel"
+  - ""
+  - "<yellow>Clic droit pour écouter la magie!"
+custom-model-data: 3003
+metadata:
+  block-data:
+    note-block:
+      instrument: PIANO
+      note: 12  # High C

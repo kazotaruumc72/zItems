@@ -1,0 +1,22 @@
+# Ultimate Farmland - Terre agricole ultra-hydratée
+id: "ultimate_farmland"
+material: FARMLAND
+display-name: "<gradient:#8B4513:#DEB887><bold>🌾 Terre Agricole Divine</bold></gradient>"
+lore:
+  - "<gray>Une terre agricole bénie par les dieux"
+  - ""
+  - "<light_purple>🌾 Propriétés:"
+  - "  <aqua>• Hydratation maximale (7/7)"
+  - "  <green>• Croissance 3x plus rapide"
+  - "  <gold>• Ne peut jamais se dessécher"
+  - ""
+  - "<gold>✨ Bénédiction de la Déesse des Moissons"
+  - ""
+  - "<yellow>Les cultures ne peuvent jamais être piétinées"
+  - "<dark_gray>Parfait pour les méga-fermes"
+custom-model-data: 3013
+metadata:
+  block-data:
+    farmland:
+      moisture: 7  # Maximum moisture level
+      max: true

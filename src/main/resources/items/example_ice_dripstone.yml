@@ -1,0 +1,24 @@
+# Frozen Dripstone - Stalactite de glace massive
+id: "frozen_dripstone"
+material: POINTED_DRIPSTONE
+display-name: "<gradient:#B0E0E6:#4682B4><bold>🧊 Stalactite de Glace</bold></gradient>"
+lore:
+  - "<gray>Une formation de glace ancienne"
+  - ""
+  - "<light_purple>🧊 Caractéristiques:"
+  - "  <aqua>• Épaisseur: THICK (Massive)"
+  - "  <blue>• Direction: Vers le bas"
+  - "  <white>• Glace millénaire"
+  - ""
+  - "<gold>❄ Découvert dans les cavernes gelées"
+  - ""
+  - "<yellow>Danger: Peut tomber et causer des dégâts!"
+  - "<dark_gray>Inflige 6 points de dégâts en tombant"
+custom-model-data: 3012
+metadata:
+  block-data:
+    pointed-dripstone:
+      thickness: THICK           # Maximum thickness
+      vertical-direction: DOWN   # Pointing downward
+    waterlogged:
+      waterlogged: false         # Not waterlogged

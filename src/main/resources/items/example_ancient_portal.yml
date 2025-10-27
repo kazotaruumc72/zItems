@@ -17,7 +17,8 @@ lore:
 custom-model-data: 3007
 metadata:
   block-data:
-    end-portal-frame:
-      eye: true      # Eye of Ender already inserted
-    directional:
-      facing: NORTH  # Facing north for proper alignment
+    settings:
+      end-portal-frame:
+        eye: true      # Eye of Ender already inserted
+      directional:
+        facing: NORTH  # Facing north for proper alignment

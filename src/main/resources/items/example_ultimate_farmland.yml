@@ -17,6 +17,7 @@ lore:
 custom-model-data: 3013
 metadata:
   block-data:
-    farmland:
-      moisture: 7  # Maximum moisture level
-      max: true
+    settings:
+      farmland:
+        moisture: 7  # Maximum moisture level
+        max: true

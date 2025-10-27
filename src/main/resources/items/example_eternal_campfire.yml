@@ -16,6 +16,7 @@ lore:
 custom-model-data: 3004
 metadata:
   block-data:
-    campfire:
-      lit: true           # Toujours allumé
-      signal-fire: false  # Pas de fumée
+    settings:
+      campfire:
+        lit: true           # Toujours allumé
+        signal-fire: false  # Pas de fumée

@@ -25,6 +25,7 @@ public record BlockDataMetadata(
 
     @Override
     public void apply(ItemStack itemStack, @Nullable Player player) {
+
         // Create BlockData using Bukkit's standard method
         BlockData blockData = Bukkit.createBlockData(itemStack.getType());
 
@@ -39,6 +40,7 @@ public record BlockDataMetadata(
         boolean apply = itemStack.editMeta(org.bukkit.inventory.meta.BlockDataMeta.class, meta -> {
             meta.setBlockData(blockData);
         });
+
         if(!apply){
             Logger.severe("Failed to apply BlockData to ItemStack of type {}", itemStack.getType().name());
         }

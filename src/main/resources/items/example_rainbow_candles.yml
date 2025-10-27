@@ -16,6 +16,7 @@ lore:
 custom-model-data: 3005
 metadata:
   block-data:
-    candle:
-      candles: 4  # Maximum stack of candles
-      lit: true   # Pre-lit
+    settings:
+      candle:
+        candles: 4  # Maximum stack of candles
+        lit: true   # Pre-lit

@@ -13,5 +13,6 @@ lore:
 custom-model-data: 3001
 metadata:
   block-data:
-    cake:
-      bites: 3  # Déjà mangé 3 fois sur 6
+    settings:
+      cake:
+        bites: 3  # Déjà mangé 3 fois sur 6

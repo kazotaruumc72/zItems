@@ -18,7 +18,8 @@ lore:
 custom-model-data: 3014
 metadata:
   block-data:
-    sea-pickle:
-      pickles: 4        # Maximum colony size
-    waterlogged:
-      waterlogged: true # Must be in water to glow
+    settings:
+      sea-pickle:
+        pickles: 4        # Maximum colony size
+      waterlogged:
+        waterlogged: true # Must be in water to glow

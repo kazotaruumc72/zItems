@@ -15,6 +15,7 @@ lore:
 custom-model-data: 3003
 metadata:
   block-data:
-    note-block:
-      instrument: PIANO
-      note: 12  # High C
+    settings:
+      note-block:
+        instrument: PIANO
+        note: 12  # High C

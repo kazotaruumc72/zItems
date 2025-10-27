@@ -17,8 +17,9 @@ lore:
 custom-model-data: 3010
 metadata:
   block-data:
-    crafter:
-      triggered: true  # Pre-triggered state
-      crafting: true   # Currently crafting
-    directional:
-      facing: UP       # Faces upward for hopper integration
+    settings:
+      crafter:
+        triggered: true  # Pre-triggered state
+        crafting: true   # Currently crafting
+      directional:
+        facing: UP       # Faces upward for hopper integration

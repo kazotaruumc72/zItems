@@ -18,8 +18,9 @@ lore:
 custom-model-data: 3015
 metadata:
   block-data:
-    sculk-shrieker:
-      shrieking: true      # Currently active
-      can-summon: true     # Can summon the Warden
-    waterlogged:
-      waterlogged: false
+    settings:
+      sculk-shrieker:
+        shrieking: true      # Currently active
+        can-summon: true     # Can summon the Warden
+      waterlogged:
+        waterlogged: false

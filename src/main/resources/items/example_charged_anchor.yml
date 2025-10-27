@@ -15,5 +15,6 @@ lore:
 custom-model-data: 3002
 metadata:
   block-data:
-    respawn-anchor:
-      charges: 4  # Fully charged
+    settings:
+      respawn-anchor:
+        charges: 4  # Fully charged

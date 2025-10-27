@@ -17,7 +17,8 @@ lore:
 custom-model-data: 3011
 metadata:
   block-data:
-    pink-petals:
-      flower-amount: 4  # Maximum flowers
-    directional:
-      facing: SOUTH     # Aesthetic orientation
+    settings:
+      pink-petals:
+        flower-amount: 4  # Maximum flowers
+      directional:
+        facing: SOUTH     # Aesthetic orientation

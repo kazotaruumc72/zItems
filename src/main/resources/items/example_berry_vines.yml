@@ -17,5 +17,6 @@ lore:
 custom-model-data: 3008
 metadata:
   block-data:
-    cave-vines-plant:
-      berries: true  # Has berries ready to harvest
+    settings:
+      cave-vines-plant:
+        berries: true  # Has berries ready to harvest

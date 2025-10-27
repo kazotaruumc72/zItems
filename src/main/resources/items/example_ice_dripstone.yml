@@ -17,8 +17,9 @@ lore:
 custom-model-data: 3012
 metadata:
   block-data:
-    pointed-dripstone:
-      thickness: THICK           # Maximum thickness
-      vertical-direction: DOWN   # Pointing downward
-    waterlogged:
-      waterlogged: false         # Not waterlogged
+    settings:
+      pointed-dripstone:
+        thickness: BASE           # Maximum thickness
+        vertical-direction: DOWN   # Pointing downward
+      waterlogged:
+        waterlogged: false         # Not waterlogged

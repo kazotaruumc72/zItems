@@ -16,8 +16,9 @@ lore:
 custom-model-data: 3006
 metadata:
   block-data:
-    comparator:
-      mode: SUBTRACT
-    analogue-powerable:
-      power: 15   # Max power
-      max: true   # Ensure maximum power
+    settings:
+      comparator:
+        mode: SUBTRACT
+      analogue-powerable:
+        power: 15   # Max power
+        max: true   # Ensure maximum power

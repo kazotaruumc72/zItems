@@ -17,8 +17,9 @@ lore:
 custom-model-data: 3009
 metadata:
   block-data:
-    turtle-egg:
-      eggs: 4      # Maximum eggs in one block
-    hatchable:
-      hatch: 2     # Almost ready to hatch
-      max: false
+    settings:
+      turtle-egg:
+        eggs: 4      # Maximum eggs in one block
+      hatchable:
+        hatch: 2     # Almost ready to hatch
+        max: false

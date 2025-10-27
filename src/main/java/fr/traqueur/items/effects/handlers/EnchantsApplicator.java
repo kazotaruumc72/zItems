@@ -13,7 +13,7 @@ public class EnchantsApplicator implements EffectHandler.NoEventEffectHandler<En
         boolean error = false;
         for (EnchantsSettings.EnchantSetting enchantment : settings.enchantments()) {
             int evolution = enchantment.computeEvolutionValue();
-            int level = context.itemSource().getItemMeta().getEnchants().getOrDefault(enchantment.enchantment(), 0);
+            int level = context.itemSource().getItemMeta().getEnchants().getOrDefault(enchantment.wrapper().enchantment(), 0);
             if (level == 0) {
                 error = true;
                 break;
@@ -31,12 +31,12 @@ public class EnchantsApplicator implements EffectHandler.NoEventEffectHandler<En
         context.itemSource().editMeta(meta -> {
             for (EnchantsSettings.EnchantSetting enchantment : settings.enchantments()) {
                 int evolution = enchantment.computeEvolutionValue();
-                int level = meta.getEnchants().getOrDefault(enchantment.enchantment(), 0);
+                int level = meta.getEnchants().getOrDefault(enchantment.wrapper().enchantment(), 0);
 
                 if (level + evolution == 0) {
-                    meta.removeEnchant(enchantment.enchantment());
+                    meta.removeEnchant(enchantment.wrapper().enchantment());
                 } else {
-                    meta.addEnchant(enchantment.enchantment(), level + evolution, true);
+                    meta.addEnchant(enchantment.wrapper().enchantment(), level + evolution, true);
                 }
             }
         });

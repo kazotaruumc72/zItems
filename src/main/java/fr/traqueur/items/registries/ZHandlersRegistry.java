@@ -1,5 +1,6 @@
 package fr.traqueur.items.registries;
 
+import fr.traqueur.items.PlatformType;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.AutoEffect;
@@ -138,6 +139,20 @@ public class ZHandlersRegistry implements HandlersRegistry {
         try {
             AutoEffect meta = clazz.getAnnotation(AutoEffect.class);
             String effectId = meta.value();
+
+            // Check platform-specific annotations
+            boolean paperOnly = clazz.isAnnotationPresent(AutoEffect.PaperEffect.class);
+            boolean spigotOnly = clazz.isAnnotationPresent(AutoEffect.SpigotEffect.class);
+
+            if (spigotOnly && PlatformType.isPaper()) {
+                Logger.debug("Skipping registration of EffectHandler <aqua>{}<reset> as it is Spigot-only.", clazz.getSimpleName());
+                return false;
+            }
+
+            if (paperOnly && !PlatformType.isPaper()) {
+                Logger.debug("Skipping registration of EffectHandler <aqua>{}<reset> as it is Paper-only.", clazz.getSimpleName());
+                return false;
+            }
 
             if (this.handlers.containsKey(effectId)) {
                 Logger.warning("Effect ID <yellow>{}<reset> is already registered. Skipping class {}.",

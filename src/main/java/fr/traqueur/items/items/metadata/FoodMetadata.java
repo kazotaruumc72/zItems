@@ -2,7 +2,7 @@ package fr.traqueur.items.items.metadata;
 
 import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.items.ItemMetadata;
-import fr.traqueur.items.settings.models.PotionEffectSettings;
+import fr.traqueur.items.settings.models.PotionEffectWrapper;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultBool;
 import fr.traqueur.structura.annotations.defaults.DefaultDouble;
@@ -29,7 +29,7 @@ public record FoodMetadata(
         int nutrition,
         double saturation,
         @Options(optional = true) @DefaultBool(false) boolean canAlwaysEat,
-        @Options(optional = true) List<PotionEffectSettings> effects,
+        @Options(optional = true) List<PotionEffectWrapper> effects,
         @Options(optional = true) @DefaultDouble(-1) double eatSeconds,
         @Options(optional = true) ItemUseAnimation animation,
         @Options(optional = true) Sound sound,
@@ -44,7 +44,7 @@ public record FoodMetadata(
 
         if (effects != null && !effects.isEmpty()) {
             List<PotionEffect> potionEffects = effects.stream()
-                    .map(PotionEffectSettings::toPotionEffect)
+                    .map(PotionEffectWrapper::toPotionEffect)
                     .toList();
             builder = Consumable.consumable()
                     .addEffect(ConsumeEffect.applyStatusEffects(potionEffects, 1.0f));

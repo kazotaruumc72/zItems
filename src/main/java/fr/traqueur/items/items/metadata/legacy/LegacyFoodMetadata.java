@@ -1,4 +1,4 @@
-package fr.traqueur.items.items.metadata;
+package fr.traqueur.items.items.metadata.legacy;
 
 import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.items.ItemMetadata;

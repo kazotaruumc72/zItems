@@ -7,7 +7,7 @@ lore:
   - ""
   - "<gold>Features:"
   - "  <yellow>• Netherite Vex Trim"
-  - "  <yellow>• +12 Armor"
+  - "  <yellow>• +12 Armor (without the default armor value so +20 total)"
   - "  <yellow>• +3 Knockback Resistance"
 enchantments:
   - enchantment: protection
@@ -25,6 +25,14 @@ attributes:
     operation: ADD_NUMBER
     amount: 0.3
     slot: CHEST
+# Strategy for merging custom attributes with default item attributes
+# Options: REPLACE, ADD, KEEP_HIGHEST, KEEP_LOWEST, SUM
+# REPLACE: Replace all existing attributes (default)
+# ADD: Keep existing + add new (may create duplicates)
+# KEEP_HIGHEST: Keep highest value for each (attribute, operation, slot)
+# KEEP_LOWEST: Keep lowest value for each (attribute, operation, slot)
+# SUM: Sum values for each (attribute, operation, slot)
+attribute-merge-strategy: SUM
 metadata:
   trim:
     material: DIAMOND

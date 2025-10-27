@@ -7,7 +7,7 @@ import fr.traqueur.structura.api.Loadable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public record PotionEffectSettings(
+public record PotionEffectWrapper(
         PotionEffectType type,
         int duration,
 

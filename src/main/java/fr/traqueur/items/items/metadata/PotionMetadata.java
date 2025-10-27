@@ -3,7 +3,7 @@ package fr.traqueur.items.items.metadata;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.items.ItemMetadata;
-import fr.traqueur.items.settings.models.PotionEffectSettings;
+import fr.traqueur.items.settings.models.PotionEffectWrapper;
 import fr.traqueur.structura.annotations.Options;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
@@ -27,7 +27,7 @@ public record PotionMetadata(
         PotionType basePotionType,
 
         @Options(optional = true)
-        List<PotionEffectSettings> customEffects
+        List<PotionEffectWrapper> customEffects
 ) implements ItemMetadata {
 
     @Override
@@ -42,7 +42,7 @@ public record PotionMetadata(
             }
 
             if (customEffects != null && !customEffects.isEmpty()) {
-                for (PotionEffectSettings effectSetting : customEffects) {
+                for (PotionEffectWrapper effectSetting : customEffects) {
                     meta.addCustomEffect(effectSetting.toPotionEffect(), true);
                 }
             }

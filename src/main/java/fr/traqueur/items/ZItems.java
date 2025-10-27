@@ -9,6 +9,7 @@ import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.managers.EffectsManager;
 import fr.traqueur.items.api.managers.ItemsManager;
 import fr.traqueur.items.api.registries.*;
+import fr.traqueur.items.api.settings.models.AttributeMergeStrategy;
 import fr.traqueur.items.api.settings.Settings;
 import fr.traqueur.items.commands.CommandsMessageHandler;
 import fr.traqueur.items.commands.ZItemsCommand;
@@ -34,6 +35,7 @@ import fr.traqueur.recipes.api.hook.Hook;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.registries.CustomReaderRegistry;
+import fr.traqueur.structura.registries.DefaultValueRegistry;
 import fr.traqueur.structura.types.TypeToken;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
@@ -159,8 +161,7 @@ public class ZItems extends ItemsPlugin {
         CustomReaderRegistry.getInstance().register(EquipmentSlotGroup.class, new EquipmentSlotGroupReader());
         CustomReaderRegistry.getInstance().register(Attribute.class, new AttributeReader());
         CustomReaderRegistry.getInstance().register(Enchantment.class, new EnchantmentReader());
-        CustomReaderRegistry.getInstance().register(new TypeToken<>() {
-        }, new TagReader());
+        CustomReaderRegistry.getInstance().register(new TypeToken<>() {}, new TagReader());
         CustomReaderRegistry.getInstance().register(Component.class, new ComponentReader());
         CustomReaderRegistry.getInstance().register(Effect.class, new EffectReader());
         CustomReaderRegistry.getInstance().register(PotionEffectType.class, new PotionEffectTypeReader());
@@ -169,8 +170,9 @@ public class ZItems extends ItemsPlugin {
         CustomReaderRegistry.getInstance().register(TrimMaterial.class, new TrimMaterialReader());
         CustomReaderRegistry.getInstance().register(TrimPattern.class, new TrimPatternReader());
         CustomReaderRegistry.getInstance().register(Sound.class, new SoundReader());
-        CustomReaderRegistry.getInstance().register(new TypeToken<>() {
-        }, new DamageTypeReader());
+        CustomReaderRegistry.getInstance().register(new TypeToken<>() {}, new DamageTypeReader());
+
+        DefaultValueRegistry.getInstance().register(AttributeMergeStrategy.class, AttributeMergeStrategy.DefaultStrategy.class, AttributeMergeStrategy.DefaultStrategy::value);
     }
 
     @Override

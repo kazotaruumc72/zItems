@@ -27,4 +27,24 @@ public @interface AutoEffect {
      * @return the effect identifier
      */
     String value();
+
+    /**
+     * Marker annotation for Paper-only effect handlers.
+     * Effect handlers marked with this annotation will only be registered
+     * when running on Paper or Paper-based servers.
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    @interface PaperEffect {
+    }
+
+    /**
+     * Marker annotation for Spigot-only effect handlers.
+     * Effect handlers marked with this annotation will only be registered
+     * when running on Spigot (non-Paper) servers.
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    @interface SpigotEffect {
+    }
 }

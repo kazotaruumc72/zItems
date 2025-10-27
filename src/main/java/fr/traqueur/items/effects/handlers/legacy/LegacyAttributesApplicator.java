@@ -1,4 +1,4 @@
-package fr.traqueur.items.effects.handlers;
+package fr.traqueur.items.effects.handlers.legacy;
 
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.annotations.AutoEffect;
@@ -7,19 +7,15 @@ import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.settings.models.AttributeWrapper;
 import fr.traqueur.items.effects.settings.AttributesSettings;
 import fr.traqueur.items.utils.AttributeUtil;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.ItemAttributeModifiers;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.inventory.ItemStack;
 
 @AutoEffect(value = "ATTRIBUTES_APPLICATOR")
-@AutoEffect.PaperEffect
-public record AttributesApplicator(
+@AutoEffect.SpigotEffect
+public record LegacyAttributesApplicator(
         ItemsPlugin plugin) implements EffectHandler.NoEventEffectHandler<AttributesSettings> {
 
     @Override
     public void handle(EffectContext context, AttributesSettings settings) {
-        AttributeUtil.applyAttributesModern(context.itemSource(), settings.attributes(), plugin, settings.strategy());
+        AttributeUtil.applyAttributesLegacy(context.itemSource(), settings.attributes(), plugin, settings.strategy());
     }
 
     @Override

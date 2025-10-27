@@ -6,12 +6,12 @@ import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.managers.EffectsManager;
 import fr.traqueur.items.api.settings.ItemSettings;
+import fr.traqueur.items.api.settings.models.EnchantmentWrapper;
 import fr.traqueur.items.serialization.Keys;
+import fr.traqueur.items.utils.AttributeUtil;
 import fr.traqueur.items.utils.ItemUtil;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.api.Loadable;
-import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.UUID;
 
 public record ZItem(String id, @Options(inline = true) ItemSettings settings) implements Item, Loadable {
 
@@ -39,25 +38,14 @@ public record ZItem(String id, @Options(inline = true) ItemSettings settings) im
                 settings.itemName()
         );
 
+        AttributeUtil.applyAttributes(itemStack, settings.attributes(), plugin, settings.attributeMergeStrategy());
+
         // Apply additional settings via editMeta
         itemStack.editMeta(meta -> {
             // Apply enchantments
             if (settings.enchantments() != null) {
-                for (ItemSettings.EnchantmentSetting enchantment : settings.enchantments()) {
+                for (EnchantmentWrapper enchantment : settings.enchantments()) {
                     meta.addEnchant(enchantment.enchantment(), enchantment.level(), true);
-                }
-            }
-
-            // Apply attributes
-            if (settings.attributes() != null) {
-                for (ItemSettings.AttributeSetting attribute : settings.attributes()) {
-                    AttributeModifier modifier = new AttributeModifier(
-                            new NamespacedKey(plugin, UUID.randomUUID().toString()),
-                            attribute.amount(),
-                            attribute.operation(),
-                            attribute.slot()
-                    );
-                    meta.addAttributeModifier(attribute.attribute(), modifier);
                 }
             }
 

@@ -310,9 +310,4 @@ public class FarmingHoe implements EffectHandler.MultiEventEffectHandler<Farming
     public int priority() {
         return 0;
     }
-
-    @Override
-    public Class<FarmingHoeSettings> settingsType() {
-        return FarmingHoeSettings.class;
-    }
 }

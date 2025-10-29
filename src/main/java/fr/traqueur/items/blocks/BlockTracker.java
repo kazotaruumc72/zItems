@@ -24,6 +24,12 @@ import java.util.*;
  */
 public class BlockTracker {
 
+    private static BlockTracker instance;
+
+    public static BlockTracker get() {
+        return instance;
+    }
+
     /**
      * In-memory cache using Guava Table for efficient chunk-based lookups.
      * Row: WorldChunkKey (world UUID + chunk key) - unique identifier for each chunk across all worlds
@@ -33,6 +39,7 @@ public class BlockTracker {
     private final Table<WorldChunkKey, Integer, String> cache;
 
     public BlockTracker() {
+        instance = this;
         this.cache = HashBasedTable.create();
     }
 

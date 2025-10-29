@@ -45,11 +45,6 @@ public class InfiniteBucket implements EffectHandler.MultiEventEffectHandler<Emp
         return 0;
     }
 
-    @Override
-    public Class<EmptySettings> settingsType() {
-        return EmptySettings.class;
-    }
-
     private void handleBucketEmpty(PlayerBucketEmptyEvent event) {
         Material bucketType = event.getBucket();
         if (FORBIDDEN_MATERIALS.contains(bucketType)) {

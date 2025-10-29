@@ -1,0 +1,4 @@
+id: "xp_job_boost"
+type: "JOB_XP_BOOST"
+boost: 100
+chance-to-boost: 1.0

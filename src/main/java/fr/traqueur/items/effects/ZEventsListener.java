@@ -10,10 +10,7 @@ import fr.traqueur.items.api.registries.HandlersRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.RegisteredListener;
@@ -137,11 +134,10 @@ public class ZEventsListener implements Listener {
                 }
             };
 
-            // Create a RegisteredListener with LOWEST priority (execute early, before most plugins)
             RegisteredListener registeredListener = new RegisteredListener(
                     this,
                     executor,
-                    EventPriority.LOWEST,
+                    EventPriority.HIGHEST,
                     plugin,
                     false  // ignoreCancelled = false (process even cancelled events)
             );
@@ -191,6 +187,12 @@ public class ZEventsListener implements Listener {
      */
     @SuppressWarnings("unchecked")
     private <E extends Event> void handleEvent(E event) {
+        if(event instanceof Cancellable cancellable) {
+            if(cancellable.isCancelled()) {
+                return;
+            }
+        }
+
         Class<E> eventClass = (Class<E>) event.getClass();
         ItemSourceExtractor<E> extractor = (ItemSourceExtractor<E>) Registry.get(ExtractorsRegistry.class).getById(eventClass);
 

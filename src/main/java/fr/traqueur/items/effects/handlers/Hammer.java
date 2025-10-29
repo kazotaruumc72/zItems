@@ -25,11 +25,6 @@ import java.util.Set;
 public class Hammer implements EffectHandler.SingleEventEffectHandler<HammerSettings, BlockBreakEvent> {
 
     @Override
-    public Class<BlockBreakEvent> eventType() {
-        return BlockBreakEvent.class;
-    }
-
-    @Override
     public void handle(EffectContext context, HammerSettings settings) {
         BlockBreakEvent event = context.getEventAs(BlockBreakEvent.class);
         Block block = event.getBlock();
@@ -158,10 +153,5 @@ public class Hammer implements EffectHandler.SingleEventEffectHandler<HammerSett
     @Override
     public int priority() {
         return 1;
-    }
-
-    @Override
-    public Class<HammerSettings> settingsType() {
-        return HammerSettings.class;
     }
 }

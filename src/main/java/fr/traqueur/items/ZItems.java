@@ -64,7 +64,6 @@ public class ZItems extends ItemsPlugin {
 
     private RecipesAPI recipesManager;
     private EffectsDispatcher dispatcher;
-    private BlockTracker blockTracker;
 
     @Override
     public void onEnable() {
@@ -139,8 +138,7 @@ public class ZItems extends ItemsPlugin {
         ItemsManager manager = this.registerManager(ItemsManager.class, new ZItemsManager());
         manager.generateRecipesFromLoadedItems();
 
-        this.blockTracker = new BlockTracker();
-        this.getServer().getPluginManager().registerEvents(new BlockTrackerListener(this.blockTracker, manager), this);
+        this.getServer().getPluginManager().registerEvents(new BlockTrackerListener(new BlockTracker(), manager), this);
         
         this.registerCommands(settings);
 
@@ -194,8 +192,9 @@ public class ZItems extends ItemsPlugin {
         Logger.info("<yellow>=== DISABLE START ===");
         Logger.info("<gray>Plugin Version V<red>{}", this.getDescription().getVersion());
 
-        if (this.blockTracker != null) {
-            this.blockTracker.clearCache();
+        BlockTracker blockTracker = BlockTracker.get();
+        if (blockTracker != null) {
+            blockTracker.clearCache();
         }
 
         MessageUtil.close();

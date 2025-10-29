@@ -20,11 +20,6 @@ import java.util.*;
 public class VeinMiner implements EffectHandler.SingleEventEffectHandler<VeinMinerSettings, BlockBreakEvent> {
 
     @Override
-    public Class<BlockBreakEvent> eventType() {
-        return BlockBreakEvent.class;
-    }
-
-    @Override
     public void handle(EffectContext context, VeinMinerSettings settings) {
         BlockBreakEvent event = context.getEventAs(BlockBreakEvent.class);
         Block block = event.getBlock();
@@ -135,10 +130,5 @@ public class VeinMiner implements EffectHandler.SingleEventEffectHandler<VeinMin
     @Override
     public int priority() {
         return 1;
-    }
-
-    @Override
-    public Class<VeinMinerSettings> settingsType() {
-        return VeinMinerSettings.class;
     }
 }

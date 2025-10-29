@@ -17,11 +17,6 @@ public class XPBoost implements EffectHandler.SingleEventEffectHandler<BoostSett
     private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
     @Override
-    public Class<BlockBreakEvent> eventType() {
-        return BlockBreakEvent.class;
-    }
-
-    @Override
     public void handle(EffectContext context, BoostSettings settings) {
         BlockBreakEvent event = context.getEventAs(this.eventType());
 
@@ -60,10 +55,5 @@ public class XPBoost implements EffectHandler.SingleEventEffectHandler<BoostSett
     @Override
     public int priority() {
         return 0;
-    }
-
-    @Override
-    public Class<BoostSettings> settingsType() {
-        return BoostSettings.class;
     }
 }

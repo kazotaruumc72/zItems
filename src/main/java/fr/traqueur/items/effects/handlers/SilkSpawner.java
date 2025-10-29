@@ -1,9 +1,12 @@
 package fr.traqueur.items.effects.handlers;
 
+import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.events.SpawnerDropEvent;
+import fr.traqueur.items.api.managers.ItemsManager;
+import fr.traqueur.items.blocks.BlockTracker;
 import fr.traqueur.items.effects.settings.EmptySettings;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,16 +17,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @AutoEffect(value = "SILK_SPAWNER")
-public class SilkSpawner implements EffectHandler.SingleEventEffectHandler<EmptySettings, BlockBreakEvent> {
-    @Override
-    public Class<BlockBreakEvent> eventType() {
-        return BlockBreakEvent.class;
-    }
+public record SilkSpawner(ItemsPlugin plugin) implements EffectHandler.SingleEventEffectHandler<EmptySettings, BlockBreakEvent> {
 
     @Override
     public void handle(EffectContext context, EmptySettings settings) {
-        for (Block block : context.affectedBlocks()) {
+        Set<Block> affectedBlocks = new HashSet<>(context.affectedBlocks());
+        if(context.affectedBlocks().isEmpty()) {
+            Block block = context.getEventAs(eventType()).getBlock();
+            affectedBlocks.add(block);
+        }
+
+        for (Block block : affectedBlocks) {
             if (block.getType() == Material.SPAWNER) {
                 ItemStack itemStack = this.getSpawner(block);
 
@@ -52,10 +62,5 @@ public class SilkSpawner implements EffectHandler.SingleEventEffectHandler<Empty
     @Override
     public int priority() {
         return 0;
-    }
-
-    @Override
-    public Class<EmptySettings> settingsType() {
-        return EmptySettings.class;
     }
 }

@@ -4,6 +4,7 @@ import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.managers.ItemsManager;
 import fr.traqueur.items.api.registries.ItemsRegistry;
 import fr.traqueur.items.api.registries.Registry;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -55,7 +56,7 @@ public class BlockTrackerListener implements Listener {
      * Handles block break events for tracked blocks.
      * Drops the correct custom item instead of the default block drops.
      */
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         Optional<String> trackedItemId = tracker.getTrackedItemId(block);
@@ -67,8 +68,7 @@ public class BlockTrackerListener implements Listener {
 
             if (customItem != null) {
                 // Cancel default drops
-                event.setDropItems(false);
-
+                event.setCancelled(true);
                 // Drop the custom item instead
                 ItemStack customItemStack = customItem.build(player, 1);
                 // Drop custom item at block location
@@ -76,6 +76,7 @@ public class BlockTrackerListener implements Listener {
 
                 // Untrack the block
                 tracker.untrackBlock(block);
+                block.setType(Material.AIR);
             }
         }
     }

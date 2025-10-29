@@ -46,9 +46,4 @@ public class EnchantsApplicator implements EffectHandler.NoEventEffectHandler<En
     public int priority() {
         return 0;
     }
-
-    @Override
-    public Class<EnchantsSettings> settingsType() {
-        return EnchantsSettings.class;
-    }
 }

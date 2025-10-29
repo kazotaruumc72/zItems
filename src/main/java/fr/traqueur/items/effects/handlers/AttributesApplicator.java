@@ -21,9 +21,4 @@ public record AttributesApplicator(
     public int priority() {
         return 1;
     }
-
-    @Override
-    public Class<AttributesSettings> settingsType() {
-        return AttributesSettings.class;
-    }
 }

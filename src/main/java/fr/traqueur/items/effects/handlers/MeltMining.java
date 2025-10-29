@@ -12,10 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @AutoEffect(value = "MELT_MINING")
 public class MeltMining implements EffectHandler.SingleEventEffectHandler<EmptySettings, BlockBreakEvent> {
@@ -23,15 +20,15 @@ public class MeltMining implements EffectHandler.SingleEventEffectHandler<EmptyS
     private static final Map<Material, FurnaceRecipe> CACHES = new HashMap<>();
 
     @Override
-    public Class<BlockBreakEvent> eventType() {
-        return BlockBreakEvent.class;
-    }
-
-    @Override
     public void handle(EffectContext context, EmptySettings settings) {
         float totalExperience = 0;
         BlockBreakEvent event = context.getEventAs(BlockBreakEvent.class);
-        for (Block block : context.affectedBlocks()) {
+        Set<Block> affectedBlocks = new HashSet<>(context.affectedBlocks());
+        if(affectedBlocks.isEmpty()) {
+            affectedBlocks.add(event.getBlock());
+        }
+
+        for (Block block : affectedBlocks) {
             Location location = block.getLocation().add(0.5, 0.5, 0.5);
             World world = block.getWorld();
             for (ItemStack blockDrop : block.getDrops(context.itemSource())) {
@@ -74,11 +71,5 @@ public class MeltMining implements EffectHandler.SingleEventEffectHandler<EmptyS
             }
         }
         return null;
-    }
-
-
-    @Override
-    public Class<EmptySettings> settingsType() {
-        return EmptySettings.class;
     }
 }

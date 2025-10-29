@@ -5,13 +5,29 @@ import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.effects.settings.BoostSettings;
 import org.bukkit.event.Event;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class JobsHandler<E extends Event> implements EffectHandler.SingleEventEffectHandler<BoostSettings, E> {
 
+
     @Override
     public Class<BoostSettings> settingsType() {
         return BoostSettings.class;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Class<E> eventType() {
+        Type superclass = getClass().getGenericSuperclass();
+        if (superclass instanceof ParameterizedType parameterizedType) {
+            Type actualType = parameterizedType.getActualTypeArguments()[0];
+            if (actualType instanceof Class<?>) {
+                return (Class<E>) actualType;
+            }
+        }
+        throw new IllegalStateException("Could not determine event type for " + getClass().getName());
     }
 
     @Override

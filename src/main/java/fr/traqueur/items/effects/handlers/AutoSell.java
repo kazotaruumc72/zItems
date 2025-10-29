@@ -30,6 +30,21 @@ public record AutoSell(ItemsPlugin plugin) implements EffectHandler.MultiEventEf
     public void handle(EffectContext context, AutoSellSettings settings) {
         Player player = context.executor();
 
+        List<ItemStack> drops = new ArrayList<>(context.drops());
+        switch (context.event()) {
+            case BlockBreakEvent blockBreakEvent -> {
+                if(drops.isEmpty()) {
+                    drops.addAll(blockBreakEvent.getBlock().getDrops(context.itemSource()));
+                }
+            }
+            case EntityDeathEvent entityDeathEvent -> {
+               if (drops.isEmpty()) {
+                   drops.addAll(entityDeathEvent.getDrops());
+               }
+            }
+            default -> { return; }
+        }
+
         // Récupérer le ShopProvider
         ShopProvider provider;
         try {
@@ -42,7 +57,7 @@ public record AutoSell(ItemsPlugin plugin) implements EffectHandler.MultiEventEf
         List<ItemStack> remainingDrops = new ArrayList<>();
 
         // Vendre chaque drop
-        for (ItemStack drop : context.drops()) {
+        for (ItemStack drop : drops) {
             if (drop == null || drop.getType().isAir()) {
                 continue;
             }
@@ -63,10 +78,5 @@ public record AutoSell(ItemsPlugin plugin) implements EffectHandler.MultiEventEf
     @Override
     public int priority() {
         return -1;
-    }
-
-    @Override
-    public Class<AutoSellSettings> settingsType() {
-        return AutoSellSettings.class;
     }
 }

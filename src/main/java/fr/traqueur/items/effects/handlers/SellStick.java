@@ -23,11 +23,6 @@ public record SellStick(
         ItemsPlugin plugin) implements EffectHandler.SingleEventEffectHandler<SellStickSettings, PlayerInteractEvent> {
 
     @Override
-    public Class<PlayerInteractEvent> eventType() {
-        return PlayerInteractEvent.class;
-    }
-
-    @Override
     public void handle(EffectContext effectContext, SellStickSettings settings) {
         PlayerInteractEvent event = effectContext.getEventAs(this.eventType());
         Player player = effectContext.executor();
@@ -82,10 +77,5 @@ public record SellStick(
     @Override
     public int priority() {
         return 0;
-    }
-
-    @Override
-    public Class<SellStickSettings> settingsType() {
-        return SellStickSettings.class;
     }
 }

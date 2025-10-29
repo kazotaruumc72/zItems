@@ -17,9 +17,4 @@ public class Empty implements EffectHandler.NoEventEffectHandler<EmptySettings> 
     public int priority() {
         return -1;
     }
-
-    @Override
-    public Class<EmptySettings> settingsType() {
-        return EmptySettings.class;
-    }
 }

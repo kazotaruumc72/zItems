@@ -5,10 +5,6 @@ import fr.traqueur.items.hooks.jobs.JobsHandler;
 
 
 public class JobsExperienceMultiplier extends JobsHandler<JobsExpGainEvent> {
-    @Override
-    public Class<JobsExpGainEvent> eventType() {
-        return JobsExpGainEvent.class;
-    }
 
     @Override
     protected void setNewValue(JobsExpGainEvent event, double boost) {

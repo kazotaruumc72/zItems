@@ -19,9 +19,4 @@ public class Unbreakable implements EffectHandler.NoEventEffectHandler<EmptySett
     public int priority() {
         return 0;
     }
-
-    @Override
-    public Class<EmptySettings> settingsType() {
-        return EmptySettings.class;
-    }
 }

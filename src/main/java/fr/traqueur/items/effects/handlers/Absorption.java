@@ -54,9 +54,4 @@ public class Absorption implements EffectHandler.MultiEventEffectHandler<EmptySe
     public int priority() {
         return -1;
     }
-
-    @Override
-    public Class<EmptySettings> settingsType() {
-        return EmptySettings.class;
-    }
 }

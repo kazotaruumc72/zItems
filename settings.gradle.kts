@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.maven
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -5,6 +7,10 @@ pluginManagement {
         maven {
             name = "groupezReleases"
             url = uri("https://repo.groupez.dev/releases")
+        }
+        maven {
+            name = "groupezSnapshots"
+            url = uri("https://repo.groupez.dev/snapshots")
         }
         gradlePluginPortal()
     }
@@ -19,5 +25,5 @@ file("hooks").listFiles()?.forEach { file ->
         include(":hooks:${file.name}")
     }
 }
-include("hooks:WorldGuard")
-include("hooks:SuperiorSkyBlock2")
+include("hooks:Jobs")
+include("common")

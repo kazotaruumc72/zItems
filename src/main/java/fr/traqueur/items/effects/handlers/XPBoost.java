@@ -3,7 +3,7 @@ package fr.traqueur.items.effects.handlers;
 import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
-import fr.traqueur.items.effects.settings.XPBoostSettings;
+import fr.traqueur.items.effects.settings.BoostSettings;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ExperienceOrb;
@@ -12,7 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import java.util.concurrent.ThreadLocalRandom;
 
 @AutoEffect(value = "XP_BOOST")
-public class XPBoost implements EffectHandler.SingleEventEffectHandler<XPBoostSettings, BlockBreakEvent> {
+public class XPBoost implements EffectHandler.SingleEventEffectHandler<BoostSettings, BlockBreakEvent> {
 
     private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
@@ -22,7 +22,7 @@ public class XPBoost implements EffectHandler.SingleEventEffectHandler<XPBoostSe
     }
 
     @Override
-    public void handle(EffectContext context, XPBoostSettings settings) {
+    public void handle(EffectContext context, BoostSettings settings) {
         BlockBreakEvent event = context.getEventAs(this.eventType());
 
         if (settings.chanceToBoost() != -1 && ThreadLocalRandom.current().nextDouble(0, 100) > settings.chanceToBoost()) {
@@ -36,7 +36,7 @@ public class XPBoost implements EffectHandler.SingleEventEffectHandler<XPBoostSe
             return;
         }
 
-        event.setExpToDrop((int) (settings.xpBoost() * event.getExpToDrop()));
+        event.setExpToDrop((int) (settings.boost() * event.getExpToDrop()));
 
     }
 
@@ -63,7 +63,7 @@ public class XPBoost implements EffectHandler.SingleEventEffectHandler<XPBoostSe
     }
 
     @Override
-    public Class<XPBoostSettings> settingsType() {
-        return XPBoostSettings.class;
+    public Class<BoostSettings> settingsType() {
+        return BoostSettings.class;
     }
 }

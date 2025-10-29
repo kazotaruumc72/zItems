@@ -2,6 +2,7 @@ package fr.traqueur.items.effects;
 
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.*;
+import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.registries.HandlersRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.serialization.Keys;

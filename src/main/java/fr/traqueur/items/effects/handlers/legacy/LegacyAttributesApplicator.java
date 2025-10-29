@@ -4,7 +4,6 @@ import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
-import fr.traqueur.items.api.settings.models.AttributeWrapper;
 import fr.traqueur.items.effects.settings.AttributesSettings;
 import fr.traqueur.items.utils.AttributeUtil;
 

@@ -18,8 +18,10 @@ import fr.traqueur.items.commands.arguments.ItemArgument;
 import fr.traqueur.items.effects.ZEffectsDispatcher;
 import fr.traqueur.items.effects.ZEffectsManager;
 import fr.traqueur.items.effects.ZEventsListener;
+import fr.traqueur.items.hooks.JobsHook;
 import fr.traqueur.items.hooks.SuperiorSkyBlockHook;
 import fr.traqueur.items.hooks.WorldGuardHook;
+import fr.traqueur.items.hooks.ZJobsHook;
 import fr.traqueur.items.hooks.recipes.RecipesHook;
 import fr.traqueur.items.items.ZItemsManager;
 import fr.traqueur.items.items.listeners.CommandsListener;
@@ -102,6 +104,8 @@ public class ZItems extends ItemsPlugin {
         HooksRegistry hooksRegistry = Registry.get(HooksRegistry.class);
         hooksRegistry.register("WorldGuard", new WorldGuardHook());
         hooksRegistry.register("SuperiorSkyBlock2", new SuperiorSkyBlockHook());
+        hooksRegistry.register("zJobs", new ZJobsHook());
+        hooksRegistry.register("Jobs", new JobsHook());
 
         // Register and scan effect handlers
         Registry.register(HandlersRegistry.class, new ZHandlersRegistry(this));
@@ -109,17 +113,18 @@ public class ZItems extends ItemsPlugin {
 
         // Register and load effects from files
         Registry.register(EffectsRegistry.class, new ZEffectsRegistry(this));
-        Registry.get(EffectsRegistry.class).loadFromFolder(this.getDataPath().resolve(EFFECTS_FOLDER));
 
         // Register and load items from files
         Registry.register(ItemsRegistry.class, new ZItemsRegistry(this));
-        Registry.get(ItemsRegistry.class).loadFromFolder(this.getDataPath().resolve(ITEMS_FOLDER));
 
         // Register and scan extractors
         Registry.register(ExtractorsRegistry.class, new ZExtractorsRegistry(this));
         Registry.get(ExtractorsRegistry.class).scanPackage(this, "fr.traqueur.items");
 
         Registry.get(HooksRegistry.class).enableAll();
+
+        Registry.get(EffectsRegistry.class).loadFromFolder(this.getDataPath().resolve(EFFECTS_FOLDER));
+        Registry.get(ItemsRegistry.class).loadFromFolder(this.getDataPath().resolve(ITEMS_FOLDER));
 
         Logger.info("Setting up event dispatching system...");
         this.dispatcher = new ZEffectsDispatcher();

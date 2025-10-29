@@ -2,7 +2,7 @@ package fr.traqueur.items.items.metadata;
 
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.AutoMetadata;
-import fr.traqueur.items.api.blockdata.BlockDataMeta;
+import fr.traqueur.items.api.items.BlockDataMeta;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.structura.annotations.Options;
 import org.bukkit.Bukkit;

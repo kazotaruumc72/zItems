@@ -1,7 +1,7 @@
 package fr.traqueur.items.items.blockdata;
 
 import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
-import fr.traqueur.items.api.blockdata.BlockDataMeta;
+import fr.traqueur.items.api.items.BlockDataMeta;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultBool;
 import org.bukkit.block.data.type.Farmland;

@@ -1,0 +1,18 @@
+id: "example_custom_spawner"
+material: SPAWNER
+display-name: "<gradient:#FF0000:#8B0000>Custom Mob Spawner</gradient>"
+lore:
+  - "<gray>A spawner with custom settings"
+
+metadata:
+  block-state:
+    settings:
+      spawner:
+        spawned-type: ZOMBIE  # Entity type to spawn
+        delay: 20  # Initial delay before first spawn
+        min-spawn-delay: 200  # Minimum delay between spawns (10 seconds)
+        max-spawn-delay: 800  # Maximum delay between spawns (40 seconds)
+        spawn-count: 4  # Number of entities to spawn per attempt
+        max-nearby-entities: 6  # Max entities of this type nearby
+        required-player-range: 16  # Player must be within this range
+        spawn-range: 4  # Radius around spawner to spawn entities

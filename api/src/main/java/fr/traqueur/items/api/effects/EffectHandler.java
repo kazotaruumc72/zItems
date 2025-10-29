@@ -1,8 +1,12 @@
 package fr.traqueur.items.api.effects;
 
+import fr.traqueur.items.api.annotations.IncompatibleWith;
 import org.bukkit.event.Event;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Represents an effect that can be applied in response to a specific event.
@@ -25,6 +29,21 @@ public sealed interface EffectHandler<T extends EffectSettings> permits EffectHa
                     multiEventEffectHandler.eventTypes().stream().anyMatch(type -> type.isInstance(event));
             case NoEventEffectHandler<?> __ -> event == null;
         };
+    }
+
+    /**
+     * Returns a set of effect handler classes that are incompatible with this handler.
+     * This is determined by the {@link IncompatibleWith} annotation on the implementing class.
+     *
+     * @return set of incompatible effect handler classes, or empty set if none
+     */
+    default Set<Class<? extends EffectHandler<?>>> getIncompatibleHandlers() {
+        IncompatibleWith annotation = this.getClass().getAnnotation(IncompatibleWith.class);
+        if (annotation == null) {
+            return Collections.emptySet();
+        }
+        return Arrays.stream(annotation.value())
+                .collect(Collectors.toSet());
     }
 
     non-sealed interface MultiEventEffectHandler<T extends EffectSettings> extends EffectHandler<T> {

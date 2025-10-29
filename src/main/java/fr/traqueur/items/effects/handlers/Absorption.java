@@ -1,6 +1,7 @@
 package fr.traqueur.items.effects.handlers;
 
 import fr.traqueur.items.api.annotations.AutoEffect;
+import fr.traqueur.items.api.annotations.IncompatibleWith;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.effects.settings.EmptySettings;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 @AutoEffect(value = "ABSORPTION")
+@IncompatibleWith(AutoSell.class)
 public class Absorption implements EffectHandler.MultiEventEffectHandler<EmptySettings> {
 
     @Override

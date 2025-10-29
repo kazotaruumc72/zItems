@@ -10,6 +10,6 @@ import org.bukkit.block.banner.PatternType;
 public class PatternTypeReader implements Reader<PatternType> {
     @Override
     public PatternType read(String value) throws StructuraException {
-        return RegistryAccess.registryAccess().getRegistry(RegistryKey.BANNER_PATTERN).getOrThrow(NamespacedKey.minecraft(value));
+        return RegistryAccess.registryAccess().getRegistry(RegistryKey.BANNER_PATTERN).getOrThrow(NamespacedKey.minecraft(value.toLowerCase()));
     }
 }

@@ -41,6 +41,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
@@ -170,6 +171,7 @@ public class ZItems extends ItemsPlugin {
         CustomReaderRegistry.getInstance().register(TrimMaterial.class, new TrimMaterialReader());
         CustomReaderRegistry.getInstance().register(TrimPattern.class, new TrimPatternReader());
         CustomReaderRegistry.getInstance().register(Sound.class, new SoundReader());
+        CustomReaderRegistry.getInstance().register(PatternType.class, new PatternTypeReader());
         CustomReaderRegistry.getInstance().register(new TypeToken<>() {}, new DamageTypeReader());
 
         DefaultValueRegistry.getInstance().register(AttributeMergeStrategy.class, AttributeMergeStrategy.DefaultStrategy.class, AttributeMergeStrategy.DefaultStrategy::value);

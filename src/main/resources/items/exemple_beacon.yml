@@ -1,0 +1,12 @@
+id: "example_custom_beacon"
+material: BEACON
+display-name: "<gradient:#00FFFF:#0080FF>Custom Beacon</gradient>"
+lore:
+  - "<gray>A beacon with pre-configured effects"
+
+metadata:
+  block-state:
+    settings:
+      beacon:
+        primary-effect: SPEED
+        secondary-effect: REGENERATION

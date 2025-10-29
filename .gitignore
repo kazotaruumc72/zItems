@@ -8,7 +8,7 @@ target-api/
 destinations.yml
 .idea/
 .claude/
-MIGRATION.md
+CLAUDE.md
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

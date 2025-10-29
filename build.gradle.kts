@@ -97,6 +97,7 @@ tasks {
 
     build {
         dependsOn(shadowJar)
+        dependsOn(subprojects.map { it.tasks.shadowJar })
     }
 
     processResources {

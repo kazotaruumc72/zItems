@@ -4,11 +4,17 @@ import fr.traqueur.items.PlatformType;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
+import fr.traqueur.items.api.annotations.AutoBlockStateMeta;
 import fr.traqueur.items.api.annotations.AutoMetadata;
-import fr.traqueur.items.api.blockdata.BlockDataMeta;
+import fr.traqueur.items.api.items.BlockDataMeta;
+import fr.traqueur.items.api.items.BlockStateMeta;
+import fr.traqueur.items.api.effects.Effect;
+import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.items.ItemMetadata;
+import fr.traqueur.items.api.registries.HandlersRegistry;
 import fr.traqueur.items.api.registries.ItemsRegistry;
+import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.items.ZItem;
 import fr.traqueur.items.utils.ReflectionsCache;
 import fr.traqueur.structura.api.Structura;
@@ -17,6 +23,8 @@ import fr.traqueur.structura.registries.PolymorphicRegistry;
 import org.reflections.Reflections;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class ZItemsRegistry extends ItemsRegistry {
@@ -42,6 +50,25 @@ public class ZItemsRegistry extends ItemsRegistry {
                 Logger.debug("Registered BlockDataMeta type <aqua>{}<reset> with id <gold>{}<reset>.", clazz.getSimpleName(), meta.value());
             }
             Logger.info("Registered <gold>{}<reset> BlockDataMeta type(s).", count);
+        });
+
+        PolymorphicRegistry.create(BlockStateMeta.class, registry -> {
+            Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(AutoBlockStateMeta.class);
+            int count = 0;
+            for (Class<?> clazz : annotatedClasses) {
+                if (!BlockStateMeta.class.isAssignableFrom(clazz)) {
+                    Logger.warning("Class <yellow>{}<reset> is annotated with @AutoBlockStateMeta but does not implement BlockStateMeta. Skipping.",
+                            clazz.getSimpleName());
+                    continue;
+                }
+                AutoBlockStateMeta meta = clazz.getAnnotation(AutoBlockStateMeta.class);
+
+                //noinspection unchecked
+                registry.register(meta.value(), (Class<? extends BlockStateMeta<?>>) clazz);
+                count++;
+                Logger.debug("Registered BlockStateMeta type <aqua>{}<reset> with id <gold>{}<reset>.", clazz.getSimpleName(), meta.value());
+            }
+            Logger.info("Registered <gold>{}<reset> BlockStateMeta type(s).", count);
         });
 
         PolymorphicRegistry.create(ItemMetadata.class, registry -> {
@@ -81,10 +108,75 @@ public class ZItemsRegistry extends ItemsRegistry {
     protected void loadFile(Path file) {
         try {
             Item item = Structura.load(file, ZItem.class);
+
+            // Validate effects compatibility before registering
+            if (!validateEffectsCompatibility(item, file)) {
+                Logger.severe("Failed to load item {} from file {}: incompatible effects detected",
+                        item.id(), file.getFileName());
+                return;
+            }
+
             this.register(item.id(), item);
             Logger.debug("Loaded item: " + item.id() + " from file: " + file.getFileName());
         } catch (StructuraException e) {
             Logger.severe("Failed to load item from file: " + file.getFileName(), e);
         }
+    }
+
+    /**
+     * Validates that all effects in the item settings are compatible with each other.
+     *
+     * @param item the item to validate
+     * @param file the file path for logging purposes
+     * @return true if all effects are compatible, false otherwise
+     */
+    private boolean validateEffectsCompatibility(Item item, Path file) {
+        List<Effect> effects = item.settings().effects();
+        if (effects == null || effects.isEmpty()) {
+            return true; // No effects to validate
+        }
+
+        HandlersRegistry registry = Registry.get(HandlersRegistry.class);
+        List<EffectHandler<?>> handlers = new ArrayList<>();
+
+        // Get all handlers
+        for (Effect effect : effects) {
+            EffectHandler<?> handler = registry.getById(effect.type());
+            if (handler == null) {
+                Logger.warning("Handler not found for effect type {} in item {} ({})",
+                        effect.type(), item.id(), file.getFileName());
+                return false;
+            }
+            handlers.add(handler);
+        }
+
+        // Check each pair of handlers for incompatibility
+        for (int i = 0; i < handlers.size(); i++) {
+            EffectHandler<?> handler1 = handlers.get(i);
+            Set<Class<? extends EffectHandler<?>>> incompatibles1 = handler1.getIncompatibleHandlers();
+
+            for (int j = i + 1; j < handlers.size(); j++) {
+                EffectHandler<?> handler2 = handlers.get(j);
+
+                // Check if handler1 is incompatible with handler2
+                if (incompatibles1.contains(handler2.getClass())) {
+                    Logger.severe("Incompatible effects in item {} ({}): {} is incompatible with {}",
+                            item.id(), file.getFileName(),
+                            effects.get(i).type(), effects.get(j).type());
+                    return false;
+                }
+
+                // Check if handler2 is incompatible with handler1 (bidirectional check)
+                Set<Class<? extends EffectHandler<?>>> incompatibles2 = handler2.getIncompatibleHandlers();
+                if (incompatibles2.contains(handler1.getClass())) {
+                    Logger.severe("Incompatible effects in item {} ({}): {} is incompatible with {}",
+                            item.id(), file.getFileName(),
+                            effects.get(j).type(), effects.get(i).type());
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

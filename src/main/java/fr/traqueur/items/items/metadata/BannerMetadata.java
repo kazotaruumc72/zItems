@@ -3,6 +3,7 @@ package fr.traqueur.items.items.metadata;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.AutoMetadata;
 import fr.traqueur.items.api.items.ItemMetadata;
+import fr.traqueur.items.settings.models.PatternWrapper;
 import fr.traqueur.structura.api.Loadable;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
@@ -15,24 +16,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 @AutoMetadata("banner")
-public record BannerMetadata(List<PatternSettings> patterns) implements ItemMetadata {
+public record BannerMetadata(List<PatternWrapper> patterns) implements ItemMetadata {
 
     @Override
     public void apply(ItemStack itemStack, @Nullable Player player) {
         boolean applied = itemStack.editMeta(BannerMeta.class, meta -> {
-            meta.setPatterns(patterns.stream().map(PatternSettings::toPattern).toList());
+            meta.setPatterns(patterns.stream().map(PatternWrapper::toPattern).toList());
         });
         if (!applied) {
             Logger.severe("Failed to apply BannerMeta to ItemStack of type {}", itemStack.getType().name());
         }
     }
 
-    public record PatternSettings(PatternType type, DyeColor color) implements Loadable {
 
-        public Pattern toPattern() {
-            return new Pattern(color, type);
-        }
-
-    }
 
 }

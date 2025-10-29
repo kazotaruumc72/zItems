@@ -1,4 +1,4 @@
-package fr.traqueur.items.api.blockdata;
+package fr.traqueur.items.api.items;
 
 import fr.traqueur.structura.annotations.Polymorphic;
 import fr.traqueur.structura.api.Loadable;

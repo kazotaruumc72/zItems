@@ -4,6 +4,7 @@ import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.items.api.settings.models.AttributeMergeStrategy;
 import fr.traqueur.items.api.settings.models.AttributeWrapper;
+import fr.traqueur.items.api.settings.models.DisabledEnchantment;
 import fr.traqueur.items.api.settings.models.EnchantmentWrapper;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultBool;
@@ -39,6 +40,9 @@ public record ItemSettings(
         List<EnchantmentWrapper> enchantments,
 
         @Options(optional = true)
+        List<DisabledEnchantment> disabledEnchantments,
+
+        @Options(optional = true)
         List<AttributeWrapper> attributes,
 
         @Options(optional = true)
@@ -68,6 +72,10 @@ public record ItemSettings(
         @Options(optional = true)
         @DefaultBool(false)
         boolean hideTooltip,
+
+        @Options(optional = true)
+        @DefaultBool(false)
+        boolean grindstoneEnabled,
 
         @Options(optional = true)
         @DefaultInt(-1)

@@ -23,6 +23,8 @@ import fr.traqueur.items.hooks.WorldGuardHook;
 import fr.traqueur.items.hooks.recipes.RecipesHook;
 import fr.traqueur.items.items.ZItemsManager;
 import fr.traqueur.items.items.listeners.CommandsListener;
+import fr.traqueur.items.items.listeners.DisableEnchantsListener;
+import fr.traqueur.items.items.listeners.GrindstoneListener;
 import fr.traqueur.items.registries.*;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.serialization.ZEffectDataType;
@@ -126,6 +128,8 @@ public class ZItems extends ItemsPlugin {
         Logger.info("<green>Event dispatching system initialized successfully!");
 
         this.getServer().getPluginManager().registerEvents(new CommandsListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new DisableEnchantsListener(), this);
+        this.getServer().getPluginManager().registerEvents(new GrindstoneListener(), this);
 
         this.registerManager(EffectsManager.class, new ZEffectsManager());
         ItemsManager manager = this.registerManager(ItemsManager.class, new ZItemsManager());

@@ -1,0 +1,30 @@
+id: "example_no_mending_sword"
+material: DIAMOND_SWORD
+display-name: "<gradient:#FF0000:#FF7700>Cursed Sword</gradient>"
+lore:
+  - "<gray>This sword cannot be enchanted with Mending"
+  - "<gray>Sharpness V is also forbidden!"
+
+enchantments:
+  - enchantment: SHARPNESS
+    level: 4
+  - enchantment: UNBREAKING
+    level: 3
+
+# List of enchantments that cannot be applied to this item
+disabled-enchantments:
+  # Disable Mending at any level
+  - enchantment: MENDING
+    level: -1  # -1 means any level
+
+  # Disable Sharpness V only (other levels are allowed)
+  - enchantment: SHARPNESS
+    level: 5
+
+  # Example: Disable all enchantments at level 10
+  # - enchantment: null
+  #   level: 10
+
+  # Example: Disable ALL enchantments (uncomment to test)
+  # - enchantment: null
+  #   level: -1

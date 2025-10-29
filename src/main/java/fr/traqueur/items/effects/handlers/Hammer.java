@@ -4,6 +4,8 @@ import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.annotations.IncompatibleWith;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
+import fr.traqueur.items.api.registries.CustomBlockProviderRegistry;
+import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.effects.settings.HammerSettings;
 import fr.traqueur.items.utils.EventUtil;
 import fr.traqueur.items.utils.ItemUtil;
@@ -18,6 +20,7 @@ import org.bukkit.util.RayTraceResult;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @AutoEffect(value = "HAMMER")
@@ -55,8 +58,18 @@ public class Hammer implements EffectHandler.SingleEventEffectHandler<HammerSett
             // Add to affected blocks only if not cancelled
             context.affectedBlocks().add(targetBlock);
 
-            Collection<ItemStack> blockDrops = targetBlock.getDrops(context.itemSource());
-            context.addDrops(blockDrops);
+            // Check if this is a custom block (zItems, ItemsAdder, Nexo, Oraxen, etc.)
+            CustomBlockProviderRegistry providerRegistry = Registry.get(CustomBlockProviderRegistry.class);
+            Optional<ItemStack> customDrop = providerRegistry.getCustomBlockDrop(targetBlock, player);
+
+            if (customDrop.isPresent()) {
+                // Custom block found - add custom item drop
+                context.addDrop(customDrop.get());
+            } else {
+                // Normal block - use vanilla drops
+                Collection<ItemStack> blockDrops = targetBlock.getDrops(context.itemSource());
+                context.addDrops(blockDrops);
+            }
 
             actuallyBrokenBlocks++;
         }

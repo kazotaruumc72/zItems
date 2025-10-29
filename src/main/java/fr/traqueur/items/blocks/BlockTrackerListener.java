@@ -1,6 +1,7 @@
 package fr.traqueur.items.blocks;
 
 import fr.traqueur.items.api.items.Item;
+import fr.traqueur.items.api.managers.EffectsManager;
 import fr.traqueur.items.api.managers.ItemsManager;
 import fr.traqueur.items.api.registries.ItemsRegistry;
 import fr.traqueur.items.api.registries.Registry;
@@ -15,9 +16,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -31,10 +30,12 @@ public class BlockTrackerListener implements Listener {
 
     private final BlockTracker tracker;
     private final ItemsManager itemsManager;
+    private final EffectsManager effectsManager;
 
-    public BlockTrackerListener(BlockTracker tracker, ItemsManager manager) {
+    public BlockTrackerListener(BlockTracker tracker, ItemsManager itemsManager, EffectsManager effectsManager) {
         this.tracker = tracker;
-        this.itemsManager = manager;
+        this.itemsManager = itemsManager;
+        this.effectsManager = effectsManager;
     }
 
     /**
@@ -53,31 +54,47 @@ public class BlockTrackerListener implements Listener {
     }
 
     /**
-     * Handles block break events for tracked blocks.
+     * Handles block break events for tracked blocks when using normal tools.
      * Drops the correct custom item instead of the default block drops.
+     *
+     * <p>If the player is using a custom item with effects (like Hammer or VeinMiner),
+     * this listener does NOT cancel the event - it lets the effect handlers manage
+     * the custom block drops through the CustomBlockProviderRegistry.
      */
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         Optional<String> trackedItemId = tracker.getTrackedItemId(block);
 
-        if (trackedItemId.isPresent()) {
-            Player player = event.getPlayer();
-            ItemsRegistry itemsRegistry = Registry.get(ItemsRegistry.class);
-            Item customItem = itemsRegistry.getById(trackedItemId.get());
+        if (trackedItemId.isEmpty()) {
+            return; // Not a tracked custom block
+        }
 
-            if (customItem != null) {
-                // Cancel default drops
-                event.setCancelled(true);
-                // Drop the custom item instead
-                ItemStack customItemStack = customItem.build(player, 1);
-                // Drop custom item at block location
-                block.getWorld().dropItemNaturally(block.getLocation(), customItemStack);
+        Player player = event.getPlayer();
+        ItemStack itemInHand = player.getInventory().getItemInMainHand();
 
-                // Untrack the block
-                tracker.untrackBlock(block);
-                block.setType(Material.AIR);
-            }
+        // Check if the player is using an item with effects
+        if (effectsManager.hasEffects(itemInHand)) {
+            // Let the effect handlers (Hammer, VeinMiner, etc.) manage the custom block drops
+            // They will use CustomBlockProviderRegistry to handle it properly
+            return;
+        }
+
+        // Player is using a normal tool - handle the custom block drop here
+        ItemsRegistry itemsRegistry = Registry.get(ItemsRegistry.class);
+        Item customItem = itemsRegistry.getById(trackedItemId.get());
+
+        if (customItem != null) {
+            // Cancel default drops
+            event.setCancelled(true);
+            // Drop the custom item instead
+            ItemStack customItemStack = customItem.build(player, 1);
+            // Drop custom item at block location
+            block.getWorld().dropItemNaturally(block.getLocation(), customItemStack);
+
+            // Untrack the block
+            tracker.untrackBlock(block);
+            block.setType(Material.AIR);
         }
     }
 

@@ -47,6 +47,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.potion.PotionEffectType;
@@ -54,6 +55,7 @@ import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.Optional;
 
 public class ZItems extends ItemsPlugin {
 
@@ -101,6 +103,9 @@ public class ZItems extends ItemsPlugin {
 
         Registry.register(LocationAccessRegistry.class, new ZLocationAccessRegistry());
 
+        // Register custom block provider registry
+        Registry.register(CustomBlockProviderRegistry.class, new ZCustomBlockProviderRegistry());
+
         // Register and scan hooks
         Registry.register(HooksRegistry.class, new ZHooksRegistry());
         Registry.get(HooksRegistry.class).scanPackage(this, "fr.traqueur.items");
@@ -134,11 +139,25 @@ public class ZItems extends ItemsPlugin {
         this.getServer().getPluginManager().registerEvents(new DisableEnchantsListener(), this);
         this.getServer().getPluginManager().registerEvents(new GrindstoneListener(), this);
 
-        this.registerManager(EffectsManager.class, new ZEffectsManager());
-        ItemsManager manager = this.registerManager(ItemsManager.class, new ZItemsManager());
-        manager.generateRecipesFromLoadedItems();
+        EffectsManager effectsManager = this.registerManager(EffectsManager.class, new ZEffectsManager());
+        ItemsManager itemsManager = this.registerManager(ItemsManager.class, new ZItemsManager());
+        itemsManager.generateRecipesFromLoadedItems();
 
-        this.getServer().getPluginManager().registerEvents(new BlockTrackerListener(new BlockTracker(), manager), this);
+        // Setup block tracking system
+        BlockTracker blockTracker = new BlockTracker();
+        this.getServer().getPluginManager().registerEvents(
+            new BlockTrackerListener(blockTracker, itemsManager, effectsManager),
+            this
+        );
+
+        // Register internal block provider for zItems custom blocks
+        Registry.get(CustomBlockProviderRegistry.class).register(this.getName().toLowerCase(), (block, player) -> {
+            Optional<ItemStack> customDrop = blockTracker.getCustomBlockDrop(block, player);
+            if (customDrop.isPresent()) {
+                blockTracker.untrackBlock(block);
+            }
+            return customDrop;
+        });
         
         this.registerCommands(settings);
 

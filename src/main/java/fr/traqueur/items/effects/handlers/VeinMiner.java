@@ -4,6 +4,8 @@ import fr.traqueur.items.api.annotations.AutoEffect;
 import fr.traqueur.items.api.annotations.IncompatibleWith;
 import fr.traqueur.items.api.effects.EffectContext;
 import fr.traqueur.items.api.effects.EffectHandler;
+import fr.traqueur.items.api.registries.CustomBlockProviderRegistry;
+import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.effects.settings.VeinMinerSettings;
 import fr.traqueur.items.utils.EventUtil;
 import fr.traqueur.items.utils.ItemUtil;
@@ -13,7 +15,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
 
 @AutoEffect(value = "VEIN_MINING")
 @IncompatibleWith(Hammer.class)
@@ -56,8 +63,18 @@ public class VeinMiner implements EffectHandler.SingleEventEffectHandler<VeinMin
             // Add to affected blocks only if not cancelled
             context.affectedBlocks().add(veinBlock);
 
-            Collection<ItemStack> blockDrops = veinBlock.getDrops(context.itemSource());
-            context.addDrops(blockDrops);
+            // Check if this is a custom block (zItems, ItemsAdder, Nexo, Oraxen, etc.)
+            CustomBlockProviderRegistry providerRegistry = Registry.get(CustomBlockProviderRegistry.class);
+            Optional<ItemStack> customDrop = providerRegistry.getCustomBlockDrop(veinBlock, player);
+
+            if (customDrop.isPresent()) {
+                // Custom block found - add custom item drop
+                context.addDrop(customDrop.get());
+            } else {
+                // Normal block - use vanilla drops
+                Collection<ItemStack> blockDrops = veinBlock.getDrops(context.itemSource());
+                context.addDrops(blockDrops);
+            }
 
             actuallyBrokenBlocks++;
         }

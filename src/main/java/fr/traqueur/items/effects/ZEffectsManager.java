@@ -85,4 +85,18 @@ public class ZEffectsManager implements EffectsManager {
         return true;
     }
 
+    @Override
+    public boolean hasEffects(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) {
+            return false;
+        }
+
+        List<Effect> effects = Keys.EFFECTS.get(
+            item.getItemMeta().getPersistentDataContainer(),
+            new ArrayList<>()
+        );
+
+        return effects != null && !effects.isEmpty();
+    }
+
 }

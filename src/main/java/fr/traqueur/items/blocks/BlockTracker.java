@@ -7,6 +7,8 @@ import fr.traqueur.items.api.blocks.TrackedBlock;
 import fr.traqueur.items.serialization.Keys;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.*;
@@ -81,6 +83,45 @@ public class BlockTracker {
 
         String itemId = cache.get(worldChunkKey, packedPosition);
         return Optional.ofNullable(itemId);
+    }
+
+    /**
+     * Gets the custom ItemStack for a tracked block without untracking it.
+     * This should be called by handlers that break multiple blocks (Hammer, VeinMiner)
+     * to ensure custom blocks drop the correct item.
+     *
+     * <p>The caller is responsible for calling {@link #untrackBlock(Block)} after
+     * successfully breaking the block to prevent memory leaks.
+     *
+     * @param block the block to check
+     * @param player the player breaking the block (used for item building context)
+     * @return Optional containing the custom ItemStack, or empty if not tracked
+     */
+    public Optional<ItemStack> getCustomBlockDrop(Block block, Player player) {
+        Optional<String> itemId = getTrackedItemId(block);
+
+        if (itemId.isEmpty()) {
+            return Optional.empty();
+        }
+
+        // Get the custom item from registry
+        var itemsRegistry = fr.traqueur.items.api.registries.Registry.get(
+            fr.traqueur.items.api.registries.ItemsRegistry.class
+        );
+        var customItem = itemsRegistry.getById(itemId.get());
+
+        if (customItem == null) {
+            Logger.debug("Tracked block at {} has invalid item ID: {}",
+                formatBlockLocation(block), itemId.get());
+            return Optional.empty();
+        }
+
+        // Build and return the custom item
+        ItemStack customItemStack = customItem.build(player, 1);
+        Logger.debug("Retrieved custom block drop at {}: {}",
+            formatBlockLocation(block), itemId.get());
+
+        return Optional.of(customItemStack);
     }
 
     /**

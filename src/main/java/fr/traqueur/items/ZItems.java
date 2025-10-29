@@ -11,6 +11,8 @@ import fr.traqueur.items.api.managers.ItemsManager;
 import fr.traqueur.items.api.registries.*;
 import fr.traqueur.items.api.settings.models.AttributeMergeStrategy;
 import fr.traqueur.items.api.settings.Settings;
+import fr.traqueur.items.blocks.BlockTracker;
+import fr.traqueur.items.blocks.BlockTrackerListener;
 import fr.traqueur.items.commands.CommandsMessageHandler;
 import fr.traqueur.items.commands.ZItemsCommand;
 import fr.traqueur.items.commands.arguments.EffectArgument;
@@ -26,6 +28,7 @@ import fr.traqueur.items.items.listeners.GrindstoneListener;
 import fr.traqueur.items.registries.*;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.serialization.ZEffectDataType;
+import fr.traqueur.items.serialization.ZTrackedBlockDataType;
 import fr.traqueur.items.settings.PluginSettings;
 import fr.traqueur.items.settings.readers.*;
 import fr.traqueur.items.shop.ShopProviders;
@@ -61,6 +64,7 @@ public class ZItems extends ItemsPlugin {
 
     private RecipesAPI recipesManager;
     private EffectsDispatcher dispatcher;
+    private BlockTracker blockTracker;
 
     @Override
     public void onEnable() {
@@ -78,6 +82,7 @@ public class ZItems extends ItemsPlugin {
 
         MessageUtil.initialize(this);
         ZEffectDataType.initialize();
+        ZTrackedBlockDataType.initialize();
         Keys.initialize(this);
         this.recipesManager = new RecipesAPI(this, settings.debug());
         Hook.addHook(new RecipesHook(this));
@@ -134,6 +139,9 @@ public class ZItems extends ItemsPlugin {
         ItemsManager manager = this.registerManager(ItemsManager.class, new ZItemsManager());
         manager.generateRecipesFromLoadedItems();
 
+        this.blockTracker = new BlockTracker();
+        this.getServer().getPluginManager().registerEvents(new BlockTrackerListener(this.blockTracker, manager), this);
+        
         this.registerCommands(settings);
 
         Logger.info("<yellow>=== ENABLE DONE <gray>(<gold>" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<gray>) <yellow>===");
@@ -185,6 +193,10 @@ public class ZItems extends ItemsPlugin {
         long disableTime = System.currentTimeMillis();
         Logger.info("<yellow>=== DISABLE START ===");
         Logger.info("<gray>Plugin Version V<red>{}", this.getDescription().getVersion());
+
+        if (this.blockTracker != null) {
+            this.blockTracker.clearCache();
+        }
 
         MessageUtil.close();
 

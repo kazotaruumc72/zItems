@@ -1,8 +1,11 @@
 package fr.traqueur.items.serialization;
 
 import fr.traqueur.items.api.ItemsPlugin;
+import fr.traqueur.items.api.blocks.TrackedBlock;
 import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.serialization.EffectDataType;
+import fr.traqueur.items.api.serialization.TrackedBlockDataType;
+import fr.traqueur.items.blocks.ZTrackedBlock;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -22,6 +25,15 @@ public class Keys {
 
     public static final DataKey<String> ITEM_ID = new DataKey<>(PersistentDataType.STRING);
     public static final DataKey<List<Effect>> EFFECTS = new DataKey<>(PersistentDataType.LIST.listTypeFrom(EffectDataType.INSTANCE));
+    public static final DataKey<String> CUSTOM_BLOCK_ID = new DataKey<>(PersistentDataType.STRING);
+
+    // Tracked block nested keys (for TrackedBlockDataType serialization)
+    public static final DataKey<Integer> TRACKED_BLOCK_POSITION = new DataKey<>(PersistentDataType.INTEGER);
+    public static final DataKey<String> TRACKED_BLOCK_ITEM_ID = new DataKey<>(PersistentDataType.STRING);
+
+    // Chunk-level tracked blocks list
+    public static final DataKey<List<TrackedBlock>> TRACKED_BLOCKS = new DataKey<>(PersistentDataType.LIST.listTypeFrom(TrackedBlockDataType.INSTANCE));
+
     private static ItemsPlugin PLUGIN;
 
     private Keys() {

@@ -2,6 +2,7 @@ package fr.traqueur.items.hooks;
 
 import com.gamingmesh.jobs.api.JobsExpGainEvent;
 import com.gamingmesh.jobs.api.JobsPrePaymentEvent;
+import fr.traqueur.items.api.annotations.AutoHook;
 import fr.traqueur.items.api.hooks.Hook;
 import fr.traqueur.items.api.registries.ExtractorsRegistry;
 import fr.traqueur.items.api.registries.HandlersRegistry;
@@ -11,6 +12,7 @@ import fr.traqueur.items.hooks.extractors.JobMoneyGainEventExtractor;
 import fr.traqueur.items.hooks.handlers.JobsExperienceMultiplier;
 import fr.traqueur.items.hooks.handlers.JobsMoneyMultiplier;
 
+@AutoHook("Jobs")
 public class JobsHook implements Hook {
     @Override
     public void onEnable() {

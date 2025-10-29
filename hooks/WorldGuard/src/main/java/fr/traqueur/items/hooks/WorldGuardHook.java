@@ -1,9 +1,11 @@
 package fr.traqueur.items.hooks;
 
+import fr.traqueur.items.api.annotations.AutoHook;
 import fr.traqueur.items.api.hooks.Hook;
 import fr.traqueur.items.api.registries.LocationAccessRegistry;
 import fr.traqueur.items.api.registries.Registry;
 
+@AutoHook("WorldGuard")
 public class WorldGuardHook implements Hook {
 
     @Override

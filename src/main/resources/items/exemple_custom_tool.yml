@@ -23,12 +23,12 @@ metadata:
     # Tag-based mining rules
     rules:
       # Mine all pickaxe-mineable blocks at 8x speed
-      - tag: MINEABLE_PICKAXE
+      - tag: MINEABLE/PICKAXE
         speed: 8.0
         correct-for-drops: true
 
       # Mine all shovel-mineable blocks at 4x speed (if you want multi-tool behavior)
-      - tag: MINEABLE_SHOVEL
+      - tag: MINEABLE/SHOVEL
         speed: 4.0
         correct-for-drops: true
 

@@ -10,11 +10,11 @@ import org.bukkit.Tag;
 public class TagReader implements Reader<Tag<Material>> {
     @Override
     public Tag<Material> read(String s) throws StructuraException {
-        Tag<Material> blockTag = Bukkit.getTag(Tag.REGISTRY_BLOCKS, NamespacedKey.minecraft(s), Material.class);
+        Tag<Material> blockTag = Bukkit.getTag(Tag.REGISTRY_BLOCKS, NamespacedKey.minecraft(s.toLowerCase()), Material.class);
         if (blockTag != null) {
             return blockTag;
         }
-        Tag<Material> itemTag = Bukkit.getTag(Tag.REGISTRY_ITEMS, NamespacedKey.minecraft(s), Material.class);
+        Tag<Material> itemTag = Bukkit.getTag(Tag.REGISTRY_ITEMS, NamespacedKey.minecraft(s.toLowerCase()), Material.class);
         if (itemTag != null) {
             return itemTag;
         }

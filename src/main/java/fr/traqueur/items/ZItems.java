@@ -18,10 +18,6 @@ import fr.traqueur.items.commands.arguments.ItemArgument;
 import fr.traqueur.items.effects.ZEffectsDispatcher;
 import fr.traqueur.items.effects.ZEffectsManager;
 import fr.traqueur.items.effects.ZEventsListener;
-import fr.traqueur.items.hooks.JobsHook;
-import fr.traqueur.items.hooks.SuperiorSkyBlockHook;
-import fr.traqueur.items.hooks.WorldGuardHook;
-import fr.traqueur.items.hooks.ZJobsHook;
 import fr.traqueur.items.hooks.recipes.RecipesHook;
 import fr.traqueur.items.items.ZItemsManager;
 import fr.traqueur.items.items.listeners.CommandsListener;
@@ -100,12 +96,10 @@ public class ZItems extends ItemsPlugin {
         Logger.info("Shop provider <green>{} <reset>has been found.", ShopProviders.FOUND_PROVIDER.pluginName());
 
         Registry.register(LocationAccessRegistry.class, new ZLocationAccessRegistry());
+
+        // Register and scan hooks
         Registry.register(HooksRegistry.class, new ZHooksRegistry());
-        HooksRegistry hooksRegistry = Registry.get(HooksRegistry.class);
-        hooksRegistry.register("WorldGuard", new WorldGuardHook());
-        hooksRegistry.register("SuperiorSkyBlock2", new SuperiorSkyBlockHook());
-        hooksRegistry.register("zJobs", new ZJobsHook());
-        hooksRegistry.register("Jobs", new JobsHook());
+        Registry.get(HooksRegistry.class).scanPackage(this, "fr.traqueur.items");
 
         // Register and scan effect handlers
         Registry.register(HandlersRegistry.class, new ZHandlersRegistry(this));

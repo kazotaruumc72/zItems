@@ -55,6 +55,7 @@ import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.List;
 import java.util.Optional;
 
 public class ZItems extends ItemsPlugin {
@@ -156,7 +157,7 @@ public class ZItems extends ItemsPlugin {
             if (customDrop.isPresent()) {
                 blockTracker.untrackBlock(block);
             }
-            return customDrop;
+            return customDrop.map(List::of);
         });
         
         this.registerCommands(settings);

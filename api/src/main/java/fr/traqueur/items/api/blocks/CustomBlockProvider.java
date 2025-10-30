@@ -4,6 +4,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -47,5 +48,5 @@ public interface CustomBlockProvider {
      * @param player the player breaking the block (may be null in some contexts)
      * @return Optional containing the custom ItemStack, or empty if not a custom block
      */
-    Optional<ItemStack> getCustomBlockDrop(Block block, Player player);
+    Optional<List<ItemStack>> getCustomBlockDrop(Block block, Player player);
 }

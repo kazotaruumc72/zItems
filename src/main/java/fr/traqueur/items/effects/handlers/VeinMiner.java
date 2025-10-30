@@ -60,11 +60,11 @@ public class VeinMiner implements EffectHandler.SingleEventEffectHandler<VeinMin
 
             // Check if this is a custom block (zItems, ItemsAdder, Nexo, Oraxen, etc.)
             CustomBlockProviderRegistry providerRegistry = Registry.get(CustomBlockProviderRegistry.class);
-            Optional<ItemStack> customDrop = providerRegistry.getCustomBlockDrop(veinBlock, player);
+            Optional<List<ItemStack>> customDrop = providerRegistry.getCustomBlockDrop(veinBlock, player);
 
             if (customDrop.isPresent()) {
                 // Custom block found - add custom item drop
-                context.addDrop(customDrop.get());
+                context.addDrops(customDrop.get());
             } else {
                 // Normal block - use vanilla drops
                 Collection<ItemStack> blockDrops = veinBlock.getDrops(context.itemSource());

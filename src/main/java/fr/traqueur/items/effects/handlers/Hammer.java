@@ -18,10 +18,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @AutoEffect(value = "HAMMER")
 @IncompatibleWith(VeinMiner.class)
@@ -60,11 +57,11 @@ public class Hammer implements EffectHandler.SingleEventEffectHandler<HammerSett
 
             // Check if this is a custom block (zItems, ItemsAdder, Nexo, Oraxen, etc.)
             CustomBlockProviderRegistry providerRegistry = Registry.get(CustomBlockProviderRegistry.class);
-            Optional<ItemStack> customDrop = providerRegistry.getCustomBlockDrop(targetBlock, player);
+            Optional<List<ItemStack>> customDrop = providerRegistry.getCustomBlockDrop(targetBlock, player);
 
             if (customDrop.isPresent()) {
                 // Custom block found - add custom item drop
-                context.addDrop(customDrop.get());
+                context.addDrops(customDrop.get());
             } else {
                 // Normal block - use vanilla drops
                 Collection<ItemStack> blockDrops = targetBlock.getDrops(context.itemSource());

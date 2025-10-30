@@ -19,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Dynamic event listener that automatically registers Bukkit event listeners
@@ -42,6 +43,7 @@ import java.util.Set;
  */
 public class ZEventsListener implements Listener {
 
+    private static final ConcurrentHashMap<Class<? extends Event>, Method> HANDLER_LISTS_CACHE = new ConcurrentHashMap<>();
     private final EffectsDispatcher dispatcher;
 
     /**
@@ -167,8 +169,13 @@ public class ZEventsListener implements Listener {
      * @throws Exception if reflection fails
      */
     private HandlerList getHandlerList(Class<? extends Event> eventClass) throws Exception {
-        Method method = eventClass.getMethod("getHandlerList");
-        return (HandlerList) method.invoke(null);
+        return (HandlerList) HANDLER_LISTS_CACHE.computeIfAbsent(eventClass, cls -> {
+            try {
+                return cls.getMethod("getHandlerList");
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException("Event class " + cls.getName() + " does not have getHandlerList method", e);
+            }
+        }).invoke(null);
     }
 
     /**

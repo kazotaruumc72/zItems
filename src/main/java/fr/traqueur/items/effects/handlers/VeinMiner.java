@@ -15,12 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 @AutoEffect(value = "VEIN_MINING")
 @IncompatibleWith(Hammer.class)
@@ -97,7 +92,7 @@ public class VeinMiner implements EffectHandler.SingleEventEffectHandler<VeinMin
      */
     private Set<Block> getVeinBlocks(Block startBlock, int maxVeinSize) {
         Set<Block> veinBlocks = new HashSet<>();
-        Queue<Block> blocksToCheck = new LinkedList<>();
+        Queue<Block> blocksToCheck = new ArrayDeque<>();
         Material blockType = startBlock.getType();
 
         blocksToCheck.add(startBlock);

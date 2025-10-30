@@ -48,8 +48,13 @@ public class BlockTrackerListener implements Listener {
         // Check if the placed block came from a custom item
         Optional<Item> customItem = itemsManager.getCustomItem(itemInHand);
         if (customItem.isPresent()) {
-            Block placedBlock = event.getBlockPlaced();
-            tracker.trackBlock(placedBlock, customItem.get().id());
+            Item item = customItem.get();
+
+            // Only track the block if the item is configured as trackable
+            if (item.settings().trackable()) {
+                Block placedBlock = event.getBlockPlaced();
+                tracker.trackBlock(placedBlock, item.id());
+            }
         }
     }
 

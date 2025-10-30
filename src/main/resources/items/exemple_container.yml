@@ -5,6 +5,8 @@ lore:
   - "<gray>A chest with pre-configured items"
   - "<gray>Demonstrates both simple and custom item modes"
 
+trackable: false
+
 metadata:
   block-state:
     settings:

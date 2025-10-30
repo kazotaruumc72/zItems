@@ -92,6 +92,10 @@ public record ItemSettings(
 
         @Options(optional = true)
         @AttributeMergeStrategy.DefaultStrategy(AttributeMergeStrategy.REPLACE)
-        AttributeMergeStrategy attributeMergeStrategy
+        AttributeMergeStrategy attributeMergeStrategy,
+
+        @Options(optional = true)
+        @DefaultBool(true)
+        boolean trackable
 ) implements Loadable {
 }

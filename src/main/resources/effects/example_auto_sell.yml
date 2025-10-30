@@ -2,4 +2,5 @@
 # Automatically sells all drops from BlockBreakEvent and EntityDeathEvent
 id: "auto_sell_pickaxe"
 type: "AUTO_SELL"
+display-name: "<gradient:#00FF00:#50C878><bold>💰 AUTO SELL</bold></gradient>"
 multiplier: 1.5  # 150% sell price (optional, default: 1.0)

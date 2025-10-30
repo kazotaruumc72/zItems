@@ -2,6 +2,7 @@
 # Mine entire veins of ores at once
 id: "vein_miner_pickaxe"
 type: "VEIN_MINING"
+display-name: "<gradient:#34eb9b:#2ecc71><bold>⛏ VEIN MINING</bold></gradient>"
 materials: # List of materials that can be vein mined
   - COAL_ORE
   - DEEPSLATE_COAL_ORE

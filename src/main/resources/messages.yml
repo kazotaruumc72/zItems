@@ -24,6 +24,11 @@ requirement-not-met: "<red>You do not meet the requirements to perform this comm
 arg-not-recognized: "<red>Argument not recognized."
 
 effect-applied: "<green>Effect <yellow><effect></yellow> has been applied to your item."
+effect-already-present: "<red>Effect <yellow><effect></yellow> is already present on this item."
+effect-incompatible: "<red>Effect <yellow><effect></yellow> is incompatible with existing effects on this item."
+effect-not-allowed: "<red>Additional effects are not allowed on this item."
+effect-disabled: "<red>Effect <yellow><effect></yellow> is disabled for this item."
+effect-handler-not-found: "<red>Handler not found for effect <yellow><effect></yellow>."
 
 # ========================================
 # Item Give Command Messages
@@ -31,3 +36,13 @@ effect-applied: "<green>Effect <yellow><effect></yellow> has been applied to you
 item-given: "<green>Given <yellow><amount>x <item></yellow> to <aqua><player></aqua>."
 item-received: "<green>You received <yellow><amount>x <item></yellow>."
 item-give-invalid-amount: "<red>Invalid amount! Amount must be greater than 0."
+
+# ========================================
+# Effects Display in Item Lore
+# ========================================
+# These messages control how effects are displayed in item lore
+# <effect> placeholder will be replaced with the effect's display name
+effects-lore-header: ""  # Empty line before effects section
+effects-lore-title: "<gray>Effects"  # Section title
+effects-lore-line: "<dark_gray>- <effect>"  # Each effect line
+effects-lore-more: "<dark_gray>- <white>And More..."  # When limit exceeded

@@ -1,27 +1,79 @@
 package fr.traqueur.items.effects;
 
+import fr.traqueur.items.Messages;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.Effect;
+import fr.traqueur.items.api.effects.EffectApplicationResult;
 import fr.traqueur.items.api.effects.EffectHandler;
+import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.managers.EffectsManager;
+import fr.traqueur.items.api.managers.ItemsManager;
 import fr.traqueur.items.api.registries.HandlersRegistry;
 import fr.traqueur.items.api.registries.Registry;
+import fr.traqueur.items.api.settings.ItemSettings;
+import fr.traqueur.items.api.settings.Settings;
 import fr.traqueur.items.serialization.Keys;
+import fr.traqueur.items.settings.PluginSettings;
+import fr.traqueur.items.utils.ItemUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ZEffectsManager implements EffectsManager {
 
+    private static final PlainTextComponentSerializer PLAIN_TEXT_SERIALIZER = PlainTextComponentSerializer.plainText();
+
     @Override
-    public void applyEffect(Player player, ItemStack item, Effect effect) {
+    public EffectApplicationResult applyEffect(Player player, ItemStack item, Effect effect) {
+        // Get all existing effects from the item
+        List<Effect> existingEffects = Keys.EFFECTS.get(
+                item.getItemMeta().getPersistentDataContainer(),
+                new ArrayList<>()
+        );
+
+        // Check if effect is already present
+        if (existingEffects.stream().anyMatch(e -> e.id().equals(effect.id()))) {
+            Logger.debug("Effect {} is already present on the item", effect.id());
+            return EffectApplicationResult.ALREADY_PRESENT;
+        }
+
+        // Check if this is a custom item and validate restrictions
+        ItemsManager itemsManager = this.getPlugin().getManager(ItemsManager.class);
+        if (itemsManager != null) {
+            Optional<Item> customItem = itemsManager.getCustomItem(item);
+            if (customItem.isPresent()) {
+                Item customItemInstance = customItem.get();
+
+                // Check if additional effects are allowed
+                if (!customItemInstance.settings().allowAdditionalEffects()) {
+                    Logger.debug("Cannot apply effect {} to item {}: additional effects are not allowed",
+                            effect.type(), customItemInstance.id());
+                    return EffectApplicationResult.NOT_ALLOWED;
+                }
+
+                // Check if this specific effect is disabled for this item
+                if (customItemInstance.settings().disabledEffects() != null &&
+                        customItemInstance.settings().disabledEffects().contains(effect.id())) {
+                    Logger.debug("Cannot apply effect {} to item {}: this effect is disabled for this item",
+                            effect.id(), customItemInstance.id());
+                    return EffectApplicationResult.DISABLED;
+                }
+            }
+        }
+
         // Validate incompatibilities before applying
-        if (!validateCompatibility(item, effect)) {
-            Logger.warning("Cannot apply effect {} to item: incompatible with existing effects", effect.type());
-            return;
+        EffectApplicationResult compatibilityResult = validateCompatibility(item, effect);
+        if (compatibilityResult != EffectApplicationResult.SUCCESS) {
+            Logger.debug("Cannot apply effect {} to item: {}", effect.type(), compatibilityResult);
+            return compatibilityResult;
         }
 
         item.editPersistentDataContainer(container -> {
@@ -30,6 +82,19 @@ public class ZEffectsManager implements EffectsManager {
             Keys.EFFECTS.set(container, effects);
         });
         this.getPlugin().getDispatcher().applyNoEventEffect(player, item, effect);
+
+        // Update item lore to show the new effect
+        if (itemsManager != null) {
+            Optional<Item> customItem = itemsManager.getCustomItem(item);
+            if (customItem.isPresent()) {
+                updateItemLore(item, customItem.get());
+            } else {
+                // For vanilla items, update lore without custom item settings
+                updateVanillaItemLore(item);
+            }
+        }
+
+        return EffectApplicationResult.SUCCESS;
     }
 
     /**
@@ -38,15 +103,15 @@ public class ZEffectsManager implements EffectsManager {
      *
      * @param item the item to check
      * @param newEffect the effect to be applied
-     * @return true if compatible, false if incompatible
+     * @return EffectApplicationResult indicating compatibility status
      */
-    private boolean validateCompatibility(ItemStack item, Effect newEffect) {
+    private EffectApplicationResult validateCompatibility(ItemStack item, Effect newEffect) {
         // Get the handler for the new effect
         HandlersRegistry registry = Registry.get(HandlersRegistry.class);
         EffectHandler<?> newHandler = registry.getById(newEffect.type());
         if (newHandler == null) {
             Logger.warning("Handler not found for effect type: {}", newEffect.type());
-            return false;
+            return EffectApplicationResult.HANDLER_NOT_FOUND;
         }
 
         // Get incompatible handlers for the new effect
@@ -56,7 +121,7 @@ public class ZEffectsManager implements EffectsManager {
         List<Effect> existingEffects = Keys.EFFECTS.get(item.getItemMeta().getPersistentDataContainer(), new ArrayList<>());
 
         if (existingEffects == null || existingEffects.isEmpty()) {
-            return true; // No existing effects, nothing to conflict with
+            return EffectApplicationResult.SUCCESS; // No existing effects, nothing to conflict with
         }
 
         // Check each existing effect for incompatibility
@@ -70,7 +135,7 @@ public class ZEffectsManager implements EffectsManager {
             if (newIncompatibles.contains(existingHandler.getClass())) {
                 Logger.debug("Effect {} is incompatible with existing effect {}",
                         newEffect.type(), existingEffect.type());
-                return false;
+                return EffectApplicationResult.INCOMPATIBLE;
             }
 
             // Check bidirectional: if existing effect is incompatible with new effect
@@ -78,12 +143,130 @@ public class ZEffectsManager implements EffectsManager {
             if (existingIncompatibles.contains(newHandler.getClass())) {
                 Logger.debug("Existing effect {} is incompatible with new effect {}",
                         existingEffect.type(), newEffect.type());
-                return false;
+                return EffectApplicationResult.INCOMPATIBLE;
             }
         }
 
-        return true;
+        return EffectApplicationResult.SUCCESS;
     }
+
+    /**
+     * Updates the item's lore to reflect current effects (base + additional).
+     * This is called after applying a new effect to update the visual display.
+     *
+     * @param item the item to update
+     * @param customItem the custom item definition
+     */
+    private void updateItemLore(ItemStack item, Item customItem) {
+        // Get all effects from PDC
+        List<Effect> allEffects = Keys.EFFECTS.get(
+                item.getItemMeta().getPersistentDataContainer(),
+                new ArrayList<>()
+        );
+
+        // Separate base effects and additional effects
+        List<Effect> baseEffects = customItem.settings().effects() != null
+                ? customItem.settings().effects()
+                : List.of();
+
+        List<String> baseEffectIds = baseEffects.stream()
+                .map(Effect::id)
+                .toList();
+
+        List<Effect> additionalEffects = allEffects.stream()
+                .filter(effect -> !baseEffectIds.contains(effect.id()))
+                .collect(Collectors.toList());
+
+        // Generate effect lore
+        List<Component> effectLoreLines = generateEffectLore(
+                baseEffects,
+                additionalEffects,
+                customItem.settings()
+        );
+
+        // Combine base lore with effect lore
+        List<Component> combinedLore = new ArrayList<>();
+        if (customItem.settings().lore() != null) {
+            combinedLore.addAll(customItem.settings().lore());
+        }
+        combinedLore.addAll(effectLoreLines);
+
+        // Update item lore using ItemUtil (handles Paper/Spigot compatibility and italic formatting)
+        ItemUtil.setLore(item, combinedLore);
+
+        Logger.debug("Updated item lore for {} with {} base effects and {} additional effects",
+                customItem.id(), baseEffects.size(), additionalEffects.size());
+    }
+
+    /**
+     * Updates the lore of a vanilla (non-custom) item to show effects.
+     * For vanilla items, all effects are treated as "additional" effects.
+     *
+     * @param item the vanilla item to update
+     */
+    private void updateVanillaItemLore(ItemStack item) {
+        // Get all effects from PDC
+        List<Effect> allEffects = Keys.EFFECTS.get(
+                item.getItemMeta().getPersistentDataContainer(),
+                new ArrayList<>()
+        );
+
+        if (allEffects.isEmpty()) {
+            return; // No effects to display
+        }
+
+        // Prepare the reference plain texts
+        String titlePlain = PLAIN_TEXT_SERIALIZER.serialize(Messages.EFFECTS_LORE_TITLE.get()).trim();
+        // header can be empty or something else; we only rely on title as anchor per your request
+
+        // Get existing lore (if any)
+        List<Component> existingLore = ItemUtil.getLore(item);
+        if (existingLore == null) {
+            existingLore = new ArrayList<>();
+        } else {
+            // Find where the effects section starts (by comparing plain text of each line to title plain)
+            int titleIndex = -1;
+            for (int i = 0; i < existingLore.size(); i++) {
+                Component line = existingLore.get(i);
+                String linePlain = PLAIN_TEXT_SERIALIZER.serialize(line).trim();
+                if (!linePlain.isEmpty() && linePlain.equals(titlePlain)) {
+                    titleIndex = i;
+                    break;
+                }
+            }
+
+            if (titleIndex != -1) {
+                // Walk upwards from titleIndex to remove empty lines directly above the header/title.
+                int startIndex = titleIndex - 1;
+                while (startIndex >= 0) {
+                    Component line = existingLore.get(startIndex);
+                    String linePlain = PLAIN_TEXT_SERIALIZER.serialize(line).trim();
+                    if (!linePlain.isEmpty()) {
+                        break; // stop at the last non-empty line before the effects section
+                    }
+                    startIndex--;
+                }
+
+                // Keep only lines before the detected section (exclude the empty lines above and the title and following lines)
+                existingLore = new ArrayList<>(existingLore.subList(0, startIndex + 1));
+            }
+        }
+
+        // Generate new effect lore
+        List<Component> effectLoreLines = generateVanillaEffectLore(allEffects);
+
+        // Combine clean lore + updated effect section
+        List<Component> combinedLore = new ArrayList<>(existingLore);
+        combinedLore.addAll(effectLoreLines);
+
+        // Apply back to the item
+        ItemUtil.setLore(item, combinedLore);
+
+        Logger.debug("Updated vanilla item lore with {} effects (cleaned duplicate headers/titles using plain text comparison)",
+                allEffects.size());
+    }
+
+
 
     @Override
     public boolean hasEffects(ItemStack item) {
@@ -97,6 +280,120 @@ public class ZEffectsManager implements EffectsManager {
         );
 
         return effects != null && !effects.isEmpty();
+    }
+
+    /**
+     * Generates lore lines for effects on an item.
+     *
+     * @param baseEffects base effects (defined in item config)
+     * @param additionalEffects additional effects (applied after item creation)
+     * @param itemSettings the item's settings
+     * @return list of lore components to add to the item
+     */
+    private List<Component> generateEffectLore(
+            List<Effect> baseEffects,
+            List<Effect> additionalEffects,
+            ItemSettings itemSettings
+    ) {
+        // Determine how many effects to display
+        int nbEffectsView = itemSettings.nbEffectsView();
+        if (nbEffectsView == -1) {
+            // Use global default if not specified per-item
+            PluginSettings pluginSettings = Settings.get(PluginSettings.class);
+            nbEffectsView = pluginSettings.defaultNbEffectsView();
+        }
+
+        // Collect visible effects based on settings
+        List<Effect> visibleEffects = new ArrayList<>();
+
+        if (itemSettings.baseEffectsVisible() && baseEffects != null) {
+            visibleEffects.addAll(baseEffects);
+        }
+
+        if (itemSettings.additionalEffectsVisible() && additionalEffects != null) {
+            visibleEffects.addAll(additionalEffects);
+        }
+
+        // Filter out effects without display names
+        visibleEffects = visibleEffects.stream()
+                .filter(effect -> effect.displayName() != null)
+                .toList();
+
+        return renderEffectLore(visibleEffects, nbEffectsView);
+    }
+
+    /**
+     * Generates lore lines for base effects only (used during item creation).
+     *
+     * @param baseEffects base effects from item config
+     * @param itemSettings the item's settings
+     * @return list of lore components to add to the item
+     */
+    @Override
+    public List<Component> generateBaseEffectLore(List<Effect> baseEffects, ItemSettings itemSettings) {
+        return generateEffectLore(baseEffects, List.of(), itemSettings);
+    }
+
+    /**
+     * Generates lore lines for vanilla items (all effects are treated as additional).
+     *
+     * @param allEffects all effects on the vanilla item
+     * @return list of lore components to add to the item
+     */
+    private List<Component> generateVanillaEffectLore(List<Effect> allEffects) {
+        // Get global default settings
+        PluginSettings pluginSettings = Settings.get(PluginSettings.class);
+        int nbEffectsView = pluginSettings.defaultNbEffectsView();
+
+        // Filter out effects without display names
+        List<Effect> visibleEffects = allEffects.stream()
+                .filter(effect -> effect.displayName() != null)
+                .toList();
+
+        return renderEffectLore(visibleEffects, nbEffectsView);
+    }
+
+    /**
+     * Renders effect lore lines from a list of visible effects.
+     *
+     * @param visibleEffects effects to display (already filtered)
+     * @param nbEffectsView maximum number of effects to show (-1 for unlimited, 0 to hide all)
+     * @return list of lore components
+     */
+    private List<Component> renderEffectLore(List<Effect> visibleEffects, int nbEffectsView) {
+        List<Component> loreLines = new ArrayList<>();
+
+        // If set to 0, don't show any effects
+        if (nbEffectsView == 0 || visibleEffects.isEmpty()) {
+            return loreLines;
+        }
+
+        // Add header (empty line) - only if not empty
+        Component headerComponent = Messages.EFFECTS_LORE_HEADER.get();
+        if (!headerComponent.equals(Component.empty())) {
+            loreLines.add(headerComponent);
+        }
+
+        // Add title ("Effects")
+        loreLines.add(Messages.EFFECTS_LORE_TITLE.get());
+
+        // Add effect lines
+        int effectsToShow = nbEffectsView == -1 ? visibleEffects.size() : Math.min(nbEffectsView, visibleEffects.size());
+
+        for (int i = 0; i < effectsToShow; i++) {
+            Effect effect = visibleEffects.get(i);
+            Component effectLine = Messages.EFFECTS_LORE_LINE.get(
+                    Placeholder.component("effect", effect.displayName())
+            );
+            loreLines.add(effectLine);
+        }
+
+        // Add "And More..." if there are more effects than the limit
+        if (nbEffectsView != -1 && visibleEffects.size() > nbEffectsView) {
+            loreLines.add(Messages.EFFECTS_LORE_MORE.get());
+        }
+
+        return loreLines;
     }
 
 }

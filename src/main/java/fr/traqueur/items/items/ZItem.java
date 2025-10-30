@@ -7,11 +7,13 @@ import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.managers.EffectsManager;
 import fr.traqueur.items.api.settings.ItemSettings;
 import fr.traqueur.items.api.settings.models.EnchantmentWrapper;
+import fr.traqueur.items.effects.ZEffectsManager;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.utils.AttributeUtil;
 import fr.traqueur.items.utils.ItemUtil;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.api.Loadable;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -21,6 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public record ZItem(String id, @Options(inline = true) ItemSettings settings) implements Item, Loadable {
@@ -29,12 +32,26 @@ public record ZItem(String id, @Options(inline = true) ItemSettings settings) im
     public @NotNull ItemStack build(@Nullable Player player, int amount) {
         ItemsPlugin plugin = JavaPlugin.getPlugin(ItemsPlugin.class);
 
+        // Generate effect lore lines (base effects only during item creation)
+        List<Component> effectLoreLines = List.of();
+        if (settings.effects() != null && !settings.effects().isEmpty()) {
+            EffectsManager effectsManager = plugin.getManager(EffectsManager.class);
+            effectLoreLines = effectsManager.generateBaseEffectLore(settings.effects(), settings);
+        }
+
+        // Combine base lore with effect lore
+        List<Component> combinedLore = new ArrayList<>();
+        if (settings.lore() != null) {
+            combinedLore.addAll(settings.lore());
+        }
+        combinedLore.addAll(effectLoreLines);
+
         // Create base item using ItemUtil
         ItemStack itemStack = ItemUtil.createItem(
                 settings.material(),
                 amount,
                 settings.displayName(),
-                settings.lore(),
+                combinedLore,
                 settings.itemName()
         );
 

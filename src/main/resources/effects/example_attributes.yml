@@ -2,6 +2,7 @@
 # Apply custom attributes to items
 id: "legendary_sword"
 type: "ATTRIBUTES_APPLICATOR"
+display-name: "<gradient:#FF0000:#FFD700><bold>⚔ LEGENDARY ATTRIBUTES</bold></gradient>"
 attributes:
   - attribute: ATTACK_DAMAGE
     operation: ADD_NUMBER        # ADD_NUMBER, ADD_SCALAR, MULTIPLY_SCALAR_1

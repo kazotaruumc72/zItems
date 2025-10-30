@@ -4,7 +4,9 @@ import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.effects.EffectSettings;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.api.Loadable;
+import net.kyori.adventure.text.Component;
 
 public record ZEffect(String id, String type,
-                      @Options(inline = true) EffectSettings settings) implements Effect, Loadable {
+                      @Options(inline = true) EffectSettings settings,
+                      @Options(optional = true) Component displayName) implements Effect, Loadable {
 }

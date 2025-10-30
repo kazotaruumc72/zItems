@@ -1,1 +1,8 @@
+# Debug mode - enables detailed logging
 debug: true
+
+# Default number of effects to display in item lore
+# -1 = show all effects
+# 0 = hide all effects
+# >0 = show only this number of effects (remaining shown as "...")
+default-nb-effects-view: -1

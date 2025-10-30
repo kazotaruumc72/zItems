@@ -2,6 +2,7 @@
 # Advanced farming tool with auto-harvest, auto-replant, and area tilling
 id: "super_farming_hoe"
 type: "FARMING_HOE"
+display-name: "<gradient:#7CFC00:#32CD32><bold>🌾 FARMING HOE</bold></gradient>"
 size: 5                # Area size (must be odd number, default: 3)
 auto-replant: true      # Auto-replant crops after harvest (optional, default: true)
 drop-location: "PLAYER" # Drop location: BLOCK, CENTER, PLAYER (optional)

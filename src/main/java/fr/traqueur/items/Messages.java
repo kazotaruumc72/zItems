@@ -14,10 +14,20 @@ public enum Messages implements Loadable {
     REQUIREMENT_NOT_MET("<red>You do not meet the requirements to perform this command."),
 
     EFFECT_APPLIED("<green>Effect <yellow><effect></yellow> applied successfully."),
+    EFFECT_ALREADY_PRESENT("<red>Effect <yellow><effect></yellow> is already present on this item."),
+    EFFECT_INCOMPATIBLE("<red>Effect <yellow><effect></yellow> is incompatible with existing effects on this item."),
+    EFFECT_NOT_ALLOWED("<red>Additional effects are not allowed on this item."),
+    EFFECT_DISABLED("<red>Effect <yellow><effect></yellow> is disabled for this item."),
+    EFFECT_HANDLER_NOT_FOUND("<red>Handler not found for effect <yellow><effect></yellow>."),
 
     ITEM_GIVEN("<green>Given <yellow><amount>x <item></yellow> to <aqua><player></aqua>."),
     ITEM_RECEIVED("<green>You received <yellow><amount>x <item></yellow>."),
     ITEM_GIVE_INVALID_AMOUNT("<red>Invalid amount! Amount must be greater than 0."),
+
+    EFFECTS_LORE_HEADER(""),
+    EFFECTS_LORE_TITLE("<gray>Effects"),
+    EFFECTS_LORE_LINE("<dark_gray>- <effect>"),
+    EFFECTS_LORE_MORE("<dark_gray>- <white>And More..."),
     ;
 
     private final String rawMessage;

@@ -95,6 +95,25 @@ public record ItemSettings(
         AttributeMergeStrategy attributeMergeStrategy,
 
         @Options(optional = true)
+        @DefaultInt(-1)
+        int nbEffectsView,
+
+        @Options(optional = true)
+        @DefaultBool(true)
+        boolean baseEffectsVisible,
+
+        @Options(optional = true)
+        @DefaultBool(true)
+        boolean additionalEffectsVisible,
+
+        @Options(optional = true)
+        @DefaultBool(true)
+        boolean allowAdditionalEffects,
+
+        @Options(optional = true)
+        List<String> disabledEffects,
+
+        @Options(optional = true)
         @DefaultBool(true)
         boolean trackable
 ) implements Loadable {

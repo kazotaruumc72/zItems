@@ -2,4 +2,5 @@
 # Automatically smelt ores when mining
 id: "auto_smelt_pickaxe"
 type: "MELT_MINING"
+display-name: "<gradient:#FF4500:#FF8C00><bold>🔥 MELT MINING</bold></gradient>"
 # No additional settings required - automatically smelts compatible ores

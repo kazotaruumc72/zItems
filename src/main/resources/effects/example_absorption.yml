@@ -2,4 +2,5 @@
 # Automatically adds block drops to player inventory instead of dropping on ground
 id: "absorption_pickaxe"
 type: "ABSORPTION"
+display-name: "<gradient:#9B59B6:#E91E63><bold>💫 ABSORPTION</bold></gradient>"
 # No additional settings required - automatically adds drops to inventory

@@ -5,6 +5,7 @@ import fr.traqueur.commands.spigot.Command;
 import fr.traqueur.items.Messages;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.effects.Effect;
+import fr.traqueur.items.api.effects.EffectApplicationResult;
 import fr.traqueur.items.api.managers.EffectsManager;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.command.CommandSender;
@@ -33,10 +34,31 @@ public class ApplyEffectCommand extends Command<@NotNull ItemsPlugin> {
         Effect effect = arguments.get("effect");
         ItemStack item = player.getInventory().getItemInMainHand();
         EffectsManager manager = this.getPlugin().getManager(EffectsManager.class);
-        manager.applyEffect(player, item, effect);
-        Messages.EFFECT_APPLIED.send(
-                player,
-                Placeholder.parsed("effect", effect.id())
-        );
+
+        EffectApplicationResult result = manager.applyEffect(player, item, effect);
+
+        switch (result) {
+            case SUCCESS -> Messages.EFFECT_APPLIED.send(
+                    player,
+                    Placeholder.parsed("effect", effect.id())
+            );
+            case ALREADY_PRESENT -> Messages.EFFECT_ALREADY_PRESENT.send(
+                    player,
+                    Placeholder.parsed("effect", effect.id())
+            );
+            case INCOMPATIBLE -> Messages.EFFECT_INCOMPATIBLE.send(
+                    player,
+                    Placeholder.parsed("effect", effect.id())
+            );
+            case NOT_ALLOWED -> Messages.EFFECT_NOT_ALLOWED.send(player);
+            case DISABLED -> Messages.EFFECT_DISABLED.send(
+                    player,
+                    Placeholder.parsed("effect", effect.id())
+            );
+            case HANDLER_NOT_FOUND -> Messages.EFFECT_HANDLER_NOT_FOUND.send(
+                    player,
+                    Placeholder.parsed("effect", effect.type())
+            );
+        }
     }
 }

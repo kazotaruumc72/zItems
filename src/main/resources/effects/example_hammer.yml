@@ -2,6 +2,7 @@
 # Break blocks in a 3x3 area
 id: "super_hammer"
 type: "HAMMER"
+display-name: "<gradient:#FFD700:#FFA500><bold>⚒ HAMMER</bold></gradient>"
 materials: # List of materials that can be broken (whitelist)
   - STONE
   - COBBLESTONE

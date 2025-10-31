@@ -1,8 +1,10 @@
 package fr.traqueur.items.api;
 
+import fr.maxlego08.menu.api.InventoryManager;
 import fr.traqueur.items.api.effects.EffectsDispatcher;
 import fr.traqueur.items.api.managers.Manager;
 import fr.traqueur.recipes.api.RecipesAPI;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -40,4 +42,5 @@ public abstract class ItemsPlugin extends JavaPlugin {
         return rsp.getProvider();
     }
 
+    public abstract InventoryManager getInventoryManager();
 }

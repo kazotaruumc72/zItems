@@ -27,9 +27,8 @@ public enum Messages implements Loadable {
     EFFECTS_LORE_HEADER(""),
     EFFECTS_LORE_TITLE("<gray>Effects"),
     EFFECTS_LORE_LINE("<dark_gray>- <effect>"),
-    EFFECTS_LORE_MORE("<dark_gray>- <white>And More..."),
+    EFFECTS_LORE_MORE("<dark_gray>- <white>And More...")
     ;
-
     private final String rawMessage;
 
     Messages(String message) {

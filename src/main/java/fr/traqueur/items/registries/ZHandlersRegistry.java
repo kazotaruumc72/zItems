@@ -123,6 +123,12 @@ public class ZHandlersRegistry implements HandlersRegistry {
         return this.handlers.values();
     }
 
+    @Override
+    public void clear() {
+        this.handlers.clear();
+        Logger.info("Cleared all registered effect handlers.");
+    }
+
     /**
      * Registers a single effect handler class.
      * Tries to instantiate using a constructor with ItemsPlugin parameter first,

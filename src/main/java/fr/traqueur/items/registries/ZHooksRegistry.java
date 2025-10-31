@@ -39,6 +39,13 @@ public class ZHooksRegistry implements HooksRegistry {
     }
 
     @Override
+    public void clear() {
+        this.hooks.clear();
+        this.scannedPackages.clear();
+        Logger.debug("Cleared all registered hooks.");
+    }
+
+    @Override
     public void enableAll() {
         for (Map.Entry<String, Hook> stringHookEntry : this.hooks.entrySet()) {
             String hookName = stringHookEntry.getKey();

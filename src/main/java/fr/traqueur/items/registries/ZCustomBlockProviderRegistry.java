@@ -38,6 +38,12 @@ public class ZCustomBlockProviderRegistry implements CustomBlockProviderRegistry
     }
 
     @Override
+    public void clear() {
+        this.providers.clear();
+        Logger.debug("Cleared all custom block providers.");
+    }
+
+    @Override
     public Optional<List<ItemStack>> getCustomBlockDrop(Block block, Player player) {
         // Iterate through all providers until one returns a drop
         for (Map.Entry<String, CustomBlockProvider> provider : providers.entrySet()) {

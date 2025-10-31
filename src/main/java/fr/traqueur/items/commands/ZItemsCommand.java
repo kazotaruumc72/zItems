@@ -21,6 +21,7 @@ public class ZItemsCommand extends Command<@NotNull ItemsPlugin> {
         this.addSubCommand(
                 new ApplyEffectCommand(plugin),
                 new GiveItemCommand(plugin),
+                new GuiCommand(plugin),
                 new ReloadCommand(plugin)
         );
     }

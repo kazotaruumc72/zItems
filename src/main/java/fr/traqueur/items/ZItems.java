@@ -1,6 +1,11 @@
 package fr.traqueur.items;
 
+import fr.maxlego08.menu.api.ButtonManager;
+import fr.maxlego08.menu.api.InventoryManager;
+import fr.maxlego08.menu.api.exceptions.InventoryException;
+import fr.maxlego08.menu.api.loader.NoneLoader;
 import fr.traqueur.commands.spigot.CommandManager;
+import fr.traqueur.items.buttons.ItemsListButton;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.Effect;
@@ -43,6 +48,7 @@ import fr.traqueur.structura.registries.DefaultValueRegistry;
 import fr.traqueur.structura.types.TypeToken;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.banner.PatternType;
@@ -68,6 +74,7 @@ public class ZItems extends ItemsPlugin {
 
     private RecipesAPI recipesManager;
     private EffectsDispatcher dispatcher;
+    private InventoryManager inventoryManager;
 
     @Override
     public void onEnable() {
@@ -163,7 +170,32 @@ public class ZItems extends ItemsPlugin {
             }
             return customDrop.map(List::of);
         });
-        
+
+        // Initialize zMenu InventoryManager and ButtonManager
+        var inventoryProvider = getServer().getServicesManager().getRegistration(InventoryManager.class);
+        if (inventoryProvider == null) {
+            Logger.severe("zMenu InventoryManager not found! Is zMenu installed?");
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        this.inventoryManager = inventoryProvider.getProvider();
+        Logger.info("zMenu <green>InventoryManager <reset>initialized successfully!");
+
+        var buttonProvider = getServer().getServicesManager().getRegistration(ButtonManager.class);
+        if (buttonProvider == null) {
+            Logger.severe("zMenu ButtonManager not found! Is zMenu installed?");
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        ButtonManager buttonManager = buttonProvider.getProvider();
+
+        // Register custom buttons
+        buttonManager.unregisters(this);
+        buttonManager.register(new NoneLoader(this, ItemsListButton.class, "ZITEMS_ITEMS_LIST"));
+        Logger.info("Registered <green>custom zMenu buttons<reset>!");
+
+        this.loadInventories();
+
         this.registerCommands(settings);
 
         Logger.info("<yellow>=== ENABLE DONE <gray>(<gold>" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<gray>) <yellow>===");
@@ -189,6 +221,17 @@ public class ZItems extends ItemsPlugin {
         commandManager.registerConverter(Item.class, new ItemArgument());
 
         commandManager.registerCommand(new ZItemsCommand(this));
+    }
+
+    private void loadInventories() {
+        if(this.inventoryManager != null) {
+            try {
+                this.inventoryManager.deleteInventories(this);
+                this.inventoryManager.loadInventoryOrSaveResource(this, "inventories/items_list.yml");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private void injectReaders() {
@@ -256,6 +299,8 @@ public class ZItems extends ItemsPlugin {
         if (itemsManager != null) {
             itemsManager.generateRecipesFromLoadedItems();
         }
+
+        this.loadInventories();
     }
 
     private <T extends Settings> T createSettings(String path, Class<T> clazz) {
@@ -286,5 +331,9 @@ public class ZItems extends ItemsPlugin {
     @Override
     public EffectsDispatcher getDispatcher() {
         return dispatcher;
+    }
+
+    public InventoryManager getInventoryManager() {
+        return inventoryManager;
     }
 }

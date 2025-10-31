@@ -1,5 +1,6 @@
 package fr.traqueur.items.registries;
 
+import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.access.LocationAccess;
 import fr.traqueur.items.api.registries.LocationAccessRegistry;
 
@@ -28,5 +29,11 @@ public class ZLocationAccessRegistry implements LocationAccessRegistry {
     @Override
     public Collection<LocationAccess> getAll() {
         return this.accessors.values();
+    }
+
+    @Override
+    public void clear() {
+        this.accessors.clear();
+        Logger.debug("Cleared all custom block providers.");
     }
 }

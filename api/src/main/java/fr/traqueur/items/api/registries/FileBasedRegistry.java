@@ -44,7 +44,7 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         Logger.info("Loaded " + storage.size() + " " + logName + "(s) from folder: " + folder);
     }
 
-    private boolean ensureFolderExists(Path folder) {
+    protected boolean ensureFolderExists(Path folder) {
         if (!Files.exists(folder)) {
             try {
                 Files.createDirectories(folder);
@@ -69,18 +69,16 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         List<String> copiedFiles = new ArrayList<>();
 
         try {
-            // Get all YAML files from the resource folder in the JAR
             List<String> resourceFiles = listResourceFiles(resourceFolder);
 
-            for (String fileName : resourceFiles) {
-                if (isYamlFileName(fileName)) {
-                    String resourcePath = resourceFolder + "/" + fileName;
+            for (String relativePath : resourceFiles) {
+                if (isFile(relativePath)) {
                     try {
-                        plugin.saveResource(resourcePath, false);
-                        copiedFiles.add(fileName);
-                        Logger.debug("Copied example file: " + fileName);
+                        plugin.saveResource(resourceFolder + "/" + relativePath, false);
+                        copiedFiles.add(relativePath);
+                        Logger.debug("Copied example file: " + relativePath);
                     } catch (Exception e) {
-                        Logger.warning("Failed to copy example file: " + fileName + " - " + e.getMessage());
+                        Logger.warning("Failed to copy example file: " + relativePath + " - " + e.getMessage());
                     }
                 }
             }
@@ -91,18 +89,17 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         }
     }
 
-    private List<String> listResourceFiles(String folder) throws IOException {
-        List<String> fileNames = new ArrayList<>();
 
-        // Get the resource URL from the class loader
+    private List<String> listResourceFiles(String folder) throws IOException {
+        List<String> filePaths = new ArrayList<>();
+
         ClassLoader classLoader = plugin.getClass().getClassLoader();
         URI uri;
-
         try {
-            uri = classLoader.getResource(folder).toURI();
+            uri = Objects.requireNonNull(classLoader.getResource(folder)).toURI();
         } catch (Exception e) {
             Logger.warning("Could not find resource folder: " + folder);
-            return fileNames;
+            return filePaths;
         }
 
         Path resourcePath;
@@ -110,8 +107,7 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         boolean needsClose = false;
 
         try {
-            if (uri.getScheme().equals("jar")) {
-                // Running from JAR - need to create a FileSystem
+            if ("jar".equals(uri.getScheme())) {
                 try {
                     fileSystem = FileSystems.getFileSystem(uri);
                 } catch (FileSystemNotFoundException e) {
@@ -120,18 +116,18 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
                 }
                 resourcePath = fileSystem.getPath("/" + folder);
             } else {
-                // Running from IDE or extracted files
                 resourcePath = Paths.get(uri);
             }
 
-            // Walk the resource directory and collect all file names
-            try (Stream<Path> paths = Files.walk(resourcePath, 1)) {
+            try (Stream<Path> paths = Files.walk(resourcePath)) {
                 paths.filter(Files::isRegularFile)
                         .forEach(path -> {
-                            String fileName = path.getFileName().toString();
-                            fileNames.add(fileName);
+                            // Conserve le chemin relatif complet
+                            Path relative = resourcePath.relativize(path);
+                            filePaths.add(relative.toString().replace("\\", "/"));
                         });
             }
+
         } finally {
             if (needsClose && fileSystem != null) {
                 try {
@@ -142,15 +138,22 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
             }
         }
 
-        return fileNames;
+        return filePaths;
     }
 
-    private boolean isYamlFileName(String fileName) {
+
+    private boolean isFile(String fileName) {
         String lower = fileName.toLowerCase();
-        return lower.endsWith(".yml") || lower.endsWith(".yaml");
+        return lower.endsWith(".yml") || lower.endsWith(".yaml") || lower.endsWith(".properties");
     }
 
-    protected abstract void loadFile(Path file);
+    /**
+     * Loads an object from a file and returns it.
+     *
+     * @param file the file to load
+     * @return the loaded object, or null if loading failed
+     */
+    protected abstract T loadFile(Path file);
 
     @Override
     public void register(ID id, T item) {
@@ -165,5 +168,10 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
     @Override
     public Collection<T> getAll() {
         return storage.values();
+    }
+
+    @Override
+    public void clear() {
+        storage.clear();
     }
 }

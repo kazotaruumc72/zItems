@@ -1,6 +1,6 @@
 # Glowing Berry Vines - Lianes avec baies lumineuses
 id: "glowing_berry_vines"
-material: CAVE_VINES_PLANT
+material: CAVE_VINES
 display-name: "<gradient:#FF6B35:#FFA500><bold>🫐 Lianes Lumineuses Chargées</bold></gradient>"
 lore:
   - "<gray>Des lianes de caverne pleines de baies"

@@ -11,23 +11,31 @@ import fr.traqueur.items.api.items.BlockStateMeta;
 import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.items.Item;
+import fr.traqueur.items.api.items.ItemFolder;
 import fr.traqueur.items.api.items.ItemMetadata;
 import fr.traqueur.items.api.registries.HandlersRegistry;
 import fr.traqueur.items.api.registries.ItemsRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.items.ZItem;
+import fr.traqueur.items.utils.MessageUtil;
 import fr.traqueur.items.utils.ReflectionsCache;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.registries.PolymorphicRegistry;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
 import org.reflections.Reflections;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class ZItemsRegistry extends ItemsRegistry {
+
+    private ItemFolder rootFolder;
 
     public ZItemsRegistry(ItemsPlugin plugin) {
         super(plugin);
@@ -105,7 +113,7 @@ public class ZItemsRegistry extends ItemsRegistry {
     }
 
     @Override
-    protected void loadFile(Path file) {
+    protected Item loadFile(Path file) {
         try {
             Item item = Structura.load(file, ZItem.class);
 
@@ -113,13 +121,15 @@ public class ZItemsRegistry extends ItemsRegistry {
             if (!validateEffectsCompatibility(item, file)) {
                 Logger.severe("Failed to load item {} from file {}: incompatible effects detected",
                         item.id(), file.getFileName());
-                return;
+                return null;
             }
 
             this.register(item.id(), item);
             Logger.debug("Loaded item: " + item.id() + " from file: " + file.getFileName());
+            return item;
         } catch (StructuraException e) {
             Logger.severe("Failed to load item from file: " + file.getFileName(), e);
+            return null;
         }
     }
 
@@ -178,5 +188,85 @@ public class ZItemsRegistry extends ItemsRegistry {
         }
 
         return true;
+    }
+
+    @Override
+    public void loadFromFolder(Path folder) {
+        if(!this.ensureFolderExists(folder)) {
+            return;
+        }
+        // Clear existing items
+        this.storage.clear();
+
+        // Build folder structure and load items
+        this.rootFolder = buildFolderStructure(folder, folder);
+
+        Logger.info("Loaded {} items in folder structure", this.storage.size());
+    }
+
+    /**
+     * Recursively builds the folder structure and loads items.
+     *
+     * @param currentPath the current directory being processed
+     * @param rootPath the root items folder
+     * @return the ItemFolder representing the current directory
+     */
+    private ItemFolder buildFolderStructure(Path currentPath, Path rootPath) {
+        List<ItemFolder> subFolders = new ArrayList<>();
+        List<String> itemIds = new ArrayList<>();
+
+        String folderName = currentPath.equals(rootPath) ? "root" : currentPath.getFileName().toString();
+        String displayName = folderName;
+        Material material = Material.CHEST;
+        int modelId = -1;
+
+        try (Stream<Path> paths = Files.list(currentPath)) {
+            paths.forEach(path -> {
+                if (Files.isDirectory(path)) {
+                    // Recursively build sub-folder
+                    ItemFolder subFolder = buildFolderStructure(path, rootPath);
+                    if (!subFolder.isEmpty()) {
+                        subFolders.add(subFolder);
+                    }
+                } else if (path.toString().endsWith(".yml") || path.toString().endsWith(".yaml")) {
+                    // Load item file and get the item back
+                    Item item = loadFile(path);
+
+                    // If the item was successfully loaded, add its ID to this folder
+                    if (item != null) {
+                        itemIds.add(item.id());
+                    }
+                }
+            });
+        } catch (IOException e) {
+            Logger.severe("Failed to read directory: " + currentPath, e);
+        }
+
+        Path folderPropertiesPath = currentPath.resolve("folder.properties");
+        if (Files.exists(folderPropertiesPath)) {
+            Properties properties = new Properties();
+            try (InputStream in = Files.newInputStream(folderPropertiesPath)) {
+                properties.load(in);
+            } catch (IOException e) {
+                Logger.severe("Failed to load folder properties from: " + folderPropertiesPath, e);
+            }
+            String materialStr = properties.getProperty("material");
+            String modelIdStr = properties.getProperty("model-id", "-1");
+            displayName = properties.getProperty("display-name");
+            material = Material.matchMaterial(materialStr);
+            try {
+                modelId = Integer.parseInt(modelIdStr);
+            } catch (NumberFormatException e) {
+                Logger.warning("Invalid model-id '{}' in folder properties at {}. Using default -1.", modelIdStr, folderPropertiesPath);
+            }
+        }
+
+        // Get folder name
+        return new ItemFolder(folderName, displayName, material, modelId, subFolders, itemIds);
+    }
+
+    @Override
+    public ItemFolder getRootFolder() {
+        return rootFolder != null ? rootFolder : new ItemFolder("root", "root", Material.CHEST, -1, List.of(), List.of());
     }
 }

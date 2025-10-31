@@ -18,13 +18,15 @@ public class ZEffectsRegistry extends EffectsRegistry {
 
 
     @Override
-    protected void loadFile(Path file) {
+    protected Effect loadFile(Path file) {
         try {
             Effect effect = Structura.load(file, ZEffect.class);
             this.register(effect.id(), effect);
             Logger.debug("Loaded effect: " + effect.id() + " from file: " + file.getFileName());
+            return effect;
         } catch (StructuraException e) {
             Logger.severe("Failed to load effect from file: " + file.getFileName(), e);
+            return null;
         }
     }
 }

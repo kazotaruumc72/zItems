@@ -207,4 +207,12 @@ public class ZExtractorsRegistry implements ExtractorsRegistry {
     public Collection<ItemSourceExtractor<?>> getAll() {
         return extractors.values();
     }
+
+    @Override
+    public void clear() {
+        extractors.clear();
+        cache.clear();
+        scannedPackages.clear();
+        Logger.debug("Cleared all registered ItemSourceExtractors and cache.");
+    }
 }

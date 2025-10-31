@@ -24,4 +24,6 @@ public interface Registry<ID, T> {
 
     Collection<T> getAll();
 
+    void clear();
+
 }

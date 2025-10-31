@@ -213,7 +213,7 @@ public class ZItemsRegistry extends ItemsRegistry {
      */
     private ItemFolder buildFolderStructure(Path currentPath, Path rootPath) {
         List<ItemFolder> subFolders = new ArrayList<>();
-        List<String> itemIds = new ArrayList<>();
+        List<Item> items = new ArrayList<>();
 
         String folderName = currentPath.equals(rootPath) ? "root" : currentPath.getFileName().toString();
         String displayName = folderName;
@@ -230,12 +230,7 @@ public class ZItemsRegistry extends ItemsRegistry {
                     }
                 } else if (path.toString().endsWith(".yml") || path.toString().endsWith(".yaml")) {
                     // Load item file and get the item back
-                    Item item = loadFile(path);
-
-                    // If the item was successfully loaded, add its ID to this folder
-                    if (item != null) {
-                        itemIds.add(item.id());
-                    }
+                    items.add(loadFile(path));
                 }
             });
         } catch (IOException e) {
@@ -262,7 +257,7 @@ public class ZItemsRegistry extends ItemsRegistry {
         }
 
         // Get folder name
-        return new ItemFolder(folderName, displayName, material, modelId, subFolders, itemIds);
+        return new ItemFolder(folderName, displayName, material, modelId, subFolders, items);
     }
 
     @Override

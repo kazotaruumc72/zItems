@@ -1,5 +1,6 @@
 package fr.traqueur.items.api.items;
 
+import fr.traqueur.items.api.ItemsPlugin;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 
@@ -13,27 +14,27 @@ public class ItemFolder {
 
 
     private String displayName;
-    private Material displayMaterial;
-    private int displayModelId;
 
+    private final Material displayMaterial;
+    private final int displayModelId;
     private final String name;
     private final List<ItemFolder> subFolders;
-    private final List<String> itemIds;
+    private final List<Item> items;
 
-    public ItemFolder(String name, String displayName, Material displayMaterial, int displayModelId, List<ItemFolder> subFolders, List<String> itemIds) {
+    public ItemFolder(String name, String displayName, Material displayMaterial, int displayModelId, List<ItemFolder> subFolders, List<Item> items) {
         this.name = name;
         this.displayName = displayName;
         this.displayMaterial = displayMaterial;
         this.displayModelId = displayModelId;
         this.subFolders = subFolders;
-        this.itemIds = itemIds;
+        this.items = items;
     }
 
     /**
      * Checks if this folder is empty (no items and no sub-folders).
      */
     public boolean isEmpty() {
-        return (itemIds == null || itemIds.isEmpty()) &&
+        return (items == null || items.isEmpty()) &&
                (subFolders == null || subFolders.isEmpty());
     }
 
@@ -49,16 +50,8 @@ public class ItemFolder {
         return displayName;
     }
 
-    public void displayMaterial(Material displayMaterial) {
-        this.displayMaterial = displayMaterial;
-    }
-
     public Material displayMaterial() {
         return displayMaterial;
-    }
-
-    public void displayModelId(int displayModelId) {
-        this.displayModelId = displayModelId;
     }
 
     public int displayModelId() {
@@ -69,17 +62,8 @@ public class ItemFolder {
         return subFolders;
     }
 
-    public List<String> itemIds() {
-        return itemIds;
+    public List<Item> items() {
+        return items;
     }
 
-    /**
-     * Gets the total number of elements (items + sub-folders) in this folder.
-     */
-    public int getElementCount() {
-        int count = 0;
-        if (itemIds != null) count += itemIds.size();
-        if (subFolders != null) count += subFolders.size();
-        return count;
-    }
 }

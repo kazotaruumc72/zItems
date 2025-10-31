@@ -3,6 +3,7 @@ package fr.traqueur.items.buttons;
 import fr.maxlego08.menu.api.button.PaginateButton;
 import fr.maxlego08.menu.api.engine.InventoryEngine;
 import fr.maxlego08.menu.api.utils.Placeholders;
+import fr.traqueur.items.Messages;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.items.Item;
@@ -10,6 +11,7 @@ import fr.traqueur.items.api.items.ItemFolder;
 import fr.traqueur.items.api.registries.ItemsRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.utils.MessageUtil;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -59,7 +61,7 @@ public class ItemsListButton extends PaginateButton {
                     var inventoryManager = plugin.getInventoryManager();
                     inventoryManager.getInventory(plugin, "items_list").ifPresentOrElse(inv -> {
                         inventoryManager.openInventoryWithOldInventories(player, inv, 1);
-                    }, () -> player.sendMessage("§cFailed to open inventory!"));
+                    }, () -> Messages.FAILED_TO_OPEN_GUI.send(player));
                 });
             } else {
                 // Render item
@@ -75,8 +77,9 @@ public class ItemsListButton extends PaginateButton {
                         rest.values().forEach(droppedItem ->
                                 player.getWorld().dropItem(player.getLocation(), droppedItem)
                         );
-
-                        player.sendMessage("§aYou received §e" + element.item.id() + "§a!");
+                        Messages.ITEM_RECEIVED.send(player,
+                                Placeholder.component("item", element.item.representativeName()),
+                                Placeholder.parsed("amount", "1"));
                     });
                 } catch (Exception e) {
                     Logger.severe("Failed to build item {}", element.item.id(), e);
@@ -129,12 +132,9 @@ public class ItemsListButton extends PaginateButton {
         }
 
         // Add items
-        if (currentFolder.itemIds() != null) {
-            currentFolder.itemIds().forEach(itemId -> {
-                Item item = registry.getById(itemId);
-                if (item != null) {
-                    elements.add(new Element(item, null));
-                }
+        if (currentFolder.items() != null) {
+            currentFolder.items().forEach(item -> {
+                elements.add(new Element(item, null));
             });
         }
 

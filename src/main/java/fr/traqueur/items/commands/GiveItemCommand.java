@@ -11,6 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.Optional;
+
 public class GiveItemCommand extends Command<@NotNull ItemsPlugin> {
 
     /**
@@ -22,14 +25,16 @@ public class GiveItemCommand extends Command<@NotNull ItemsPlugin> {
         super(plugin, "give");
         this.setDescription("Give a custom item to a player");
         this.setPermission("items.command.give");
-        this.addArgs("player", Player.class, "item", Item.class, "amount", Integer.class);
+        this.addArgs("player", Player.class, "item", Item.class);
+        this.addOptionalArgs("amount", Integer.class, (sender, lastArgs) -> List.of("1", "16", "64"));
     }
 
     @Override
     public void execute(CommandSender sender, Arguments arguments) {
         Player target = arguments.get("player");
         Item item = arguments.get("item");
-        int amount = arguments.get("amount");
+        Optional<Integer> amountOpt = arguments.getOptional("amount");
+        int amount = amountOpt.orElse(1);
 
         // Validate amount
         if (amount <= 0) {

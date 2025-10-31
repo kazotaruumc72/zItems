@@ -4,8 +4,9 @@ import fr.traqueur.commands.api.arguments.Arguments;
 import fr.traqueur.commands.spigot.Command;
 import fr.traqueur.items.api.ItemsPlugin;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
-public class ReloadCommand extends Command<ItemsPlugin> {
+public class ReloadCommand extends Command<@NotNull ItemsPlugin> {
 
     public ReloadCommand(ItemsPlugin plugin) {
         super(plugin, "reload");

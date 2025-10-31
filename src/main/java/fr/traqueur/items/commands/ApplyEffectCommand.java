@@ -21,9 +21,9 @@ public class ApplyEffectCommand extends Command<@NotNull ItemsPlugin> {
      * @param plugin The plugin that owns the command.
      */
     public ApplyEffectCommand(ItemsPlugin plugin) {
-        super(plugin, "applyeffect");
+        super(plugin, "effect.apply");
         this.setDescription("Apply an effect to an item");
-        this.setPermission("items.command.applyeffect");
+        this.setPermission("items.command.effect.apply");
         this.setGameOnly(true);
         this.addArgs("effect", Effect.class);
     }

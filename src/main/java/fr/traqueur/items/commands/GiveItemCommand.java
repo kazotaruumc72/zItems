@@ -22,9 +22,9 @@ public class GiveItemCommand extends Command<@NotNull ItemsPlugin> {
      * @param plugin The plugin that owns the command.
      */
     public GiveItemCommand(ItemsPlugin plugin) {
-        super(plugin, "give");
+        super(plugin, "item.give");
         this.setDescription("Give a custom item to a player");
-        this.setPermission("items.command.give");
+        this.setPermission("items.command.item.give");
         this.addArgs("player", Player.class, "item", Item.class);
         this.addOptionalArgs("amount", Integer.class, (sender, lastArgs) -> List.of("1", "16", "64"));
     }

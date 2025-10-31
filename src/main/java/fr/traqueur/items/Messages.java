@@ -24,6 +24,11 @@ public enum Messages implements Loadable {
     ITEM_RECEIVED("<green>You received <yellow><amount>x <item></yellow>."),
     ITEM_GIVE_INVALID_AMOUNT("<red>Invalid amount! Amount must be greater than 0."),
 
+    EFFECT_GIVEN("<green>Given <yellow><amount>x <effect></yellow> to <aqua><player></aqua>."),
+    EFFECT_RECEIVED("<green>You received <yellow><amount>x <effect></yellow>."),
+    EFFECT_GIVE_INVALID_AMOUNT("<red>Invalid amount! Amount must be greater than 0."),
+    EFFECT_NO_REPRESENTATION("<red>Effect <yellow><effect></yellow> has no representation and cannot be given as an item."),
+
     EFFECTS_LORE_HEADER(""),
     EFFECTS_LORE_TITLE("<gray>Effects"),
     EFFECTS_LORE_LINE("<dark_gray>- <effect>"),

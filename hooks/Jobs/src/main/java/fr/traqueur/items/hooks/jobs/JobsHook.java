@@ -1,4 +1,4 @@
-package fr.traqueur.items.jobs;
+package fr.traqueur.items.hooks.jobs;
 
 import com.gamingmesh.jobs.api.JobsExpGainEvent;
 import com.gamingmesh.jobs.api.JobsPrePaymentEvent;
@@ -7,10 +7,10 @@ import fr.traqueur.items.api.hooks.Hook;
 import fr.traqueur.items.api.registries.ExtractorsRegistry;
 import fr.traqueur.items.api.registries.HandlersRegistry;
 import fr.traqueur.items.api.registries.Registry;
-import fr.traqueur.items.jobs.extractors.JobExpGainEventExtractor;
-import fr.traqueur.items.jobs.extractors.JobMoneyGainEventExtractor;
-import fr.traqueur.items.jobs.handlers.JobsExperienceMultiplier;
-import fr.traqueur.items.jobs.handlers.JobsMoneyMultiplier;
+import fr.traqueur.items.hooks.jobs.extractors.JobExpGainEventExtractor;
+import fr.traqueur.items.hooks.jobs.extractors.JobMoneyGainEventExtractor;
+import fr.traqueur.items.hooks.jobs.handlers.JobsExperienceMultiplier;
+import fr.traqueur.items.hooks.jobs.handlers.JobsMoneyMultiplier;
 
 @AutoHook("Jobs")
 public class JobsHook implements Hook {

@@ -1,4 +1,4 @@
-package fr.traqueur.items.jobs.extractors;
+package fr.traqueur.items.hooks.jobs.extractors;
 
 import com.gamingmesh.jobs.api.JobsPrePaymentEvent;
 import fr.traqueur.items.api.effects.ItemSourceExtractor;

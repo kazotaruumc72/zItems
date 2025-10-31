@@ -1,4 +1,4 @@
-package fr.traqueur.items.jobs.handlers;
+package fr.traqueur.items.hooks.jobs.handlers;
 
 import com.gamingmesh.jobs.api.JobsExpGainEvent;
 import fr.traqueur.items.hooks.jobs.JobsHandler;

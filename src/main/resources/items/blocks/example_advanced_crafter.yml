@@ -20,6 +20,4 @@ metadata:
     settings:
       crafter:
         triggered: true  # Pre-triggered state
-        crafting: true   # Currently crafting
-      directional:
-        facing: UP       # Faces upward for hopper integration
+        crafting: true   # Currently crafting    # Faces upward for hopper integration

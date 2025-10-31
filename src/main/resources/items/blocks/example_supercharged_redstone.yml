@@ -19,6 +19,3 @@ metadata:
     settings:
       comparator:
         mode: SUBTRACT
-      analogue-powerable:
-        power: 15   # Max power
-        max: true   # Ensure maximum power

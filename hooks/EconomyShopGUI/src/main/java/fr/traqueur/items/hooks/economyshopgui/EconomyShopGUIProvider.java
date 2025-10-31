@@ -1,4 +1,4 @@
-package fr.traqueur.items.economyshopgui;
+package fr.traqueur.items.hooks.economyshopgui;
 
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.shop.ShopProvider;

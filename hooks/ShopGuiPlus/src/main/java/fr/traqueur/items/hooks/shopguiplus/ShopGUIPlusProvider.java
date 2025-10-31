@@ -1,4 +1,4 @@
-package fr.traqueur.items.shopguiplus;
+package fr.traqueur.items.hooks.shopguiplus;
 
 
 import fr.traqueur.items.api.ItemsPlugin;

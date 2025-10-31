@@ -1,4 +1,4 @@
-package fr.traqueur.items.worldguard;
+package fr.traqueur.items.hooks.worldguard;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;

@@ -2,9 +2,9 @@ package fr.traqueur.items.shop;
 
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.shop.ShopProvider;
-import fr.traqueur.items.economyshopgui.EconomyShopGUIProvider;
-import fr.traqueur.items.shopguiplus.ShopGUIPlusProvider;
-import fr.traqueur.items.zshop.ZShopProvider;
+import fr.traqueur.items.hooks.economyshopgui.EconomyShopGUIProvider;
+import fr.traqueur.items.hooks.shopguiplus.ShopGUIPlusProvider;
+import fr.traqueur.items.hooks.zshop.ZShopProvider;
 import org.bukkit.Bukkit;
 
 import java.util.Comparator;

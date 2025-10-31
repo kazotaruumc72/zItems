@@ -1,4 +1,4 @@
-package fr.traqueur.items.superiorskyblock2;
+package fr.traqueur.items.hooks.superiorskyblock2;
 
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.island.IslandPrivilege;

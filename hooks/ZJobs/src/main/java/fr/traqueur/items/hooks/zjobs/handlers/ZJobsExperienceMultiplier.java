@@ -1,4 +1,4 @@
-package fr.traqueur.items.zjobs.handlers;
+package fr.traqueur.items.hooks.zjobs.handlers;
 
 import fr.maxlego08.jobs.api.event.events.JobExpGainEvent;
 import fr.traqueur.items.hooks.jobs.JobsHandler;

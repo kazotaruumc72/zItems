@@ -1,4 +1,4 @@
-package fr.traqueur.items.zshop;
+package fr.traqueur.items.hooks.zshop;
 
 import fr.maxlego08.shop.api.ShopManager;
 import fr.maxlego08.shop.api.buttons.ItemButton;

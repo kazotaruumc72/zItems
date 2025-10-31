@@ -21,4 +21,23 @@ public non-sealed interface EffectsManager extends Manager {
     boolean hasEffects(ItemStack item);
 
     List<Component> generateBaseEffectLore(List<Effect> baseEffects, ItemSettings itemSettings);
+
+    /**
+     * Updates the item's lore to display the given effects.
+     * Handles both custom items (with ItemSettings) and vanilla items.
+     *
+     * @param item the item to update
+     * @param effects all effects to display in the lore
+     */
+    void updateItemLoreWithEffects(ItemStack item, List<Effect> effects);
+
+    /**
+     * Reapplies all NoEventEffects from the given list to the item.
+     * This is useful when fusing items in anvils or similar scenarios.
+     *
+     * @param player the player context (can be null)
+     * @param item the item to apply effects to
+     * @param effects the list of effects to reapply
+     */
+    void reapplyNoEventEffects(Player player, ItemStack item, List<Effect> effects);
 }

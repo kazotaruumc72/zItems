@@ -24,7 +24,8 @@ import fr.traqueur.items.hooks.recipes.RecipesHook;
 import fr.traqueur.items.items.ZItemsManager;
 import fr.traqueur.items.items.listeners.CommandsListener;
 import fr.traqueur.items.items.listeners.DisableEnchantsListener;
-import fr.traqueur.items.items.listeners.GrindstoneListener;
+import fr.traqueur.items.items.listeners.ItemRestrictionsListener;
+import fr.traqueur.items.listeners.AnvilEffectFusionListener;
 import fr.traqueur.items.registries.*;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.serialization.ZEffectDataType;
@@ -138,7 +139,10 @@ public class ZItems extends ItemsPlugin {
 
         this.getServer().getPluginManager().registerEvents(new CommandsListener(this), this);
         this.getServer().getPluginManager().registerEvents(new DisableEnchantsListener(), this);
-        this.getServer().getPluginManager().registerEvents(new GrindstoneListener(), this);
+
+        // Register restrictions listener BEFORE fusion listener so restrictions are checked first
+        this.getServer().getPluginManager().registerEvents(new ItemRestrictionsListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new AnvilEffectFusionListener(this), this);
 
         EffectsManager effectsManager = this.registerManager(EffectsManager.class, new ZEffectsManager());
         ItemsManager itemsManager = this.registerManager(ItemsManager.class, new ZItemsManager());

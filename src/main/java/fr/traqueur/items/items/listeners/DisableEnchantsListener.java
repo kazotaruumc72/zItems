@@ -18,7 +18,10 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Listener that prevents disabled enchantments from being applied to custom items.
@@ -58,7 +61,9 @@ public class DisableEnchantsListener implements Listener {
 
     /**
      * Handles anvil events to prevent disabled enchantments.
-     * Cancels the result if the second item contains a disabled enchantment.
+     * Cancels the result if:
+     * 1. The second item contains a disabled enchantment directly
+     * 2. The fusion result would create a disabled enchantment level
      */
     @EventHandler(priority = EventPriority.HIGH)
     public void onAnvil(PrepareAnvilEvent event) {
@@ -82,14 +87,67 @@ public class DisableEnchantsListener implements Listener {
                 return;
             }
 
-            // Check if any disabled enchantment is on the second item
+            // Check 1: if any disabled enchantment is directly on the second item
             for (DisabledEnchantment disabledEnchantment : disabledEnchantments) {
                 if (hasDisabledEnchantment(secondItem, disabledEnchantment)) {
                     event.setResult(null);
                     return;
                 }
             }
+
+            // Check 2: Calculate what the fusion result would be and check if it creates disabled enchants
+            Map<Enchantment, Integer> firstEnchants = getEnchantments(firstItem);
+            Map<Enchantment, Integer> secondEnchants = getEnchantments(secondItem);
+
+            // Simulate vanilla anvil fusion logic
+            for (Map.Entry<Enchantment, Integer> secondEntry : secondEnchants.entrySet()) {
+                Enchantment enchant = secondEntry.getKey();
+                int secondLevel = secondEntry.getValue();
+
+                if (firstEnchants.containsKey(enchant)) {
+                    int firstLevel = firstEnchants.get(enchant);
+                    int resultLevel;
+
+                    if (firstLevel == secondLevel) {
+                        // Same level: upgrade by 1 if possible (vanilla anvil behavior)
+                        resultLevel = Math.min(firstLevel + 1, enchant.getMaxLevel());
+                    } else {
+                        // Different levels: take the higher one
+                        resultLevel = Math.max(firstLevel, secondLevel);
+                    }
+
+                    // Check if this result level is disabled
+                    for (DisabledEnchantment disabledEnchant : disabledEnchantments) {
+                        if (disabledEnchant.matches(enchant, resultLevel)) {
+                            event.setResult(null);
+                            return;
+                        }
+                    }
+                }
+            }
         });
+    }
+
+    /**
+     * Gets all enchantments from an item (regular or book).
+     *
+     * @param item the item to get enchantments from
+     * @return map of enchantments and their levels
+     */
+    private java.util.Map<Enchantment, Integer> getEnchantments(ItemStack item) {
+        if (!item.hasItemMeta()) {
+            return Collections.emptyMap();
+        }
+
+        ItemMeta meta = item.getItemMeta();
+
+        // Check enchantment storage meta (for books)
+        if (meta instanceof EnchantmentStorageMeta enchantMeta) {
+            return new HashMap<>(enchantMeta.getStoredEnchants());
+        }
+
+        // Regular enchantments
+        return new HashMap<>(item.getEnchantments());
     }
 
     /**

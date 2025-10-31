@@ -115,6 +115,14 @@ public record ItemSettings(
 
         @Options(optional = true)
         @DefaultBool(true)
-        boolean trackable
+        boolean trackable,
+
+        @Options(optional = true)
+        @DefaultBool(true)
+        boolean anvilEnabled,
+
+        @Options(optional = true)
+        @DefaultBool(true)
+        boolean enchantingTableEnabled
 ) implements Loadable {
 }

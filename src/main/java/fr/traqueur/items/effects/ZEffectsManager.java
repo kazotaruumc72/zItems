@@ -84,15 +84,11 @@ public class ZEffectsManager implements EffectsManager {
         this.getPlugin().getDispatcher().applyNoEventEffect(player, item, effect);
 
         // Update item lore to show the new effect
-        if (itemsManager != null) {
-            Optional<Item> customItem = itemsManager.getCustomItem(item);
-            if (customItem.isPresent()) {
-                updateItemLore(item, customItem.get());
-            } else {
-                // For vanilla items, update lore without custom item settings
-                updateVanillaItemLore(item);
-            }
-        }
+        List<Effect> allEffects = Keys.EFFECTS.get(
+                item.getItemMeta().getPersistentDataContainer(),
+                new ArrayList<>()
+        );
+        updateItemLoreWithEffects(item, allEffects);
 
         return EffectApplicationResult.SUCCESS;
     }
@@ -150,20 +146,56 @@ public class ZEffectsManager implements EffectsManager {
         return EffectApplicationResult.SUCCESS;
     }
 
+    @Override
+    public boolean hasEffects(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) {
+            return false;
+        }
+
+        List<Effect> effects = Keys.EFFECTS.get(
+            item.getItemMeta().getPersistentDataContainer(),
+            new ArrayList<>()
+        );
+
+        return effects != null && !effects.isEmpty();
+    }
+
+    @Override
+    public void updateItemLoreWithEffects(ItemStack item, List<Effect> effects) {
+        if (item == null || !item.hasItemMeta() || effects == null) {
+            return;
+        }
+
+        ItemsManager itemsManager = this.getPlugin().getManager(ItemsManager.class);
+        if (itemsManager != null) {
+            Optional<Item> customItem = itemsManager.getCustomItem(item);
+            if (customItem.isPresent()) {
+                updateItemLoreForCustomItem(item, customItem.get(), effects);
+            } else {
+                updateVanillaItemLoreWithEffects(item, effects);
+            }
+        }
+    }
+
+    @Override
+    public void reapplyNoEventEffects(Player player, ItemStack item, List<Effect> effects) {
+        if (item == null || effects == null || effects.isEmpty()) {
+            return;
+        }
+
+        for (Effect effect : effects) {
+            this.getPlugin().getDispatcher().applyNoEventEffect(player, item, effect);
+        }
+    }
+
     /**
-     * Updates the item's lore to reflect current effects (base + additional).
-     * This is called after applying a new effect to update the visual display.
+     * Updates the item's lore for a custom item with the given effects.
      *
      * @param item the item to update
      * @param customItem the custom item definition
+     * @param allEffects all effects to display
      */
-    private void updateItemLore(ItemStack item, Item customItem) {
-        // Get all effects from PDC
-        List<Effect> allEffects = Keys.EFFECTS.get(
-                item.getItemMeta().getPersistentDataContainer(),
-                new ArrayList<>()
-        );
-
+    private void updateItemLoreForCustomItem(ItemStack item, Item customItem, List<Effect> allEffects) {
         // Separate base effects and additional effects
         List<Effect> baseEffects = customItem.settings().effects() != null
                 ? customItem.settings().effects()
@@ -191,40 +223,33 @@ public class ZEffectsManager implements EffectsManager {
         }
         combinedLore.addAll(effectLoreLines);
 
-        // Update item lore using ItemUtil (handles Paper/Spigot compatibility and italic formatting)
+        // Update item lore
         ItemUtil.setLore(item, combinedLore);
 
-        Logger.debug("Updated item lore for {} with {} base effects and {} additional effects",
-                customItem.id(), baseEffects.size(), additionalEffects.size());
+        Logger.debug("Updated item lore for {} with {} total effects",
+                customItem.id(), allEffects.size());
     }
 
     /**
-     * Updates the lore of a vanilla (non-custom) item to show effects.
-     * For vanilla items, all effects are treated as "additional" effects.
+     * Updates the lore of a vanilla item with the given effects.
      *
      * @param item the vanilla item to update
+     * @param allEffects all effects to display
      */
-    private void updateVanillaItemLore(ItemStack item) {
-        // Get all effects from PDC
-        List<Effect> allEffects = Keys.EFFECTS.get(
-                item.getItemMeta().getPersistentDataContainer(),
-                new ArrayList<>()
-        );
-
+    private void updateVanillaItemLoreWithEffects(ItemStack item, List<Effect> allEffects) {
         if (allEffects.isEmpty()) {
             return; // No effects to display
         }
 
         // Prepare the reference plain texts
         String titlePlain = PLAIN_TEXT_SERIALIZER.serialize(Messages.EFFECTS_LORE_TITLE.get()).trim();
-        // header can be empty or something else; we only rely on title as anchor per your request
 
         // Get existing lore (if any)
         List<Component> existingLore = ItemUtil.getLore(item);
         if (existingLore == null) {
             existingLore = new ArrayList<>();
         } else {
-            // Find where the effects section starts (by comparing plain text of each line to title plain)
+            // Find where the effects section starts
             int titleIndex = -1;
             for (int i = 0; i < existingLore.size(); i++) {
                 Component line = existingLore.get(i);
@@ -236,18 +261,16 @@ public class ZEffectsManager implements EffectsManager {
             }
 
             if (titleIndex != -1) {
-                // Walk upwards from titleIndex to remove empty lines directly above the header/title.
+                // Remove effects section
                 int startIndex = titleIndex - 1;
                 while (startIndex >= 0) {
                     Component line = existingLore.get(startIndex);
                     String linePlain = PLAIN_TEXT_SERIALIZER.serialize(line).trim();
                     if (!linePlain.isEmpty()) {
-                        break; // stop at the last non-empty line before the effects section
+                        break;
                     }
                     startIndex--;
                 }
-
-                // Keep only lines before the detected section (exclude the empty lines above and the title and following lines)
                 existingLore = new ArrayList<>(existingLore.subList(0, startIndex + 1));
             }
         }
@@ -262,24 +285,7 @@ public class ZEffectsManager implements EffectsManager {
         // Apply back to the item
         ItemUtil.setLore(item, combinedLore);
 
-        Logger.debug("Updated vanilla item lore with {} effects (cleaned duplicate headers/titles using plain text comparison)",
-                allEffects.size());
-    }
-
-
-
-    @Override
-    public boolean hasEffects(ItemStack item) {
-        if (item == null || !item.hasItemMeta()) {
-            return false;
-        }
-
-        List<Effect> effects = Keys.EFFECTS.get(
-            item.getItemMeta().getPersistentDataContainer(),
-            new ArrayList<>()
-        );
-
-        return effects != null && !effects.isEmpty();
+        Logger.debug("Updated vanilla item lore with {} effects", allEffects.size());
     }
 
     /**

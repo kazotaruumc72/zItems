@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.maven
-
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -18,6 +16,7 @@ pluginManagement {
 
 rootProject.name = "zItems"
 include("api")
+include("common")
 
 file("hooks").listFiles()?.forEach { file ->
     if (file.isDirectory and !file.name.equals("build")) {
@@ -25,5 +24,3 @@ file("hooks").listFiles()?.forEach { file ->
         include(":hooks:${file.name}")
     }
 }
-include("hooks:Jobs")
-include("common")

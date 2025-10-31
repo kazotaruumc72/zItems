@@ -18,7 +18,7 @@ import java.util.Optional;
 public class NexoHook implements Hook {
     @Override
     public void onEnable() {
-        Registry.get(CustomBlockProviderRegistry.class).register("oraxen", (block, player) -> {
+        Registry.get(CustomBlockProviderRegistry.class).register("nexo", (block, player) -> {
             boolean mechanic = NexoFurniture.isFurniture(block.getLocation());
             boolean isBlockMechanic = NexoBlocks.isCustomBlock(block);
 

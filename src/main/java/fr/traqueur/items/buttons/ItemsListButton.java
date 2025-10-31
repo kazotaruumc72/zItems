@@ -6,11 +6,13 @@ import fr.maxlego08.menu.api.utils.Placeholders;
 import fr.traqueur.items.Messages;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
+import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.items.Item;
-import fr.traqueur.items.api.items.ItemFolder;
+import fr.traqueur.items.api.managers.EffectsManager;
+import fr.traqueur.items.api.models.Folder;
+import fr.traqueur.items.api.registries.EffectsRegistry;
 import fr.traqueur.items.api.registries.ItemsRegistry;
 import fr.traqueur.items.api.registries.Registry;
-import fr.traqueur.items.utils.MessageUtil;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,14 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Button that displays items and folders in a hierarchical structure.
- * - Shows folders and items from the current folder
- * - Clicking a folder navigates into it
- * - Clicking an item gives it to the player
+ * Displays folders, items, and effects (with representation and folders) in one unified inventory.
  */
 public class ItemsListButton extends PaginateButton {
 
-    private static final String METADATA_KEY = "zitems-current-folder";
+    private static final String METADATA_KEY_FOLDER = "zitems-current-folder";
+    private static final String METADATA_KEY_EFFECTS_MODE = "zitems-showing-effects";
+    private static final String METADATA_KEY_EFFECTS_FOLDER = "zitems-current-effects-folder";
+
     private final ItemsPlugin plugin;
 
     public ItemsListButton(Plugin plugin) {
@@ -43,118 +45,217 @@ public class ItemsListButton extends PaginateButton {
 
     @Override
     public void onRender(Player player, InventoryEngine inventory) {
-        List<Element> elements = getElements(player);
+        if (player.hasMetadata(METADATA_KEY_EFFECTS_MODE)) {
+            renderEffects(player, inventory);
+        } else {
+            renderItems(player, inventory);
+        }
+    }
+
+    /* -------------------- Items rendering -------------------- */
+
+    private void renderItems(Player player, InventoryEngine inventory) {
+        List<Element<Item>> elements = getItemElements(player);
 
         paginate(elements, inventory, (slot, element) -> {
             if (element.isFolder()) {
                 // Render folder
                 Placeholders placeholders = new Placeholders();
-                placeholders.register("name", element.folder.displayName());
-                placeholders.register("material", element.folder.displayMaterial().name());
-                placeholders.register("model-id", String.valueOf(element.folder.displayModelId()));
+                placeholders.register("name", element.folder().displayName());
+                placeholders.register("material", element.folder().displayMaterial().name());
+                placeholders.register("model-id", String.valueOf(element.folder().displayModelId()));
 
-                inventory.addItem(slot, getItemStack().build(player, false, placeholders)).setClick(event -> {
-                    // Navigate into this folder
-                    player.setMetadata(METADATA_KEY, new FixedMetadataValue(this.plugin, element.folder));
-
-                    // Reopen the inventory to refresh the view
-                    var inventoryManager = plugin.getInventoryManager();
-                    inventoryManager.getInventory(plugin, "items_list").ifPresentOrElse(inv -> {
-                        inventoryManager.openInventoryWithOldInventories(player, inv, 1);
-                    }, () -> Messages.FAILED_TO_OPEN_GUI.send(player));
-                });
+                inventory.addItem(slot, getItemStack().build(player, false, placeholders))
+                        .setClick(event -> {
+                            if ("effects".equalsIgnoreCase(element.folder().name())) {
+                                // Enter effects mode (root)
+                                player.setMetadata(METADATA_KEY_EFFECTS_MODE, new FixedMetadataValue(plugin, true));
+                                player.removeMetadata(METADATA_KEY_FOLDER, plugin);
+                                player.removeMetadata(METADATA_KEY_EFFECTS_FOLDER, plugin);
+                            } else {
+                                // Enter item folder mode
+                                player.setMetadata(METADATA_KEY_FOLDER,
+                                        new FixedMetadataValue(plugin, element.folder()));
+                                player.removeMetadata(METADATA_KEY_EFFECTS_MODE, plugin);
+                            }
+                            reopen(player);
+                        });
             } else {
                 // Render item
                 try {
-                    ItemStack itemStack = element.item.build(player, 1);
-
+                    ItemStack itemStack = element.item().build(player, 1);
                     inventory.addItem(slot, itemStack).setClick(event -> {
-                        // Give the item to the player
-                        ItemStack giveItem = element.item.build(player, 1);
+                        ItemStack giveItem = element.item().build(player, 1);
                         var rest = player.getInventory().addItem(giveItem);
-
-                        // Drop excess items if inventory is full
-                        rest.values().forEach(droppedItem ->
-                                player.getWorld().dropItem(player.getLocation(), droppedItem)
+                        rest.values().forEach(dropped ->
+                                player.getWorld().dropItem(player.getLocation(), dropped)
                         );
                         Messages.ITEM_RECEIVED.send(player,
-                                Placeholder.component("item", element.item.representativeName()),
+                                Placeholder.component("item", element.item().representativeName()),
                                 Placeholder.parsed("amount", "1"));
                     });
                 } catch (Exception e) {
-                    Logger.severe("Failed to build item {}", element.item.id(), e);
+                    Logger.severe("Failed to build item {}", element.item().id(), e);
                 }
+            }
+        });
+    }
 
+    /* -------------------- Effects rendering (with folders, no back) -------------------- */
+
+    private void renderEffects(Player player, InventoryEngine inventory) {
+        List<Element<Effect>> elements = getEffectElements(player);
+        EffectsManager effectsManager = plugin.getManager(EffectsManager.class);
+
+        paginate(elements, inventory, (slot, element) -> {
+            if (element.isFolder()) {
+                // Folder
+                Folder<Effect> folder = element.folder();
+                Placeholders placeholders = new Placeholders();
+                placeholders.register("name", folder.displayName());
+                placeholders.register("material", folder.displayMaterial().name());
+                placeholders.register("model-id", String.valueOf(folder.displayModelId()));
+
+                inventory.addItem(slot, getItemStack().build(player, false, placeholders))
+                        .setClick(event -> {
+                            // Navigate into subfolder
+                            player.setMetadata(METADATA_KEY_EFFECTS_FOLDER, new FixedMetadataValue(plugin, folder));
+                            reopen(player);
+                        });
+            } else {
+                // Effect item with representation
+                Effect effect = element.item();
+                if (effect.representation() == null) return;
+
+                ItemStack effectItem = effectsManager.createEffectItem(effect, player);
+                inventory.addItem(slot, effectItem).setClick(event -> {
+                    ItemStack giveItem = effectsManager.createEffectItem(effect, player);
+                    var rest = player.getInventory().addItem(giveItem);
+                    rest.values().forEach(dropped ->
+                            player.getWorld().dropItem(player.getLocation(), dropped)
+                    );
+                });
             }
         });
     }
 
     @Override
     public int getPaginationSize(Player player) {
-        return getElements(player).size();
+        if (player.hasMetadata(METADATA_KEY_EFFECTS_MODE)) {
+            return getEffectElements(player).size();
+        }
+        return getItemElements(player).size();
     }
 
     @Override
     public void onInventoryClose(Player player, InventoryEngine inventory) {
-        // Clean up metadata when inventory closes
-        player.removeMetadata(METADATA_KEY, this.plugin);
+        player.removeMetadata(METADATA_KEY_FOLDER, plugin);
+        player.removeMetadata(METADATA_KEY_EFFECTS_MODE, plugin);
+        player.removeMetadata(METADATA_KEY_EFFECTS_FOLDER, plugin);
     }
 
-    /**
-     * Gets elements (folders and items) for the current folder.
-     *
-     * @param player the player viewing the inventory
-     * @return list of elements to display
-     */
-    private List<Element> getElements(Player player) {
+    /* -------------------- Helpers -------------------- */
+
+    private List<Element<Item>> getItemElements(Player player) {
+        List<Element<Item>> elements = new ArrayList<>();
+
         ItemsRegistry registry = Registry.get(ItemsRegistry.class);
-        if (registry == null) {
-            return new ArrayList<>();
-        }
+        if (registry == null) return elements;
 
-        // Get current folder from metadata, or use root folder
-        ItemFolder currentFolder = getRootFolder();
-        if (player.hasMetadata(METADATA_KEY)) {
-            currentFolder = (ItemFolder) player.getMetadata(METADATA_KEY).getFirst().value();
+        Folder<Item> currentFolder = registry.getRootFolder();
+        if (player.hasMetadata(METADATA_KEY_FOLDER)) {
+            currentFolder = (Folder<Item>) player.getMetadata(METADATA_KEY_FOLDER).getFirst().value();
         }
-
-        if (currentFolder == null) {
-            currentFolder = registry.getRootFolder();
-        }
-
-        List<Element> elements = new ArrayList<>();
 
         // Add sub-folders
         if (currentFolder.subFolders() != null) {
-            currentFolder.subFolders().forEach(folder ->
-                elements.add(new Element(null, folder))
-            );
+            currentFolder.subFolders().forEach(folder -> elements.add(new Element<>(folder)));
+        }
+
+        // Add special “effects” pseudo-folder in root
+        if ("root".equalsIgnoreCase(currentFolder.name())) {
+            elements.add(new Element<>(new Folder<>("effects", "Effets", Material.ENCHANTED_BOOK, -1, List.of(), List.of())));
         }
 
         // Add items
-        if (currentFolder.items() != null) {
-            currentFolder.items().forEach(item -> {
-                elements.add(new Element(item, null));
-            });
+        if (currentFolder.elements() != null) {
+            currentFolder.elements().forEach(item -> elements.add(new Element<>(item)));
         }
 
         return elements;
     }
 
-    private ItemFolder getRootFolder() {
-        ItemsRegistry registry = Registry.get(ItemsRegistry.class);
-        if (registry == null) {
-            return new ItemFolder("root", "root", Material.CHEST, -1, List.of(), List.of());
+    private List<Element<Effect>> getEffectElements(Player player) {
+        List<Element<Effect>> elements = new ArrayList<>();
+        EffectsRegistry effectsRegistry = Registry.get(EffectsRegistry.class);
+        if (effectsRegistry == null) return elements;
+
+        Folder<Effect> root = effectsRegistry.getRootFolder();
+        Folder<Effect> current = root;
+
+        if (player.hasMetadata(METADATA_KEY_EFFECTS_FOLDER)) {
+            current = (Folder<Effect>) player.getMetadata(METADATA_KEY_EFFECTS_FOLDER).getFirst().value();
+            if (current == null) current = root;
         }
-        return registry.getRootFolder();
+
+        // Add subfolders
+        if (current.subFolders() != null) {
+            current.subFolders().forEach(folder -> elements.add(new Element<>(folder)));
+        }
+
+        // Add effects with representation
+        if (current.elements() != null) {
+            current.elements().stream()
+                    .filter(e -> e.representation() != null)
+                    .forEach(effect -> elements.add(new Element<>(effect)));
+        }
+
+        return elements;
+    }
+
+    private void reopen(Player player) {
+        var invManager = plugin.getInventoryManager();
+        invManager.getInventory(plugin, "items_list").ifPresentOrElse(
+                inv -> invManager.openInventoryWithOldInventories(player, inv, 1),
+                () -> Messages.FAILED_TO_OPEN_GUI.send(player)
+        );
     }
 
     /**
-     * Represents an element in the GUI - either a folder or an item.
+     * Represents either an item, a folder, or an effect.
      */
-    public record Element(Item item, ItemFolder folder) {
+    public static class Element<T> {
+        private final T item;
+        private final Folder<T> folder;
+
+        public Element(T item) {
+            this.item = item;
+            this.folder = null;
+        }
+
+        public Element(Folder<T> folder) {
+            this.item = null;
+            this.folder = folder;
+        }
+
+        public T item() {
+            return item;
+        }
+
+        public Folder<T> folder() {
+            return folder;
+        }
+
         public boolean isFolder() {
             return folder != null;
+        }
+
+        public boolean isItem() {
+            return item != null && !(item instanceof Effect);
+        }
+
+        public boolean isEffect() {
+            return item instanceof Effect;
         }
     }
 }

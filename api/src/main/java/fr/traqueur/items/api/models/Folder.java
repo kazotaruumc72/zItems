@@ -1,41 +1,34 @@
-package fr.traqueur.items.api.items;
+package fr.traqueur.items.api.models;
 
-import fr.traqueur.items.api.ItemsPlugin;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 
 import java.util.List;
 
-/**
- * Represents a folder containing items and sub-folders.
- * Used for organizing items in a hierarchical structure based on the file system.
- */
-public class ItemFolder {
-
+public class Folder<T> {
 
     private String displayName;
 
     private final Material displayMaterial;
     private final int displayModelId;
     private final String name;
-    private final List<ItemFolder> subFolders;
-    private final List<Item> items;
+    private final List<Folder<T>> subFolders;
+    private final List<T> elements;
 
-    public ItemFolder(String name, String displayName, Material displayMaterial, int displayModelId, List<ItemFolder> subFolders, List<Item> items) {
+    public Folder(String name, String displayName, Material displayMaterial, int displayModelId, List<Folder<T>> subFolders, List<T> elements) {
         this.name = name;
         this.displayName = displayName;
         this.displayMaterial = displayMaterial;
         this.displayModelId = displayModelId;
         this.subFolders = subFolders;
-        this.items = items;
+        this.elements = elements;
     }
 
     /**
      * Checks if this folder is empty (no items and no sub-folders).
      */
     public boolean isEmpty() {
-        return (items == null || items.isEmpty()) &&
-               (subFolders == null || subFolders.isEmpty());
+        return (elements == null || elements.isEmpty()) &&
+                (subFolders == null || subFolders.isEmpty());
     }
 
     public String name() {
@@ -58,12 +51,12 @@ public class ItemFolder {
         return displayModelId;
     }
 
-    public List<ItemFolder> subFolders() {
+    public List<Folder<T>> subFolders() {
         return subFolders;
     }
 
-    public List<Item> items() {
-        return items;
+    public List<T> elements() {
+        return elements;
     }
 
 }

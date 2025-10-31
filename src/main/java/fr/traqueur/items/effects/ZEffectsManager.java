@@ -5,9 +5,11 @@ import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.effects.EffectApplicationResult;
 import fr.traqueur.items.api.effects.EffectHandler;
+import fr.traqueur.items.api.effects.EffectRepresentation;
 import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.managers.EffectsManager;
 import fr.traqueur.items.api.managers.ItemsManager;
+import fr.traqueur.items.api.registries.EffectsRegistry;
 import fr.traqueur.items.api.registries.HandlersRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.api.settings.ItemSettings;
@@ -15,21 +17,72 @@ import fr.traqueur.items.api.settings.Settings;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.settings.PluginSettings;
 import fr.traqueur.items.utils.ItemUtil;
+import fr.traqueur.recipes.api.RecipeType;
+import fr.traqueur.recipes.impl.domains.ItemRecipe;
+import fr.traqueur.recipes.impl.domains.ingredients.StrictItemStackIngredient;
+import fr.traqueur.recipes.impl.domains.recipes.RecipeBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ZEffectsManager implements EffectsManager {
 
     private static final PlainTextComponentSerializer PLAIN_TEXT_SERIALIZER = PlainTextComponentSerializer.plainText();
+
+    private final List<ItemRecipe> recipes;
+
+    public ZEffectsManager() {
+        this.recipes = new ArrayList<>();
+    }
+
+    @Override
+    public void loadRecipes() {
+        for (ItemRecipe recipe : recipes) {
+            this.getPlugin().getRecipesManager().removeRecipe(recipe);
+        }
+        for (Effect effect : Registry.get(EffectsRegistry.class).getAll()) {
+            if (effect.representation() != null) {
+                if (effect.representation().applicatorType() == EffectRepresentation.ApplicatorType.SMITHING_TABLE) {
+                    createSmithingCraft(effect);
+                }
+            }
+        }
+    }
+
+    private void createSmithingCraft(Effect effect) {
+        EffectRepresentation representation = effect.representation();
+        Set<Material> materials = new HashSet<>();
+        List<Material> effectsMat = effect.settings().applicableMaterials();
+        if(effectsMat != null && !effectsMat.isEmpty()) {
+            materials.addAll(effectsMat);
+        }
+        List<Tag<Material>> effectsTags = effect.settings().applicableTags();
+        if(effectsTags != null && !effectsTags.isEmpty()) {
+            effectsTags.forEach(tag -> materials.addAll(tag.getValues()));
+        }
+
+        materials.forEach(material -> {
+            ItemStack result = new ItemStack(material);
+            this.applyEffect(null, result, effect);
+            ItemRecipe recipe = new RecipeBuilder().setType(RecipeType.SMITHING_TRANSFORM)
+                    .addIngredient(representation.getTemplateIngredient())
+                    .addIngredient(material)
+                    .addIngredient(new StrictItemStackIngredient(representation.item().build(null)))
+                    .setResult(result)
+                    .setAmount(1)
+                    .setName("effect" + effect.id() + "_" + material.name().toLowerCase()).build();
+            this.recipes.add(recipe);
+            this.getPlugin().getRecipesManager().addRecipe(recipe);
+            Logger.debug("Registered smithing recipe for effect {} with material {}", effect.id(), material.name());
+        });
+    }
 
     @Override
     public EffectApplicationResult applyEffect(Player player, ItemStack item, Effect effect) {
@@ -144,6 +197,16 @@ public class ZEffectsManager implements EffectsManager {
         }
 
         return EffectApplicationResult.SUCCESS;
+    }
+
+    @Override
+    public boolean canApplyEffectTo(Effect effect, ItemStack item) {
+        if (item == null || item.getType().isAir()) {
+            return false;
+        }
+
+        // Use the effect settings to check applicability
+        return effect.settings().canApplyTo(item);
     }
 
     @Override
@@ -400,6 +463,48 @@ public class ZEffectsManager implements EffectsManager {
         }
 
         return loreLines;
+    }
+
+    @Override
+    public boolean isEffectItem(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) {
+            return false;
+        }
+
+        return Keys.EFFECT_REPRESENTATION.get(item.getItemMeta().getPersistentDataContainer()).isPresent();
+    }
+
+    @Override
+    public Effect getEffectFromItem(ItemStack item) {
+        if (!isEffectItem(item)) {
+            return null;
+        }
+
+        String effectId = Keys.EFFECT_REPRESENTATION.get(item.getItemMeta().getPersistentDataContainer()).orElse(null);
+        if (effectId == null) {
+            return null;
+        }
+
+        return Registry.get(EffectsRegistry.class).getById(effectId);
+    }
+
+    @Override
+    public ItemStack createEffectItem(Effect effect, Player player) {
+        if (effect == null || effect.representation() == null) {
+            return null;
+        }
+
+        EffectRepresentation representation = effect.representation();
+
+        // Build the item from ItemStackWrapper
+        ItemStack item = representation.item().build(player);
+
+        // Store the effect ID in PDC to mark it as an effect representation
+        item.editPersistentDataContainer(container -> {
+            Keys.EFFECT_REPRESENTATION.set(container, effect.id());
+        });
+
+        return item;
     }
 
 }

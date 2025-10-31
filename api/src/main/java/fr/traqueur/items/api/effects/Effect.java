@@ -5,12 +5,13 @@ import org.jetbrains.annotations.Nullable;
 
 public interface Effect {
 
+    EffectRepresentation representation();
+
     String id();
 
     String type();
 
     EffectSettings settings();
-
 
     Component displayName();
 

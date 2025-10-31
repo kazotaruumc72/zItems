@@ -16,7 +16,10 @@ public record HammerSettings(
         int height,
         int width,
         int depth,
-        @Options(optional = true) @DefaultInt(-1) int damage
+        @Options(optional = true) @DefaultInt(-1) int damage,
+        @Options(optional = true) List<Material> applicableMaterials,
+        @Options(optional = true) List<Tag<Material>> applicableTags,
+        @Options(optional = true) @DefaultBool(false) boolean applicabilityBlacklisted
 ) implements MaterialFilterSettings {
 
     public HammerSettings {

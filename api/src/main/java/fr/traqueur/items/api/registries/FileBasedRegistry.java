@@ -2,8 +2,11 @@ package fr.traqueur.items.api.registries;
 
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
+import fr.traqueur.items.api.models.Folder;
+import org.bukkit.Material;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.*;
 import java.util.*;
@@ -16,6 +19,9 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
     private final String resourceFolder;
     private final String logName;
 
+    // Nouveau : stockage du dossier racine
+    private Folder<T> rootFolder;
+
     protected FileBasedRegistry(ItemsPlugin plugin, String resourceFolder, String logName) {
         this.plugin = plugin;
         this.storage = new HashMap<>();
@@ -23,27 +29,77 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         this.logName = logName;
     }
 
+    // --- Méthode principale de chargement ---
     public void loadFromFolder(Path folder) {
         if (!ensureFolderExists(folder)) {
             return;
         }
 
-        if (!Files.isDirectory(folder)) {
-            Logger.warning(logName + " path is not a directory: " + folder);
-            return;
-        }
+        this.storage.clear();
+        this.rootFolder = buildFolderStructure(folder, folder);
 
-        try (Stream<Path> files = Files.walk(folder)) {
-            files.filter(Files::isRegularFile)
-                    .filter(this::isYamlFile)
-                    .forEach(this::loadFile);
-        } catch (IOException e) {
-            Logger.severe("Failed to read " + logName + " folder: " + folder, e);
-        }
-
-        Logger.info("Loaded " + storage.size() + " " + logName + "(s) from folder: " + folder);
+        Logger.info("Loaded {} {}(s) in folder structure", this.storage.size(), logName);
     }
 
+    // --- Construction récursive des dossiers ---
+    private Folder<T> buildFolderStructure(Path currentPath, Path rootPath) {
+        List<Folder<T>> subFolders = new ArrayList<>();
+        List<T> elements = new ArrayList<>();
+
+        String folderName = currentPath.equals(rootPath) ? "root" : currentPath.getFileName().toString();
+        String displayName = folderName;
+        Material material = Material.CHEST;
+        int modelId = -1;
+
+        try (Stream<Path> paths = Files.list(currentPath)) {
+            paths.forEach(path -> {
+                if (Files.isDirectory(path)) {
+                    Folder<T> sub = buildFolderStructure(path, rootPath);
+                    if (!sub.isEmpty()) {
+                        subFolders.add(sub);
+                    }
+                } else if (isYamlFile(path)) {
+                    T element = loadFile(path);
+                    if (element != null) {
+                        elements.add(element);
+                    }
+                }
+            });
+        } catch (IOException e) {
+            Logger.severe("Failed to read directory: " + currentPath, e);
+        }
+
+        // Lecture des propriétés facultatives
+        Path folderPropertiesPath = currentPath.resolve("folder.properties");
+        if (Files.exists(folderPropertiesPath)) {
+            Properties properties = new Properties();
+            try (InputStream in = Files.newInputStream(folderPropertiesPath)) {
+                properties.load(in);
+            } catch (IOException e) {
+                Logger.severe("Failed to load folder properties from: " + folderPropertiesPath, e);
+            }
+
+            String matStr = properties.getProperty("material");
+            String modelStr = properties.getProperty("model-id", "-1");
+            displayName = properties.getProperty("display-name", folderName);
+
+            if (matStr != null) {
+                Material m = Material.matchMaterial(matStr);
+                if (m != null) material = m;
+            }
+
+            try {
+                modelId = Integer.parseInt(modelStr);
+            } catch (NumberFormatException e) {
+                Logger.warning("Invalid model-id '{}' in folder properties at {}. Using default -1.",
+                        modelStr, folderPropertiesPath);
+            }
+        }
+
+        return new Folder<>(folderName, displayName, material, modelId, subFolders, elements);
+    }
+
+    // --- Utilitaires existants ---
     protected boolean ensureFolderExists(Path folder) {
         if (!Files.exists(folder)) {
             try {
@@ -60,8 +116,8 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
     }
 
     private boolean isYamlFile(Path path) {
-        String pathStr = path.toString().toLowerCase();
-        return pathStr.endsWith(".yml") || pathStr.endsWith(".yaml");
+        String name = path.toString().toLowerCase();
+        return name.endsWith(".yml") || name.endsWith(".yaml");
     }
 
     private void copyExampleFiles() {
@@ -89,10 +145,8 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         }
     }
 
-
     private List<String> listResourceFiles(String folder) throws IOException {
         List<String> filePaths = new ArrayList<>();
-
         ClassLoader classLoader = plugin.getClass().getClassLoader();
         URI uri;
         try {
@@ -122,12 +176,10 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
             try (Stream<Path> paths = Files.walk(resourcePath)) {
                 paths.filter(Files::isRegularFile)
                         .forEach(path -> {
-                            // Conserve le chemin relatif complet
                             Path relative = resourcePath.relativize(path);
                             filePaths.add(relative.toString().replace("\\", "/"));
                         });
             }
-
         } finally {
             if (needsClose && fileSystem != null) {
                 try {
@@ -141,23 +193,17 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         return filePaths;
     }
 
-
     private boolean isFile(String fileName) {
         String lower = fileName.toLowerCase();
         return lower.endsWith(".yml") || lower.endsWith(".yaml") || lower.endsWith(".properties");
     }
 
-    /**
-     * Loads an object from a file and returns it.
-     *
-     * @param file the file to load
-     * @return the loaded object, or null if loading failed
-     */
+    // --- Méthodes abstraites ---
     protected abstract T loadFile(Path file);
 
     @Override
-    public void register(ID id, T item) {
-        storage.put(id, item);
+    public void register(ID id, T value) {
+        storage.put(id, value);
     }
 
     @Override
@@ -173,5 +219,12 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
     @Override
     public void clear() {
         storage.clear();
+    }
+
+    // --- Nouveau getter pour le système de dossiers ---
+    public Folder<T> getRootFolder() {
+        return rootFolder != null
+                ? rootFolder
+                : new Folder<>("root", "root", Material.CHEST, -1, List.of(), List.of());
     }
 }

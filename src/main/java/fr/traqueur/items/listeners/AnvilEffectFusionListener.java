@@ -188,7 +188,12 @@ public class AnvilEffectFusionListener implements Listener {
         for (Effect effect : effects) {
             EffectHandler<?> handler = registry.getById(effect.type());
             if (handler instanceof EnchantsApplicator &&
-                    effect.settings() instanceof EnchantsSettings(List<EnchantsSettings.EnchantSetting> enchantments)) {
+                    effect.settings() instanceof EnchantsSettings(
+                            List<EnchantsSettings.EnchantSetting> enchantments,
+                            List<org.bukkit.Material> applicableMaterials,
+                            List<org.bukkit.Tag<org.bukkit.Material>> applicableTags,
+                            boolean applicabilityBlacklisted
+                    )) {
 
                 for (EnchantsSettings.EnchantSetting enchantSetting : enchantments) {
                     Enchantment enchant = enchantSetting.wrapper().enchantment();

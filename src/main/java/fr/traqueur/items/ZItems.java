@@ -27,10 +27,7 @@ import fr.traqueur.items.effects.ZEffectsManager;
 import fr.traqueur.items.effects.ZEventsListener;
 import fr.traqueur.items.hooks.recipes.RecipesHook;
 import fr.traqueur.items.items.ZItemsManager;
-import fr.traqueur.items.listeners.CommandsListener;
-import fr.traqueur.items.listeners.DisableEnchantsListener;
-import fr.traqueur.items.listeners.ItemRestrictionsListener;
-import fr.traqueur.items.listeners.AnvilEffectFusionListener;
+import fr.traqueur.items.listeners.*;
 import fr.traqueur.items.registries.*;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.serialization.ZEffectDataType;
@@ -133,6 +130,9 @@ public class ZItems extends ItemsPlugin {
         Registry.register(ExtractorsRegistry.class, new ZExtractorsRegistry(this));
         Registry.get(ExtractorsRegistry.class).scanPackage(this, "fr.traqueur.items");
 
+        // Register applicators registry
+        Registry.register(ApplicatorsRegistry.class, new ZApplicatorsRegistry());
+
         Registry.get(HooksRegistry.class).enableAll();
 
         Registry.get(EffectsRegistry.class).loadFromFolder(this.getDataPath().resolve(EFFECTS_FOLDER));
@@ -151,9 +151,13 @@ public class ZItems extends ItemsPlugin {
         this.getServer().getPluginManager().registerEvents(new ItemRestrictionsListener(this), this);
         this.getServer().getPluginManager().registerEvents(new AnvilEffectFusionListener(this), this);
 
+        // Register smithing table listener for effect application
+        this.getServer().getPluginManager().registerEvents(new SmithingTableListener(this), this);
+
         EffectsManager effectsManager = this.registerManager(EffectsManager.class, new ZEffectsManager());
         ItemsManager itemsManager = this.registerManager(ItemsManager.class, new ZItemsManager());
         itemsManager.generateRecipesFromLoadedItems();
+        effectsManager.loadRecipes();
 
         // Setup block tracking system
         BlockTracker blockTracker = new BlockTracker();
@@ -298,6 +302,11 @@ public class ZItems extends ItemsPlugin {
         ItemsManager itemsManager = this.getManager(ItemsManager.class);
         if (itemsManager != null) {
             itemsManager.generateRecipesFromLoadedItems();
+        }
+
+        EffectsManager effectsManager = this.getManager(EffectsManager.class);
+        if (effectsManager != null) {
+            effectsManager.loadRecipes();
         }
 
         this.loadInventories();

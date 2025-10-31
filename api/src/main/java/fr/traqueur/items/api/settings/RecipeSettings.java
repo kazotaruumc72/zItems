@@ -1,13 +1,12 @@
 package fr.traqueur.items.api.settings;
 
 import fr.traqueur.items.api.items.Item;
+import fr.traqueur.items.api.settings.models.IngredientWrapper;
 import fr.traqueur.recipes.api.RecipeType;
-import fr.traqueur.recipes.api.Util;
 import fr.traqueur.recipes.api.domains.Ingredient;
 import fr.traqueur.recipes.api.domains.Recipe;
 import fr.traqueur.recipes.impl.domains.ItemRecipe;
 import fr.traqueur.structura.annotations.Options;
-import fr.traqueur.structura.annotations.defaults.DefaultBool;
 import fr.traqueur.structura.annotations.defaults.DefaultDouble;
 import fr.traqueur.structura.annotations.defaults.DefaultInt;
 import fr.traqueur.structura.annotations.defaults.DefaultString;
@@ -17,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public record RecipeSettings(RecipeType type,
-                             List<IngredientSettings> ingredients,
+                             List<IngredientWrapper> ingredients,
                              @Options(optional = true) List<String> pattern,
                              @Options(optional = true) @DefaultInt(0) int cookingTime,
                              @Options(optional = true) @DefaultString("") String group,
@@ -89,7 +88,7 @@ public record RecipeSettings(RecipeType type,
 
     public ItemRecipe build(String pluginName, Item result) {
         return this.getItemRecipe(
-                ingredients.stream().map(IngredientSettings::toIngredient).toList(),
+                ingredients.stream().map(IngredientWrapper::toIngredient).toList(),
                 type,
                 pattern == null ? null : pattern.toArray(String[]::new),
                 cookingTime,
@@ -101,15 +100,5 @@ public record RecipeSettings(RecipeType type,
                 (float) experience,
                 priority
         );
-    }
-
-    public record IngredientSettings(String item,
-                                     @Options(optional = true) Character sign,
-                                     @Options(optional = true) @DefaultBool(false) boolean strict) implements Loadable {
-
-        public Ingredient toIngredient() {
-            return Util.parseIngredient(item, sign, strict);
-        }
-
     }
 }

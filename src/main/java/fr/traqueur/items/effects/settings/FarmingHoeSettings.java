@@ -6,10 +6,12 @@ import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultBool;
 import fr.traqueur.structura.annotations.defaults.DefaultInt;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 
 import java.util.List;
 
 public record FarmingHoeSettings(
+
         @Options(optional = true) @DefaultInt(3) int size,
         @Options(optional = true) @DefaultBool(true) boolean autoReplant,
         @Options(optional = true) DropLocation dropLocation,
@@ -20,7 +22,10 @@ public record FarmingHoeSettings(
         @Options(optional = true) List<Material> allowedCrops,
         @Options(optional = true) List<Material> allowedSeeds,
         @Options(optional = true) @DefaultInt(1) int harvestDamage,
-        @Options(optional = true) @DefaultInt(1) int tillDamage
+        @Options(optional = true) @DefaultInt(1) int tillDamage,
+        @Options(optional = true) List<Material> applicableMaterials,
+        @Options(optional = true) List<Tag<Material>> applicableTags,
+        @Options(optional = true) @DefaultBool(false) boolean applicabilityBlacklisted
 ) implements EffectSettings {
 
     /**

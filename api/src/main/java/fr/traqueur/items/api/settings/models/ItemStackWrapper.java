@@ -1,4 +1,4 @@
-package fr.traqueur.items.settings.models;
+package fr.traqueur.items.api.settings.models;
 
 import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.registries.ItemsRegistry;

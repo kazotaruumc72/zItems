@@ -2,7 +2,7 @@ package fr.traqueur.items.items.blockstate;
 
 import fr.traqueur.items.api.annotations.AutoBlockStateMeta;
 import fr.traqueur.items.api.items.BlockStateMeta;
-import fr.traqueur.items.settings.models.ItemStackWrapper;
+import fr.traqueur.items.api.settings.models.ItemStackWrapper;
 import fr.traqueur.structura.annotations.Options;
 import org.bukkit.block.Container;
 import org.bukkit.entity.Player;

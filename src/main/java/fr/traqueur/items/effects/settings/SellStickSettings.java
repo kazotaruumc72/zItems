@@ -5,12 +5,19 @@ import fr.traqueur.items.api.interactions.InteractionAction;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultBool;
 import fr.traqueur.structura.annotations.defaults.DefaultDouble;
+import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.inventory.EquipmentSlot;
+
+import java.util.List;
 
 public record SellStickSettings(
         @Options(optional = true) @DefaultDouble(1.0) double multiplier,
         @Options(optional = true) @DefaultBool(true) boolean damage,
         @Options(optional = true) InteractionAction action,
-        @Options(optional = true) EquipmentSlot hand
+        @Options(optional = true) EquipmentSlot hand,
+        @Options(optional = true) List<Material> applicableMaterials,
+        @Options(optional = true) List<Tag<Material>> applicableTags,
+        @Options(optional = true) @DefaultBool(false) boolean applicabilityBlacklisted
 ) implements EffectSettings {
 }

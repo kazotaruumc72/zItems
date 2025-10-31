@@ -10,7 +10,18 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public non-sealed interface EffectsManager extends Manager {
+    void loadRecipes();
+
     EffectApplicationResult applyEffect(Player player, ItemStack item, Effect effect);
+
+    /**
+     * Checks if an effect can be applied to the given item based on the effect's settings.
+     *
+     * @param effect the effect to check
+     * @param item the item to apply to
+     * @return true if the effect can be applied, false otherwise
+     */
+    boolean canApplyEffectTo(Effect effect, ItemStack item);
 
     /**
      * Checks if an ItemStack has any custom effects.
@@ -40,4 +51,29 @@ public non-sealed interface EffectsManager extends Manager {
      * @param effects the list of effects to reapply
      */
     void reapplyNoEventEffects(Player player, ItemStack item, List<Effect> effects);
+
+    /**
+     * Checks if an ItemStack is an effect representation item (can be applied to equipment).
+     *
+     * @param item the item to check
+     * @return true if this is an effect representation item
+     */
+    boolean isEffectItem(ItemStack item);
+
+    /**
+     * Gets the effect represented by this item, if any.
+     *
+     * @param item the item to check
+     * @return the effect this item represents, or null if not an effect item
+     */
+    Effect getEffectFromItem(ItemStack item);
+
+    /**
+     * Creates an ItemStack that represents an effect and can be applied to equipment.
+     *
+     * @param effect the effect to create an item for
+     * @param player the player context (for custom items)
+     * @return the effect representation ItemStack, or null if effect has no representation
+     */
+    ItemStack createEffectItem(Effect effect, Player player);
 }

@@ -26,6 +26,7 @@ public class Keys {
     public static final DataKey<String> ITEM_ID = new DataKey<>(PersistentDataType.STRING);
     public static final DataKey<List<Effect>> EFFECTS = new DataKey<>(PersistentDataType.LIST.listTypeFrom(EffectDataType.INSTANCE));
     public static final DataKey<String> CUSTOM_BLOCK_ID = new DataKey<>(PersistentDataType.STRING);
+    public static final DataKey<String> EFFECT_REPRESENTATION = new DataKey<>(PersistentDataType.STRING);
 
     // Tracked block nested keys (for TrackedBlockDataType serialization)
     public static final DataKey<Integer> TRACKED_BLOCK_POSITION = new DataKey<>(PersistentDataType.INTEGER);

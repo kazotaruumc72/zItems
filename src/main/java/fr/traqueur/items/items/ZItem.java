@@ -3,6 +3,7 @@ package fr.traqueur.items.items;
 import fr.traqueur.items.PlatformType;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.effects.Effect;
+import fr.traqueur.items.api.events.ItemBuildEvent;
 import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.managers.EffectsManager;
 import fr.traqueur.items.api.settings.ItemSettings;
@@ -128,6 +129,8 @@ public record ZItem(String id, @Options(inline = true) ItemSettings settings) im
             Keys.ITEM_ID.set(container, id);
         });
 
-        return itemStack;
+        ItemBuildEvent event = new ItemBuildEvent(player, this, itemStack);
+        plugin.getServer().getPluginManager().callEvent(event);
+        return event.getItemStack();
     }
 }

@@ -1,4 +1,4 @@
-package fr.traqueur.items.items.listeners;
+package fr.traqueur.items.listeners;
 
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.interactions.InteractionAction;

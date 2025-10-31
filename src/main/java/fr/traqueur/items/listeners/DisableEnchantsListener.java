@@ -1,7 +1,6 @@
-package fr.traqueur.items.items.listeners;
+package fr.traqueur.items.listeners;
 
 import fr.traqueur.items.api.ItemsPlugin;
-import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.managers.ItemsManager;
 import fr.traqueur.items.api.settings.models.DisabledEnchantment;
 import org.bukkit.enchantments.Enchantment;

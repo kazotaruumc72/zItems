@@ -67,7 +67,8 @@ public class ItemsListButton extends PaginateButton {
 
                 inventory.addItem(slot, getItemStack().build(player, false, placeholders))
                         .setClick(event -> {
-                            if ("effects".equalsIgnoreCase(element.folder().name())) {
+                            Folder<Effect> effectFolder = Registry.get(EffectsRegistry.class).getRootFolder();
+                            if (effectFolder.name().equalsIgnoreCase(element.folder().name())) {
                                 // Enter effects mode (root)
                                 player.setMetadata(METADATA_KEY_EFFECTS_MODE, new FixedMetadataValue(plugin, true));
                                 player.removeMetadata(METADATA_KEY_FOLDER, plugin);
@@ -164,17 +165,27 @@ public class ItemsListButton extends PaginateButton {
 
         Folder<Item> currentFolder = registry.getRootFolder();
         if (player.hasMetadata(METADATA_KEY_FOLDER)) {
-            currentFolder = (Folder<Item>) player.getMetadata(METADATA_KEY_FOLDER).getFirst().value();
+            Object value = player.getMetadata(METADATA_KEY_FOLDER).getFirst().value();
+            if (value instanceof Folder<?> folder) {
+                try {
+                    //noinspection unchecked
+                    currentFolder = (Folder<Item>) folder;
+                } catch (ClassCastException e) {
+                    Logger.warning("Invalid folder metadata for player {}", player.getName());
+                    player.removeMetadata(METADATA_KEY_FOLDER, plugin);
+                }
+            }
+        }
+
+        // Add special “effects” pseudo-folder in root
+        if ("root".equalsIgnoreCase(currentFolder.name())) {
+            Folder<Effect> effectFolder = Registry.get(EffectsRegistry.class).getRootFolder();
+            elements.add(new Element<>(new Folder<>(effectFolder.name(), effectFolder.displayName(), effectFolder.displayMaterial(), effectFolder.displayModelId(), List.of(), List.of())));
         }
 
         // Add sub-folders
         if (currentFolder.subFolders() != null) {
             currentFolder.subFolders().forEach(folder -> elements.add(new Element<>(folder)));
-        }
-
-        // Add special “effects” pseudo-folder in root
-        if ("root".equalsIgnoreCase(currentFolder.name())) {
-            elements.add(new Element<>(new Folder<>("effects", "Effets", Material.ENCHANTED_BOOK, -1, List.of(), List.of())));
         }
 
         // Add items
@@ -190,12 +201,18 @@ public class ItemsListButton extends PaginateButton {
         EffectsRegistry effectsRegistry = Registry.get(EffectsRegistry.class);
         if (effectsRegistry == null) return elements;
 
-        Folder<Effect> root = effectsRegistry.getRootFolder();
-        Folder<Effect> current = root;
-
+        Folder<Effect> current = effectsRegistry.getRootFolder();
         if (player.hasMetadata(METADATA_KEY_EFFECTS_FOLDER)) {
-            current = (Folder<Effect>) player.getMetadata(METADATA_KEY_EFFECTS_FOLDER).getFirst().value();
-            if (current == null) current = root;
+            Object value = player.getMetadata(METADATA_KEY_EFFECTS_FOLDER).getFirst().value();
+            if (value instanceof Folder<?> folder) {
+                try {
+                    //noinspection unchecked
+                    current = (Folder<Effect>) folder;
+                } catch (ClassCastException e) {
+                    Logger.warning("Invalid folder metadata for player {}", player.getName());
+                    player.removeMetadata(METADATA_KEY_EFFECTS_FOLDER, plugin);
+                }
+            }
         }
 
         // Add subfolders

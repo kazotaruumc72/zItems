@@ -49,7 +49,7 @@ public class SmithingTableListener implements Listener {
         ItemStack additionItem = inventory.getItem(2);  // Addition slot (effect item)
 
         // Check if addition is an effect item
-        if (!effectsManager.isEffectItem(additionItem) || additionItem == null || additionItem.getType().isAir()) {
+        if (additionItem == null || !effectsManager.isEffectItem(additionItem) || additionItem.getType().isAir()) {
             return; // Not an effect application
         }
 

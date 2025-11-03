@@ -1,15 +1,19 @@
 package fr.traqueur.items.utils;
 
+import fr.maxlego08.menu.api.dupe.DupeManager;
 import fr.traqueur.items.PlatformType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +25,22 @@ import java.util.List;
 public class ItemUtil {
 
     private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
+    private static final NamespacedKey DUPE_KEY = new NamespacedKey(Bukkit.getServer().getPluginManager().getPlugin("zMenu"), DupeManager.KEY);
+
+    public static ItemStack cloneItemStack(ItemStack itemStack) {
+        if (itemStack == null) {
+            return null;
+        }
+        ItemStack clone = itemStack.clone();
+
+        clone.editPersistentDataContainer(container -> {
+            if (container.has(DUPE_KEY)) {
+                container.remove(DUPE_KEY);
+            }
+        });
+
+        return clone;
+    }
 
     /**
      * Sets the display name of an ItemStack using a Component.

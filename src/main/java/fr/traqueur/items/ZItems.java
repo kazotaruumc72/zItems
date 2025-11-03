@@ -18,6 +18,8 @@ import fr.traqueur.items.api.settings.models.AttributeMergeStrategy;
 import fr.traqueur.items.api.settings.Settings;
 import fr.traqueur.items.blocks.BlockTracker;
 import fr.traqueur.items.blocks.BlockTrackerListener;
+import fr.traqueur.items.buttons.applicator.ApplicatorButton;
+import fr.traqueur.items.buttons.applicator.ApplicatorOutputButton;
 import fr.traqueur.items.commands.CommandsMessageHandler;
 import fr.traqueur.items.commands.ZItemsCommand;
 import fr.traqueur.items.commands.arguments.EffectArgument;
@@ -26,6 +28,7 @@ import fr.traqueur.items.effects.ZEffectsDispatcher;
 import fr.traqueur.items.effects.ZEffectsManager;
 import fr.traqueur.items.effects.ZEventsListener;
 import fr.traqueur.items.hooks.recipes.RecipesHook;
+import fr.traqueur.items.inventories.ApplicatorMenu;
 import fr.traqueur.items.items.ZItemsManager;
 import fr.traqueur.items.listeners.*;
 import fr.traqueur.items.registries.*;
@@ -196,6 +199,11 @@ public class ZItems extends ItemsPlugin {
         // Register custom buttons
         buttonManager.unregisters(this);
         buttonManager.register(new NoneLoader(this, ItemsListButton.class, "ZITEMS_ITEMS_LIST"));
+        buttonManager.register(new NoneLoader(this, ApplicatorButton.Input.class, "ZITEMS_EFFECT_APPLICATOR_INPUTS"));
+        buttonManager.register(new NoneLoader(this, ApplicatorButton.BaseInput.class, "ZITEMS_EFFECT_APPLICATOR_BASE_INPUT"));
+        buttonManager.register(new NoneLoader(this, ApplicatorButton.EffectInput.class, "ZITEMS_EFFECT_APPLICATOR_EFFECT_INPUT"));
+        buttonManager.register(new NoneLoader(this, ApplicatorOutputButton.class, "ZITEMS_EFFECT_APPLICATOR_OUTPUT"));
+
         Logger.info("Registered <green>custom zMenu buttons<reset>!");
 
         this.loadInventories();
@@ -232,6 +240,7 @@ public class ZItems extends ItemsPlugin {
             try {
                 this.inventoryManager.deleteInventories(this);
                 this.inventoryManager.loadInventoryOrSaveResource(this, "inventories/items_list.yml");
+                this.inventoryManager.loadInventoryOrSaveResource(this, "inventories/effect_applicator.yml", ApplicatorMenu.class);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

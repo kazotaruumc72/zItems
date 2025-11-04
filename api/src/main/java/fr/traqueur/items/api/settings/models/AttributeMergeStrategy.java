@@ -47,6 +47,11 @@ public enum AttributeMergeStrategy {
     @Target({ElementType.PARAMETER, ElementType.FIELD, ElementType.RECORD_COMPONENT})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface DefaultStrategy {
+
+        /**
+         * The default AttributeMergeStrategy value.
+         * @return the default strategy
+         **/
         AttributeMergeStrategy value();
     }
 

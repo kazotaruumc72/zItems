@@ -8,6 +8,9 @@ import java.util.List;
 /**
  * Represents a recipe for applying an effect to an item.
  * Validates that the correct items and ingredients are present.
+ * @param effect The effect to be applied
+ * @param ingredients The ingredients required for application
+ * @param type The type of applicator
  */
 public record Applicator(
         Effect effect,

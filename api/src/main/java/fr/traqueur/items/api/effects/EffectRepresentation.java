@@ -14,6 +14,10 @@ import java.util.List;
  * Configuration for representing an effect as a physical item that can be applied to equipment.
  * When an effect has this representation, players can obtain it as an item and apply it
  * via smithing table or applicator GUI.
+ * @param item           The item stack that represents the effect.
+ * @param applicatorType The method used to apply the effect.
+ * @param ingredients    The ingredients required to apply the effect.
+ * @param template       The template ingredient for smithing table recipes.
  */
 public record EffectRepresentation(
         @Options(inline = true) ItemStackWrapper item,
@@ -21,6 +25,19 @@ public record EffectRepresentation(
         @Options(optional = true) List<IngredientWrapper> ingredients,
         @Options(optional = true) IngredientWrapper template
 ) implements Loadable {
+
+    /**
+     * Constructor with validation for required fields based on applicator type.
+     */
+    public EffectRepresentation {
+        if(ingredients == null && applicatorType == ApplicatorType.ZITEMS_APPLICATOR) {
+            throw new IllegalArgumentException("Ingredients must be specified for ZITEMS_APPLICATOR applicator type.");
+        }
+
+        if(template == null && applicatorType == ApplicatorType.SMITHING_TABLE) {
+            throw new IllegalArgumentException("Template must be specified for SMITHING_TABLE applicator type.");
+        }
+    }
 
     /**
      * Gets the template ingredient parsed from the template string.

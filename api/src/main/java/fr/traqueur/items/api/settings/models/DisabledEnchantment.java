@@ -9,6 +9,8 @@ import org.bukkit.enchantments.Enchantment;
  * Represents an enchantment that should be disabled for an item.
  * This prevents the enchantment from being applied via enchanting tables, anvils, or books.
  *
+ * @param enchantment The specific enchantment to disable. If null, all enchantments are disabled.
+ * @param level The specific level of the enchantment to disable. If -1, all levels are disabled.
  * <p>Examples:
  * <pre>
  * # Disable specific enchantment at any level

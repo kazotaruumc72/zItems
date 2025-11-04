@@ -1,7 +1,7 @@
 package fr.traqueur.items.utils;
 
 import fr.traqueur.items.api.Logger;
-import fr.traqueur.items.api.effects.access.LocationAccess;
+import fr.traqueur.items.api.blocks.LocationAccess;
 import fr.traqueur.items.api.registries.LocationAccessRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.api.settings.Settings;

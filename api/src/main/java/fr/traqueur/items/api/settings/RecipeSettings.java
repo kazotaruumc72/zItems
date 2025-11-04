@@ -15,6 +15,19 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
+/**
+ * RecipeSettings is a record that holds the configuration for a recipe.
+ * Check <a href="https://github.com/Traqueur-dev/RecipesAPI">Recipes API Project</a> for more information.
+ * @param type         The type of the recipe.
+ * @param ingredients  The list of ingredient wrappers for the recipe.
+ * @param pattern      The optional pattern for shaped recipes.
+ * @param cookingTime  The optional cooking time for cooking recipes.
+ * @param group        The optional group name for the recipe.
+ * @param category     The optional category name for the recipe.
+ * @param amount       The optional amount of the resulting item.
+ * @param experience   The optional experience gained from the recipe.
+ * @param priority     The optional priority of the recipe.
+ */
 public record RecipeSettings(RecipeType type,
                              List<IngredientWrapper> ingredients,
                              @Options(optional = true) List<String> pattern,
@@ -83,9 +96,16 @@ public record RecipeSettings(RecipeType type,
 
     @Override
     public ItemRecipe build() {
-        throw new UnsupportedOperationException("Use build(ItemStack result) instead.");
+        throw new UnsupportedOperationException("Use build(String pluginName, ItemStack result) instead.");
     }
 
+    /**
+     * Builds an ItemRecipe using the provided plugin name and result item.
+     *
+     * @param pluginName The name of the plugin.
+     * @param result     The resulting item of the recipe.
+     * @return An ItemRecipe instance.
+     */
     public ItemRecipe build(String pluginName, Item result) {
         return this.getItemRecipe(
                 ingredients.stream().map(IngredientWrapper::toIngredient).toList(),

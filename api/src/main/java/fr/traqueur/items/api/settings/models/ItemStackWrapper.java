@@ -37,6 +37,11 @@ import java.util.List;
  * item-id: "my_custom_item"
  * amount: 16
  * </pre>
+ * @param material The material type (optional if itemId is provided)
+ * @param amount The quantity of the item (default is 1)
+ * @param itemId The ID of a custom zItem (optional if material is provided)
+ * @param displayName The custom display name (optional)
+ * @param lore The custom lore lines (optional)
  */
 public record ItemStackWrapper(
         @Options(optional = true) Material material,
@@ -50,6 +55,11 @@ public record ItemStackWrapper(
         @Options(optional = true) List<Component> lore
 ) implements Loadable {
 
+    /**
+     * Validates the configuration after loading.
+     *
+     * @throws IllegalArgumentException if amount is less than 1 or if neither itemId nor material is specified
+     */
     public ItemStackWrapper {
         if (amount < 1) {
             throw new IllegalArgumentException("Amount must be at least 1");

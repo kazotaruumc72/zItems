@@ -14,11 +14,24 @@ import java.util.stream.Collectors;
  * Represents an effect that can be applied in response to a specific event.
  * Effects can be multi-event or single-event.
  * This interface defines the contract for effects that can be registered and executed.
+ * @param <T> the type of effect settings
  */
 public sealed interface EffectHandler<T extends EffectSettings> permits EffectHandler.MultiEventEffectHandler, EffectHandler.NoEventEffectHandler, EffectHandler.SingleEventEffectHandler {
 
+    /**
+     * Handles the effect application logic.
+     *
+     * @param context  the context in which the effect is applied
+     * @param settings the settings for this effect
+     */
     void handle(EffectContext context, T settings);
 
+    /**
+     * Returns the priority of this effect handler.
+     * Handlers with higher priority values are executed before those with lower values.
+     *
+     * @return the priority of the effect handler
+     */
     int priority();
 
     /**
@@ -55,6 +68,12 @@ public sealed interface EffectHandler<T extends EffectSettings> permits EffectHa
         );
     }
 
+    /**
+     * Determines if this effect handler can be applied to the given event.
+     *
+     * @param event the event to check
+     * @return true if the handler can be applied to the event, false otherwise
+     */
     default boolean canApply(Event event) {
         return switch (this) {
             case SingleEventEffectHandler<?, ?> singleEventEffectHandler ->
@@ -80,12 +99,38 @@ public sealed interface EffectHandler<T extends EffectSettings> permits EffectHa
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * An effect handler that can handle multiple event types.
+     *
+     * @param <T> the type of effect settings
+     */
     non-sealed interface MultiEventEffectHandler<T extends EffectSettings> extends EffectHandler<T> {
+        /**
+         * Returns the set of event types this handler can respond to.
+         *
+         * @return set of event classes
+         */
         Set<Class<? extends Event>> eventTypes();
     }
 
+    /**
+     * An effect handler that handles a single specific event type.
+     *
+     * @param <T> the type of effect settings
+     * @param <E> the type of event this handler responds to
+     */
     non-sealed interface SingleEventEffectHandler<T extends EffectSettings, E extends Event> extends EffectHandler<T> {
 
+        /**
+         * Returns the event type this handler responds to.
+         * <p>
+         * By default, this method uses reflection to extract the generic type parameter
+         * from the implementing class, eliminating the need for manual implementation.
+         * <p>
+         * Handlers can override this method if needed, but it's generally not necessary.
+         *
+         * @return the Class object for the event type
+         */
         @SuppressWarnings("unchecked")
         default Class<E> eventType() {
             Type[] genericInterfaces = getClass().getGenericInterfaces();
@@ -110,6 +155,11 @@ public sealed interface EffectHandler<T extends EffectSettings> permits EffectHa
         }
     }
 
+    /**
+     * An effect handler that does not respond to any event.
+     *
+     * @param <T> the type of effect settings
+     */
     non-sealed interface NoEventEffectHandler<T extends EffectSettings> extends EffectHandler<T> {
     }
 

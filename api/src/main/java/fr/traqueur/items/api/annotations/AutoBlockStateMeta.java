@@ -6,9 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to mark BlockStateMeta implementations for automatic registration.
+ * Annotation to mark {@link fr.traqueur.items.api.items.BlockStateMeta} implementations for automatic registration.
  * The value is used as the discriminator key for polymorphic deserialization.
- *
  * <p>Example usage:</p>
  * <pre>{@code
  * @AutoBlockStateMeta("container")
@@ -20,6 +19,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface AutoBlockStateMeta {
+
     /**
      * The unique identifier for this BlockStateMeta type.
      * Used as the discriminator key in YAML configuration.

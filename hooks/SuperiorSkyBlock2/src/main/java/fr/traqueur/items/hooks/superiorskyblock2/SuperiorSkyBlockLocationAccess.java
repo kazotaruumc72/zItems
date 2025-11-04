@@ -3,7 +3,7 @@ package fr.traqueur.items.hooks.superiorskyblock2;
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.island.IslandPrivilege;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
-import fr.traqueur.items.api.effects.access.LocationAccess;
+import fr.traqueur.items.api.blocks.LocationAccess;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

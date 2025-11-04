@@ -7,7 +7,7 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
-import fr.traqueur.items.api.effects.access.LocationAccess;
+import fr.traqueur.items.api.blocks.LocationAccess;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

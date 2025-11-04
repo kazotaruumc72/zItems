@@ -30,11 +30,6 @@ allprojects {
         maven(url = "https://jitpack.io")
     }
 
-    java {
-        withSourcesJar()
-        withJavadocJar()
-    }
-
     tasks.shadowJar {
         archiveBaseName.set("zItems")
         archiveAppendix.set(if (project.path == ":") "" else project.name)
@@ -48,12 +43,6 @@ allprojects {
     tasks.compileJava {
         options.encoding = "UTF-8"
         options.release = 21
-    }
-
-    tasks.javadoc {
-        options.encoding = "UTF-8"
-        if (JavaVersion.current().isJava9Compatible)
-            (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
     }
 
     dependencies {

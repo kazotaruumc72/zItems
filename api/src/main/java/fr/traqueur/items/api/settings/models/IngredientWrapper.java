@@ -14,6 +14,9 @@ import fr.traqueur.structura.api.Loadable;
  * - "tag:planks" - Minecraft tag
  * - "base64:xyz..." - Serialized ItemStack
  * - "zitems:custom_item_id" - Custom item via hook
+ * @param item The item representation
+ * @param sign Optional sign for comparison
+ * @param strict Whether to enforce strict matching
  */
 public record IngredientWrapper(
         String item,

@@ -6,28 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used to mark a Hook for automatic registration.
- * The value represents the plugin name that this hook integrates with.
- * <p>
- * Classes annotated with this annotation are automatically discovered and instantiated
- * via reflection during plugin initialization.
- * <p>
- * The hook will only be enabled if the corresponding plugin is present on the server.
- * <p>
- * <strong>Note to IDE users:</strong> Classes annotated with @AutoHook are used via reflection
- * and may appear as "unused" in the IDE. To suppress these warnings, configure your IDE to
- * recognize this annotation as an entry point annotation.
- *
- * <p>Example usage:
- * <pre>
- * {@code @AutoHook("WorldGuard")}
- * public class WorldGuardHook implements Hook {
- *     {@code @Override}
- *     public void onEnable() {
- *         // Hook initialization logic
- *     }
- * }
- * </pre>
+ * Annotation used to mark an {@link fr.traqueur.items.api.hooks.Hook} for automatic registration.
+ * When the specified plugin is present, the hook will be enabled automatically.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

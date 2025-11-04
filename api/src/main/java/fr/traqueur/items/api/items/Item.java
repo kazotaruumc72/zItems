@@ -29,6 +29,14 @@ public interface Item {
     @NotNull
     ItemSettings settings();
 
+    /**
+     * Gets a representative name for this item.
+     * If a display name is set in the settings, it is returned.
+     * Otherwise, if an item name is set, it is returned.
+     * If neither is set, the item's ID is returned as a text component.
+     *
+     * @return the representative name component
+     */
     default Component representativeName() {
         if (settings().displayName() == null && settings().itemName() == null) {
             return Component.text(id());

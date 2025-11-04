@@ -9,6 +9,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Interface representing the settings for an effect that can be applied to items.
+ * It includes methods to determine applicable materials and tags, as well as
+ * whether the applicability is in blacklist or whitelist mode.
+ */
 @Polymorphic(inline = true)
 public interface EffectSettings extends Loadable {
 

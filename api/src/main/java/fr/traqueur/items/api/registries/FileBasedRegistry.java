@@ -12,16 +12,33 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Stream;
 
+/**
+ * A registry that loads its items from files in a specified folder structure.
+ *
+ * @param <ID> the type of the identifier for the items
+ * @param <T>  the type of the items being registered
+ */
 public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
 
+    /** The plugin instance */
     protected final ItemsPlugin plugin;
+    /** The storage for registered items */
     protected final Map<ID, T> storage;
+    /** The resource folder containing example files */
     private final String resourceFolder;
+    /** The name used in logging messages */
     private final String logName;
 
-    // Nouveau : stockage du dossier racine
+    /** The root folder of the loaded folder structure */
     private Folder<T> rootFolder;
 
+    /**
+     * Constructs a FileBasedRegistry.
+     *
+     * @param plugin         the ItemsPlugin instance
+     * @param resourceFolder the folder in resources containing example files
+     * @param logName        the name used in logging messages
+     */
     protected FileBasedRegistry(ItemsPlugin plugin, String resourceFolder, String logName) {
         this.plugin = plugin;
         this.storage = new HashMap<>();
@@ -29,7 +46,11 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         this.logName = logName;
     }
 
-    // --- Méthode principale de chargement ---
+    /**
+     * Loads items from the specified folder, building the folder structure.
+     *
+     * @param folder the path to the folder containing item files
+     */
     public void loadFromFolder(Path folder) {
         if (!ensureFolderExists(folder)) {
             return;
@@ -41,7 +62,13 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         Logger.info("Loaded {} {}(s) in folder structure", this.storage.size(), logName);
     }
 
-    // --- Construction récursive des dossiers ---
+    /**
+     * Recursively builds the folder structure from the given path.
+     *
+     * @param currentPath the current directory path being processed
+     * @param rootPath    the root directory path for reference
+     * @return the constructed Folder object representing the directory
+     */
     private Folder<T> buildFolderStructure(Path currentPath, Path rootPath) {
         List<Folder<T>> subFolders = new ArrayList<>();
         List<T> elements = new ArrayList<>();
@@ -99,7 +126,12 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         return new Folder<>(folderName, displayName, material, modelId, subFolders, elements);
     }
 
-    // --- Utilitaires existants ---
+    /**
+     * Ensures that the specified folder exists, creating it if necessary.
+     *
+     * @param folder the path to the folder
+     * @return true if the folder exists or was created successfully, false otherwise
+     */
     protected boolean ensureFolderExists(Path folder) {
         if (!Files.exists(folder)) {
             try {
@@ -115,11 +147,17 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         return true;
     }
 
+    /** Checks if the given path points to a YAML file.
+     *
+     * @param path the path to check
+     * @return true if the file is a YAML file, false otherwise
+     */
     private boolean isYamlFile(Path path) {
         String name = path.toString().toLowerCase();
         return name.endsWith(".yml") || name.endsWith(".yaml");
     }
 
+    /** Copies example files from the resource folder to the plugin's data folder. */
     private void copyExampleFiles() {
         Logger.info("Copying example " + logName + " files...");
         List<String> copiedFiles = new ArrayList<>();
@@ -145,6 +183,12 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         }
     }
 
+    /** Lists all resource files in the specified folder within the plugin's JAR.
+     *
+     * @param folder the resource folder path
+     * @return a list of file paths relative to the specified folder
+     * @throws IOException if an I/O error occurs
+     */
     private List<String> listResourceFiles(String folder) throws IOException {
         List<String> filePaths = new ArrayList<>();
         ClassLoader classLoader = plugin.getClass().getClassLoader();
@@ -193,12 +237,21 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         return filePaths;
     }
 
+    /** Checks if the given file name corresponds to a supported file type.
+     *
+     * @param fileName the file name to check
+     * @return true if the file is supported, false otherwise
+     */
     private boolean isFile(String fileName) {
         String lower = fileName.toLowerCase();
         return lower.endsWith(".yml") || lower.endsWith(".yaml") || lower.endsWith(".properties");
     }
 
-    // --- Méthodes abstraites ---
+    /** Loads an item from the specified file.
+     *
+     * @param file the path to the file
+     * @return the loaded item, or null if loading failed
+     */
     protected abstract T loadFile(Path file);
 
     @Override
@@ -221,7 +274,11 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
         storage.clear();
     }
 
-    // --- Nouveau getter pour le système de dossiers ---
+    /**
+     * Gets the root folder of the loaded folder structure.
+     *
+     * @return the root Folder object
+     */
     public Folder<T> getRootFolder() {
         return rootFolder != null
                 ? rootFolder

@@ -58,6 +58,12 @@ public interface EffectsDispatcher {
      */
     EffectContext applyNoEventEffects(Player player, ItemStack itemSource);
 
+    /**
+     * Applies a single NoEventEffectHandler to an ItemStack.
+     * @param player the player context (can be null for some effects)
+     * @param itemSource the ItemStack to apply effects to
+     * @param effect the effect to apply
+     */
     void applyNoEventEffect(Player player, ItemStack itemSource, Effect effect);
 
     /**

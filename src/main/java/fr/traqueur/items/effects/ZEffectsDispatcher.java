@@ -10,12 +10,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ZEffectsDispatcher implements EffectsDispatcher {
+
+    /**
+     * Cache mapping event types to handlers that can handle them.
+     * This is built lazily on first access and avoids repeated canApply() checks.
+     * <p>
+     * Key: Event class (e.g., BlockBreakEvent.class)
+     * Value: List of handler IDs that can handle this event type
+     */
+    private final Map<Class<? extends Event>, List<String>> eventHandlerCache = new ConcurrentHashMap<>();
+
+    /**
+     * Cache for NoEventHandlers (handlers that apply at item creation time).
+     * Built lazily on first access.
+     */
+    private List<String> noEventHandlerCache = null;
 
     @Override
     public EffectContext applyNoEventEffects(Player player, ItemStack itemSource) {

@@ -20,6 +20,7 @@ public class ZItemsCommand extends Command<@NotNull ItemsPlugin> {
 
         this.addSubCommand(
                 new ApplyEffectCommand(plugin),
+                new ViewEffectCommand(plugin),
                 new GiveItemCommand(plugin),
                 new GiveEffectCommand(plugin),
                 new GuiCommand(plugin),

@@ -34,6 +34,12 @@ public enum Messages implements Loadable {
     EFFECTS_LORE_LINE("<dark_gray>- <effect>"),
     EFFECTS_LORE_MORE("<dark_gray>- <white>And More..."),
 
+    VIEW_NO_ITEM("<red>You must be holding an item!"),
+    VIEW_NO_EFFECTS("<yellow>This item has no effects."),
+    VIEW_HEADER("<gray>======== <aqua>Item Effects (<count>) <gray>========"),
+    VIEW_EFFECT_LINE("<dark_gray>• <display-name> <dark_gray>(<type>) <gray>- Priority: <priority>"),
+    VIEW_FOOTER("<gray>==============================="),
+
     FAILED_TO_OPEN_GUI("<red>Failed to open the GUI. Please try again later.")
     ;
     private final String rawMessage;

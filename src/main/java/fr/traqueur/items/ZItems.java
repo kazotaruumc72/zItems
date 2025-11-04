@@ -2,7 +2,6 @@ package fr.traqueur.items;
 
 import fr.maxlego08.menu.api.ButtonManager;
 import fr.maxlego08.menu.api.InventoryManager;
-import fr.maxlego08.menu.api.exceptions.InventoryException;
 import fr.maxlego08.menu.api.loader.NoneLoader;
 import fr.traqueur.commands.spigot.CommandManager;
 import fr.traqueur.items.buttons.ItemsListButton;
@@ -48,7 +47,6 @@ import fr.traqueur.structura.registries.DefaultValueRegistry;
 import fr.traqueur.structura.types.TypeToken;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.banner.PatternType;
@@ -149,6 +147,10 @@ public class ZItems extends ItemsPlugin {
 
         this.getServer().getPluginManager().registerEvents(new CommandsListener(this), this);
         this.getServer().getPluginManager().registerEvents(new DisableEnchantsListener(), this);
+
+        // Register legacy rune migration listener (zItemsOld backward compatibility)
+        this.getServer().getPluginManager().registerEvents(new LegacyMigrationListener(), this);
+        Logger.info("<gold>Legacy rune migration system enabled - zItemsOld items will be auto-migrated");
 
         // Register restrictions listener BEFORE fusion listener so restrictions are checked first
         this.getServer().getPluginManager().registerEvents(new ItemRestrictionsListener(this), this);

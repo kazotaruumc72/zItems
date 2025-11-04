@@ -10,14 +10,28 @@ import org.bukkit.Tag;
 public class TagReader implements Reader<Tag<Material>> {
     @Override
     public Tag<Material> read(String s) throws StructuraException {
-        Tag<Material> blockTag = Bukkit.getTag(Tag.REGISTRY_BLOCKS, NamespacedKey.minecraft(s.toLowerCase()), Material.class);
+        // Parse namespace and key
+        NamespacedKey key;
+        if (s.contains(":")) {
+            String[] parts = s.split(":", 2);
+            key = new NamespacedKey(parts[0], parts[1].toLowerCase());
+        } else {
+            // Default to minecraft namespace
+            key = NamespacedKey.minecraft(s.toLowerCase());
+        }
+
+        // Try blocks registry first
+        Tag<Material> blockTag = Bukkit.getTag(Tag.REGISTRY_BLOCKS, key, Material.class);
         if (blockTag != null) {
             return blockTag;
         }
-        Tag<Material> itemTag = Bukkit.getTag(Tag.REGISTRY_ITEMS, NamespacedKey.minecraft(s.toLowerCase()), Material.class);
+
+        // Try items registry
+        Tag<Material> itemTag = Bukkit.getTag(Tag.REGISTRY_ITEMS, key, Material.class);
         if (itemTag != null) {
             return itemTag;
         }
-        throw new StructuraException("Tag " + s + " not found.");
+
+        throw new StructuraException("Tag '" + s + "' not found in blocks or items registry (searched for: " + key + ")");
     }
 }

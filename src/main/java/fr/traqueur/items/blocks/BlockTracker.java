@@ -26,10 +26,10 @@ import java.util.*;
  */
 public class BlockTracker {
 
-    private static BlockTracker instance;
+    private static final BlockTracker INSTANCE = new BlockTracker();
 
     public static BlockTracker get() {
-        return instance;
+        return INSTANCE;
     }
 
     /**
@@ -40,8 +40,7 @@ public class BlockTracker {
      */
     private final Table<WorldChunkKey, Integer, String> cache;
 
-    public BlockTracker() {
-        instance = this;
+    private BlockTracker() {
         this.cache = HashBasedTable.create();
     }
 

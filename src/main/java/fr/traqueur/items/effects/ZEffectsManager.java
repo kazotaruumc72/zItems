@@ -86,6 +86,19 @@ public class ZEffectsManager implements EffectsManager {
 
     @Override
     public EffectApplicationResult applyEffect(Player player, ItemStack item, Effect effect) {
+        return applyEffect(player, item, effect, true);
+    }
+
+    /**
+     * Internal method to apply an effect with control over lore updating.
+     *
+     * @param player the player applying the effect
+     * @param item the item to apply the effect to
+     * @param effect the effect to apply
+     * @param updateLore whether to update the item's lore after applying
+     * @return the result of the effect application
+     */
+    private EffectApplicationResult applyEffect(Player player, ItemStack item, Effect effect, boolean updateLore) {
         // Get all existing effects from the item
         List<Effect> existingEffects = Keys.EFFECTS.get(
                 item.getItemMeta().getPersistentDataContainer(),
@@ -136,12 +149,14 @@ public class ZEffectsManager implements EffectsManager {
         });
         this.getPlugin().getDispatcher().applyNoEventEffect(player, item, effect);
 
-        // Update item lore to show the new effect
-        List<Effect> allEffects = Keys.EFFECTS.get(
-                item.getItemMeta().getPersistentDataContainer(),
-                new ArrayList<>()
-        );
-        updateItemLoreWithEffects(item, allEffects);
+        // Update item lore to show the new effect (only if requested)
+        if (updateLore) {
+            List<Effect> allEffects = Keys.EFFECTS.get(
+                    item.getItemMeta().getPersistentDataContainer(),
+                    new ArrayList<>()
+            );
+            updateItemLoreWithEffects(item, allEffects);
+        }
 
         return EffectApplicationResult.SUCCESS;
     }
@@ -366,6 +381,7 @@ public class ZEffectsManager implements EffectsManager {
     ) {
         // Determine how many effects to display
         int nbEffectsView = itemSettings.nbEffectsView();
+       
         if (nbEffectsView == -1) {
             // Use global default if not specified per-item
             PluginSettings pluginSettings = Settings.get(PluginSettings.class);

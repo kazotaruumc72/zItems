@@ -13,7 +13,7 @@ public abstract class ItemsRegistry extends FileBasedRegistry<String, Item> {
      *
      * @param plugin the ItemsPlugin instance
      */
-    protected ItemsRegistry(ItemsPlugin plugin) {
-        super(plugin, "items", "Items Registry");
+    protected ItemsRegistry(ItemsPlugin plugin, String directory) {
+        super(plugin, directory, "Items Registry");
     }
 }

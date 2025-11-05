@@ -1,6 +1,7 @@
 package fr.traqueur.items.registries;
 
 import fr.traqueur.items.PlatformType;
+import fr.traqueur.items.ZItems;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
@@ -34,7 +35,7 @@ import java.util.stream.Stream;
 public class ZItemsRegistry extends ItemsRegistry {
 
     public ZItemsRegistry(ItemsPlugin plugin) {
-        super(plugin);
+        super(plugin, ZItems.ITEMS_FOLDER);
         Reflections reflections = ReflectionsCache.getInstance().getOrCreate(plugin, "fr.traqueur.items");
 
         PolymorphicRegistry.create(BlockDataMeta.class, registry -> {

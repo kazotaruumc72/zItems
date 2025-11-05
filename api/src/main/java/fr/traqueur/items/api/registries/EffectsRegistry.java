@@ -13,7 +13,7 @@ public abstract class EffectsRegistry extends FileBasedRegistry<String, Effect> 
      *
      * @param plugin the ItemsPlugin instance
      */
-    protected EffectsRegistry(ItemsPlugin plugin) {
-        super(plugin, "effects", "Effects Registry");
+    protected EffectsRegistry(ItemsPlugin plugin, String directory) {
+        super(plugin, directory, "Effects Registry");
     }
 }

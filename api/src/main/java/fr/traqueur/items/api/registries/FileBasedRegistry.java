@@ -48,10 +48,9 @@ public abstract class FileBasedRegistry<ID, T> implements Registry<ID, T> {
 
     /**
      * Loads items from the specified folder, building the folder structure.
-     *
-     * @param folder the path to the folder containing item files
      */
-    public void loadFromFolder(Path folder) {
+    public void loadFromFolder() {
+        Path folder = this.plugin.getDataPath().resolve(this.resourceFolder);
         if (!ensureFolderExists(folder)) {
             return;
         }

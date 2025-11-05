@@ -111,10 +111,15 @@ public record ZItem(String id, @Options(inline = true) ItemSettings settings) im
         });
 
         if (settings.effects() != null && !settings.effects().isEmpty()) {
-            EffectsManager effectsManager = plugin.getManager(EffectsManager.class);
+            // Apply effects directly to PDC without updating lore
+            // (lore was already generated above with generateBaseEffectLore)
+            itemStack.editPersistentDataContainer(container -> {
+                Keys.EFFECTS.set(container, new ArrayList<>(settings.effects()));
+            });
 
+            // Apply NoEventEffects (attributes, etc.) for each effect
             for (Effect effect : settings.effects()) {
-                effectsManager.applyEffect(player, itemStack, effect);
+                plugin.getDispatcher().applyNoEventEffect(player, itemStack, effect);
             }
         }
 

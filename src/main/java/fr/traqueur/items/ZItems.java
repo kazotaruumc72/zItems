@@ -67,12 +67,13 @@ public class ZItems extends ItemsPlugin {
 
     private static final String CONFIG_FILE = "config.yml";
     private static final String MESSAGES_FILE = "messages.yml";
-    private static final String ITEMS_FOLDER = "items";
-    private static final String EFFECTS_FOLDER = "effects";
+    public static final String ITEMS_FOLDER = "items";
+    public static final String EFFECTS_FOLDER = "effects";
 
     private RecipesAPI recipesManager;
     private EffectsDispatcher dispatcher;
     private InventoryManager inventoryManager;
+    private ButtonManager buttonManager;
 
     @Override
     public void onEnable() {
@@ -92,6 +93,7 @@ public class ZItems extends ItemsPlugin {
         ZEffectDataType.initialize();
         ZTrackedBlockDataType.initialize();
         Keys.initialize(this);
+
         this.recipesManager = new RecipesAPI(this, settings.debug());
         Hook.addHook(new RecipesHook(this));
 
@@ -108,36 +110,9 @@ public class ZItems extends ItemsPlugin {
         }
         Logger.info("Shop provider <green>{} <reset>has been found.", ShopProviders.FOUND_PROVIDER.pluginName());
 
-        Registry.register(LocationAccessRegistry.class, new ZLocationAccessRegistry());
+        this.registerRegistries();
 
-        // Register custom block provider registry
-        Registry.register(CustomBlockProviderRegistry.class, new ZCustomBlockProviderRegistry());
-
-        // Register and scan hooks
-        Registry.register(HooksRegistry.class, new ZHooksRegistry());
-        Registry.get(HooksRegistry.class).scanPackage(this, "fr.traqueur.items");
-
-        // Register and scan effect handlers
-        Registry.register(HandlersRegistry.class, new ZHandlersRegistry(this));
-        Registry.get(HandlersRegistry.class).scanPackage(this, "fr.traqueur.items");
-
-        // Register and load effects from files
-        Registry.register(EffectsRegistry.class, new ZEffectsRegistry(this));
-
-        // Register and load items from files
-        Registry.register(ItemsRegistry.class, new ZItemsRegistry(this));
-
-        // Register and scan extractors
-        Registry.register(ExtractorsRegistry.class, new ZExtractorsRegistry(this));
-        Registry.get(ExtractorsRegistry.class).scanPackage(this, "fr.traqueur.items");
-
-        // Register applicators registry
-        Registry.register(ApplicatorsRegistry.class, new ZApplicatorsRegistry());
-
-        Registry.get(HooksRegistry.class).enableAll();
-
-        Registry.get(EffectsRegistry.class).loadFromFolder(this.getDataPath().resolve(EFFECTS_FOLDER));
-        Registry.get(ItemsRegistry.class).loadFromFolder(this.getDataPath().resolve(ITEMS_FOLDER));
+        this.populateRegistries();
 
         Logger.info("Setting up event dispatching system...");
         this.dispatcher = new ZEffectsDispatcher();
@@ -145,18 +120,14 @@ public class ZItems extends ItemsPlugin {
         eventsListener.registerDynamicListeners(this);
         Logger.info("<green>Event dispatching system initialized successfully!");
 
-        this.getServer().getPluginManager().registerEvents(new CommandsListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new DisableEnchantsListener(), this);
-
         // Register legacy rune migration listener (zItemsOld backward compatibility)
         this.getServer().getPluginManager().registerEvents(new LegacyMigrationListener(), this);
         Logger.info("<gold>Legacy rune migration system enabled - zItemsOld items will be auto-migrated");
 
-        // Register restrictions listener BEFORE fusion listener so restrictions are checked first
+        this.getServer().getPluginManager().registerEvents(new CommandsListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new DisableEnchantsListener(), this);
         this.getServer().getPluginManager().registerEvents(new ItemRestrictionsListener(this), this);
         this.getServer().getPluginManager().registerEvents(new AnvilEffectFusionListener(this), this);
-
-        // Register smithing table listener for effect application
         this.getServer().getPluginManager().registerEvents(new SmithingTableListener(this), this);
 
         EffectsManager effectsManager = this.registerManager(EffectsManager.class, new ZEffectsManager());
@@ -164,55 +135,48 @@ public class ZItems extends ItemsPlugin {
         itemsManager.generateRecipesFromLoadedItems();
         effectsManager.loadRecipes();
 
-        // Setup block tracking system
-        BlockTracker blockTracker = new BlockTracker();
-        this.getServer().getPluginManager().registerEvents(
-            new BlockTrackerListener(blockTracker, itemsManager, effectsManager),
-            this
-        );
+        this.getServer().getPluginManager().registerEvents(new BlockTrackerListener(BlockTracker.get(), itemsManager, effectsManager), this);
 
-        // Register internal block provider for zItems custom blocks
-        Registry.get(CustomBlockProviderRegistry.class).register(this.getName().toLowerCase(), (block, player) -> {
-            Optional<ItemStack> customDrop = blockTracker.getCustomBlockDrop(block, player);
-            if (customDrop.isPresent()) {
-                blockTracker.untrackBlock(block);
-            }
-            return customDrop.map(List::of);
-        });
-
-        // Initialize zMenu InventoryManager and ButtonManager
-        var inventoryProvider = getServer().getServicesManager().getRegistration(InventoryManager.class);
-        if (inventoryProvider == null) {
-            Logger.severe("zMenu InventoryManager not found! Is zMenu installed?");
-            this.getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-        this.inventoryManager = inventoryProvider.getProvider();
-        Logger.info("zMenu <green>InventoryManager <reset>initialized successfully!");
-
-        var buttonProvider = getServer().getServicesManager().getRegistration(ButtonManager.class);
-        if (buttonProvider == null) {
-            Logger.severe("zMenu ButtonManager not found! Is zMenu installed?");
-            this.getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-        ButtonManager buttonManager = buttonProvider.getProvider();
-
-        // Register custom buttons
-        buttonManager.unregisters(this);
-        buttonManager.register(new NoneLoader(this, ItemsListButton.class, "ZITEMS_ITEMS_LIST"));
-        buttonManager.register(new NoneLoader(this, ApplicatorButton.Input.class, "ZITEMS_EFFECT_APPLICATOR_INPUTS"));
-        buttonManager.register(new NoneLoader(this, ApplicatorButton.BaseInput.class, "ZITEMS_EFFECT_APPLICATOR_BASE_INPUT"));
-        buttonManager.register(new NoneLoader(this, ApplicatorButton.EffectInput.class, "ZITEMS_EFFECT_APPLICATOR_EFFECT_INPUT"));
-        buttonManager.register(new NoneLoader(this, ApplicatorOutputButton.class, "ZITEMS_EFFECT_APPLICATOR_OUTPUT"));
-
-        Logger.info("Registered <green>custom zMenu buttons<reset>!");
-
+        this.loadButtons();
         this.loadInventories();
 
         this.registerCommands(settings);
 
         Logger.info("<yellow>=== ENABLE DONE <gray>(<gold>" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<gray>) <yellow>===");
+    }
+
+    private void populateRegistries() {
+        Registry.get(HooksRegistry.class).scanPackage(this, "fr.traqueur.items");
+        Registry.get(HandlersRegistry.class).scanPackage(this, "fr.traqueur.items");
+        Registry.get(ExtractorsRegistry.class).scanPackage(this, "fr.traqueur.items");
+        Registry.get(HooksRegistry.class).enableAll();
+        Registry.get(EffectsRegistry.class).loadFromFolder();
+        Registry.get(ItemsRegistry.class).loadFromFolder();
+        Registry.get(CustomBlockProviderRegistry.class).register(this.getName().toLowerCase(), (block, player) -> {
+            Optional<ItemStack> customDrop = BlockTracker.get().getCustomBlockDrop(block, player);
+            if (customDrop.isPresent()) {
+                BlockTracker.get().untrackBlock(block);
+            }
+            return customDrop.map(List::of);
+        });
+    }
+
+    private void registerRegistries() {
+        Registry.register(LocationAccessRegistry.class, new ZLocationAccessRegistry());
+        // Register custom block provider registry
+        Registry.register(CustomBlockProviderRegistry.class, new ZCustomBlockProviderRegistry());
+        // Register and scan hooks
+        Registry.register(HooksRegistry.class, new ZHooksRegistry());
+        // Register and scan effect handlers
+        Registry.register(HandlersRegistry.class, new ZHandlersRegistry(this));
+        // Register and load effects from files
+        Registry.register(EffectsRegistry.class, new ZEffectsRegistry(this));
+        // Register and load items from files
+        Registry.register(ItemsRegistry.class, new ZItemsRegistry(this));
+        // Register and scan extractors
+        Registry.register(ExtractorsRegistry.class, new ZExtractorsRegistry(this));
+        // Register applicators registry
+        Registry.register(ApplicatorsRegistry.class, new ZApplicatorsRegistry());
     }
 
     private void registerCommands(PluginSettings settings) {
@@ -237,8 +201,39 @@ public class ZItems extends ItemsPlugin {
         commandManager.registerCommand(new ZItemsCommand(this));
     }
 
+    private void loadButtons() {
+        // Initialize zMenu ButtonManager
+        var buttonProvider = getServer().getServicesManager().getRegistration(ButtonManager.class);
+        if (buttonProvider == null) {
+            Logger.severe("zMenu ButtonManager not found! Is zMenu installed?");
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        buttonManager = buttonProvider.getProvider();
+
+        // Register custom buttons
+        buttonManager.unregisters(this);
+        buttonManager.register(new NoneLoader(this, ItemsListButton.class, "ZITEMS_ITEMS_LIST"));
+        buttonManager.register(new NoneLoader(this, ApplicatorButton.Input.class, "ZITEMS_EFFECT_APPLICATOR_INPUTS"));
+        buttonManager.register(new NoneLoader(this, ApplicatorButton.BaseInput.class, "ZITEMS_EFFECT_APPLICATOR_BASE_INPUT"));
+        buttonManager.register(new NoneLoader(this, ApplicatorButton.EffectInput.class, "ZITEMS_EFFECT_APPLICATOR_EFFECT_INPUT"));
+        buttonManager.register(new NoneLoader(this, ApplicatorOutputButton.class, "ZITEMS_EFFECT_APPLICATOR_OUTPUT"));
+
+        Logger.info("Registered <green>custom zMenu buttons<reset>!");
+    }
+
     private void loadInventories() {
-        if(this.inventoryManager != null) {
+        // Initialize zMenu InventoryManager and ButtonManager
+        var inventoryProvider = getServer().getServicesManager().getRegistration(InventoryManager.class);
+        if (inventoryProvider == null) {
+            Logger.severe("zMenu InventoryManager not found! Is zMenu installed?");
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        this.inventoryManager = inventoryProvider.getProvider();
+        Logger.info("zMenu <green>InventoryManager <reset>initialized successfully!");
+
+        if(this.inventoryManager != null && this.buttonManager != null) {
             try {
                 this.inventoryManager.deleteInventories(this);
                 this.inventoryManager.loadInventoryOrSaveResource(this, "inventories/items_list.yml");
@@ -274,10 +269,7 @@ public class ZItems extends ItemsPlugin {
         Logger.info("<yellow>=== DISABLE START ===");
         Logger.info("<gray>Plugin Version V<red>{}", this.getDescription().getVersion());
 
-        BlockTracker blockTracker = BlockTracker.get();
-        if (blockTracker != null) {
-            blockTracker.clearCache();
-        }
+        BlockTracker.get().clearCache();
 
         MessageUtil.close();
 
@@ -303,11 +295,11 @@ public class ZItems extends ItemsPlugin {
 
         ItemsRegistry registry = Registry.get(ItemsRegistry.class);
         if (registry != null) {
-            registry.loadFromFolder(this.getDataPath().resolve(ITEMS_FOLDER));
+            registry.loadFromFolder();
         }
         EffectsRegistry effectsRegistry = Registry.get(EffectsRegistry.class);
         if (effectsRegistry != null) {
-            effectsRegistry.loadFromFolder(this.getDataPath().resolve(EFFECTS_FOLDER));
+            effectsRegistry.loadFromFolder();
         }
 
         ItemsManager itemsManager = this.getManager(ItemsManager.class);

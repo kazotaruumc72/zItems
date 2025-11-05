@@ -97,9 +97,10 @@ public class LegacyMigrationListener implements Listener {
         if (!(event.getEntity() instanceof Player player)) {
             return;
         }
-        event.getEquipmentChanges().forEach((key, value) -> {
-            migrateItemIfNeeded(value.newItem(), player);
-            migrateItemIfNeeded(value.oldItem(), player);
+
+        event.getEquipmentChanges().forEach((equipmentSlot, equipmentChange) -> {
+            // Get the actual item from the player's equipment (not the copy from the event)
+            migrateItemIfNeeded(player.getEquipment().getItem(equipmentSlot), player);
         });
     }
 

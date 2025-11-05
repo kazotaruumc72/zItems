@@ -1,5 +1,6 @@
 package fr.traqueur.items.registries;
 
+import fr.traqueur.items.ZItems;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.effects.Applicator;
@@ -21,7 +22,7 @@ import java.util.List;
 public class ZEffectsRegistry extends EffectsRegistry {
 
     public ZEffectsRegistry(ItemsPlugin plugin) {
-        super(plugin);
+        super(plugin, ZItems.EFFECTS_FOLDER);
     }
 
 

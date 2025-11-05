@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-* [Introduction](README.md)
+* [Introduction](../README.md)
 * [Installation](getting-started/installation.md)
 * [Quick Start Guide](getting-started/quick-start.md)
 * [Dependencies](getting-started/dependencies.md)
@@ -20,23 +20,8 @@
 * [Effect Lore Display](advanced/effect-lore.md)
 * [Custom Block Tracking](advanced/block-tracking.md)
 * [Hook System](advanced/hooks.md)
+* [Metadata System](advanced/metadata-system.md)
 
 ## Developer API
 
 * [Getting Started with API](api/getting-started.md)
-* [Creating Custom Effects](api/custom-effects.md)
-* [Creating Hooks](api/custom-hooks.md)
-* [Event System](api/events.md)
-* [API Reference](api/reference.md)
-
-## Examples & Tutorials
-
-* [Example Configurations](examples/configurations.md)
-* [Common Recipes](examples/recipes.md)
-* [Migration from zItemsOld](examples/migration.md)
-
-## Support
-
-* [Troubleshooting](support/troubleshooting.md)
-* [FAQ](support/faq.md)
-* [Changelog](support/changelog.md)

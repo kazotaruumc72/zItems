@@ -998,7 +998,6 @@ Now that you can create items:
 2. **[Effect Handlers Reference](../advanced/effect-handlers.md)** - All available effects
 3. **[Metadata System](../advanced/metadata-system.md)** - Food, potions, trims, etc.
 4. **[Effect Lore Display](../advanced/effect-lore.md)** - Customize effect display
-5. **[Example Configurations](../examples/configurations.md)** - Ready-to-use examples
 
 ---
 

@@ -807,17 +807,6 @@ scanPackages("com.example.myaddon.effects");
 
 ---
 
-## Next Steps
-
-Now that you understand the basics:
-
-1. **[Creating Custom Effects](custom-effects.md)** - Deep dive into effect creation
-2. **[Creating Hooks](custom-hooks.md)** - Integrate with other plugins
-3. **[Event System](events.md)** - All available events
-4. **[API Reference](reference.md)** - Complete API documentation
-
----
-
 ## Resources
 
 - **JavaDocs**: (Coming soon)

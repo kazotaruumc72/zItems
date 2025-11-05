@@ -598,7 +598,6 @@ BlockTracker.get().untrackBlock(block);
 
 - **[Effect Handlers Reference](effect-handlers.md)** - How effects use BlockTracker
 - **[Hooks System](hooks.md)** - Custom block provider integrations
-- **[Creating Custom Effects](../api/custom-effects.md)** - Using BlockTracker in custom effects
 
 ---
 

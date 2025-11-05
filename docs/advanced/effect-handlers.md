@@ -800,9 +800,7 @@ damage: -1  # Auto-calculate (1 damage per block broken)
 
 ## Next Steps
 
-- **[Creating Effects](../user-guide/effects.md)** - Learn how to create effect configurations
 - **[Effect Lore Display](effect-lore.md)** - Control how effects appear on items
-- **[Custom Effects API](../api/custom-effects.md)** - Create your own effect handlers
 
 ---
 

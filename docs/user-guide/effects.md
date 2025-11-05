@@ -780,7 +780,6 @@ block-limit: 999999  # Bad - can lag server
 - **[Effect Handlers Reference](../advanced/effect-handlers.md)** - All available effects and their settings
 - **[Commands](commands.md)** - Effect-related commands
 - **[Creating Items](creating-items.md)** - Using effects in items
-- **[Custom Effects API](../api/custom-effects.md)** - Create your own effects
 
 ---
 

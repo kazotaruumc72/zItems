@@ -668,7 +668,6 @@ If you're migrating from the old zItems plugin, see the [Migration Guide](../exa
 - **[Creating Items](creating-items.md)** - Detailed item creation guide
 - **[Effects System](effects.md)** - Understanding effects
 - **[Effect Handlers](../advanced/effect-handlers.md)** - All available effects
-- **[Examples](../examples/configurations.md)** - Ready-to-use configurations
 
 ---
 

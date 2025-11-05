@@ -683,7 +683,6 @@ metadata:
 
 - **[Creating Items Guide](../user-guide/creating-items.md)** - Complete item configuration
 - **[Effect System](../user-guide/effects.md)** - Dynamic item behaviors
-- **[API Reference](../api/reference.md)** - Create custom metadata types
 
 ---
 

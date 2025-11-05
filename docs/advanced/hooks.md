@@ -741,7 +741,6 @@ Look for: `[zItems] Detected EconomyShopGUI - enabling shop integration`
 ## Related Documentation
 
 - **[Dependencies](../getting-started/dependencies.md)** - Required and optional plugins
-- **[Creating Hooks](../api/custom-hooks.md)** - Detailed hook creation guide
 - **[Effect Handlers Reference](effect-handlers.md)** - How effects use hooks
 - **[Block Tracking](block-tracking.md)** - zItems custom block tracking
 

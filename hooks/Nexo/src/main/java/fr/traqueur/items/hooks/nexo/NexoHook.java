@@ -12,6 +12,7 @@ import fr.traqueur.items.api.hooks.Hook;
 import fr.traqueur.items.api.registries.CustomBlockProviderRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -58,12 +59,28 @@ public class NexoHook implements Hook {
         }
 
         @Override
-        public ItemStack getItem(Player __, String itemId) {
-            ItemBuilder itemBuilder = NexoItems.itemFromId(itemId);
-            if (itemBuilder != null) {
-                return itemBuilder.build();
+        public Optional<String> getCustomBlockId(Block block) {
+            boolean isBlockMechanic = NexoBlocks.isCustomBlock(block);
+            if(!isBlockMechanic) {
+                return Optional.empty();
             }
-            return null;
+
+            CustomBlockMechanic blockMechanic = NexoBlocks.customBlockMechanic(block);
+            if (blockMechanic != null) {
+                return Optional.of(blockMechanic.getItemID());
+            }
+
+            return Optional.empty();
         }
+
+        @Override
+        public void placeCustomBlock(String itemId, Block block) {
+            BlockData data = NexoBlocks.blockData(itemId);
+            if (data == null) {
+                throw new IllegalArgumentException("Nexo block with item ID " + itemId + " does not exist.");
+            }
+            block.setBlockData(data);
+        }
+
     }
 }

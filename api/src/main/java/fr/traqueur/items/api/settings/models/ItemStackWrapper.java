@@ -113,9 +113,6 @@ public record ItemStackWrapper(
             }
         }
 
-        ItemStack itemStack = new ItemStack(material, amount);
-        ItemUtil.setDisplayName(itemStack, parsedDisplayName);
-        ItemUtil.setLore(itemStack, lore);
-        return itemStack;
+        return ItemUtil.createItem(material, amount, parsedDisplayName, lore, MessageUtil.parseMessage(PlaceholderParser.parsePlaceholders(player, itemId)));
     }
 }

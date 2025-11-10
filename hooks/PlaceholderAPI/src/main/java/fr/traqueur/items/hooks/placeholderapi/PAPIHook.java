@@ -12,13 +12,15 @@ public class PAPIHook implements Hook, PlaceholderParser {
 
     @Override
     public void onEnable() {
-        // Register this hook as the global placeholder parser
         PlaceholderParser.Holder.setInstance(this);
         Logger.info("PlaceholderAPI hook enabled and registered as global placeholder parser.");
     }
 
     @Override
     public String parse(Player player, String string) {
+        if (string == null || string.isEmpty()) {
+            return string;
+        }
         return PlaceholderAPI.setPlaceholders(player, string);
     }
 

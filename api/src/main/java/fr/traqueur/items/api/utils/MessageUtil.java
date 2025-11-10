@@ -128,6 +128,9 @@ public class MessageUtil {
      * @return The parsed Component with placeholders replaced
      */
     public static Component parseMessage(String message, TagResolver... placeholders) {
+        if (message == null || message.isEmpty()) {
+            return Component.empty();
+        }
         String converted = convertLegacyToMiniMessage(message);
         return MINI_MESSAGE.deserialize(converted, placeholders);
     }

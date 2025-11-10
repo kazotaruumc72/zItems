@@ -41,13 +41,23 @@ public class IAHook implements Hook {
         }
 
         @Override
-        public ItemStack getItem(Player __, String itemId) {
-            CustomStack customStack = CustomStack.getInstance(itemId);
-            if (customStack != null) {
-                return customStack.getItemStack();
+        public Optional<String> getCustomBlockId(Block block) {
+            CustomBlock customBlock = CustomBlock.byAlreadyPlaced(block);
+            if (customBlock != null) {
+                return Optional.of(customBlock.getId());
             }
-            return null;
+            return Optional.empty();
         }
+
+        @Override
+        public void placeCustomBlock(String itemId, Block block) {
+            CustomStack customStack = CustomStack.getInstance(itemId);
+            if (customStack == null) {
+                throw new IllegalArgumentException("Invalid ItemsAdder item ID: " + itemId);
+            }
+            CustomBlock.place(itemId, block.getLocation());
+        }
+
     }
 
 }

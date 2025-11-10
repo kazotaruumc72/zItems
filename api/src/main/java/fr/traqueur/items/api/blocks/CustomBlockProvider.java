@@ -50,12 +50,19 @@ public interface CustomBlockProvider {
     Optional<List<ItemStack>> getCustomBlockDrop(Block block, Player player);
 
     /**
-     * Retrieves the ItemStack associated with a custom block by its item ID.
+     * Attempts to get the custom block ID for a given block.
      *
-     * @param player the player requesting the item
-     * @param itemId the unique identifier of the custom block item
-     * @return the corresponding ItemStack, or null if not found
+     * @param block the block to check
+     * @return Optional containing the custom block ID, or empty if not a custom block
      */
-    ItemStack getItem(Player player, String itemId);
+    Optional<String> getCustomBlockId(Block block);
+
+    /**
+     * Places a custom block at the specified location.
+     *
+     * @param itemId the custom block item ID
+     * @param block the block location to place the custom block
+     */
+    void placeCustomBlock(String itemId, Block block);
 
 }

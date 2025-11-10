@@ -13,6 +13,7 @@ import io.th0rgal.oraxen.mechanics.provided.gameplay.block.BlockMechanic;
 import io.th0rgal.oraxen.mechanics.provided.gameplay.furniture.FurnitureMechanic;
 import io.th0rgal.oraxen.utils.drops.Loot;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -46,12 +47,24 @@ public class OraxenHook implements Hook {
         }
 
         @Override
-        public ItemStack getItem(Player __, String itemId) {
-            ItemBuilder builder = OraxenItems.getItemById(itemId);
-            if(builder != null) {
-                return builder.build();
+        public Optional<String> getCustomBlockId(Block block) {
+            BlockMechanic blockMechanic = OraxenBlocks.getBlockMechanic(block);
+
+            if(blockMechanic == null) {
+                return  Optional.empty();
             }
-            return null;
+
+            return Optional.of(blockMechanic.getItemID());
         }
+
+        @Override
+        public void placeCustomBlock(String itemId, Block block) {
+            BlockData data = OraxenBlocks.getOraxenBlockData(itemId);
+            if (data != null) {
+                block.setBlockData(data);
+            }
+            throw new IllegalArgumentException("Oraxen block with item ID " + itemId + " does not exist.");
+        }
+
     }
 }

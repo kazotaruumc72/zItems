@@ -125,11 +125,7 @@ public class ZItems extends ItemsPlugin {
         this.getServer().getPluginManager().registerEvents(new LegacyMigrationListener(), this);
         Logger.info("<gold>Legacy rune migration system enabled - zItemsOld items will be auto-migrated");
 
-        this.getServer().getPluginManager().registerEvents(new CommandsListener(), this);
-        this.getServer().getPluginManager().registerEvents(new DisableEnchantsListener(), this);
-        this.getServer().getPluginManager().registerEvents(new ItemRestrictionsListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new AnvilEffectFusionListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new SmithingTableListener(this), this);
+        this.registerListeners();
 
         EffectsManager effectsManager = this.registerManager(EffectsManager.class, new ZEffectsManager());
         ItemsManager itemsManager = this.registerManager(ItemsManager.class, new ZItemsManager());
@@ -144,6 +140,15 @@ public class ZItems extends ItemsPlugin {
         this.registerCommands(settings);
 
         Logger.info("<yellow>=== ENABLE DONE <gray>(<gold>" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<gray>) <yellow>===");
+    }
+
+    private void registerListeners() {
+        this.getServer().getPluginManager().registerEvents(new CommandsListener(), this);
+        this.getServer().getPluginManager().registerEvents(new DisableEnchantsListener(), this);
+        this.getServer().getPluginManager().registerEvents(new ItemRestrictionsListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new AnvilEffectFusionListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new SmithingTableListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new StripLogListener(), this);
     }
 
     private void populateRegistries() {

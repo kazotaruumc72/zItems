@@ -12,7 +12,7 @@ import java.util.List;
 
 public record AttributesSettings(
         List<AttributeWrapper> attributes,
-        @Options(optional = true) @AttributeMergeStrategy.DefaultStrategy(AttributeMergeStrategy.REPLACE) AttributeMergeStrategy strategy,
+        @Options(optional = true) @AttributeMergeStrategy.DefaultStrategy(AttributeMergeStrategy.ADD) AttributeMergeStrategy strategy,
         @Options(optional = true) List<Material> applicableMaterials,
         @Options(optional = true) List<Tag<Material>> applicableTags,
         @Options(optional = true) @DefaultBool(false) boolean applicabilityBlacklisted

@@ -37,7 +37,7 @@ import fr.traqueur.items.serialization.ZTrackedBlockDataType;
 import fr.traqueur.items.settings.PluginSettings;
 import fr.traqueur.items.settings.readers.*;
 import fr.traqueur.items.shop.ShopProviders;
-import fr.traqueur.items.utils.MessageUtil;
+import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.recipes.api.RecipesAPI;
 import fr.traqueur.recipes.api.hook.Hook;
 import fr.traqueur.structura.api.Structura;
@@ -124,7 +124,7 @@ public class ZItems extends ItemsPlugin {
         this.getServer().getPluginManager().registerEvents(new LegacyMigrationListener(), this);
         Logger.info("<gold>Legacy rune migration system enabled - zItemsOld items will be auto-migrated");
 
-        this.getServer().getPluginManager().registerEvents(new CommandsListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new CommandsListener(), this);
         this.getServer().getPluginManager().registerEvents(new DisableEnchantsListener(), this);
         this.getServer().getPluginManager().registerEvents(new ItemRestrictionsListener(this), this);
         this.getServer().getPluginManager().registerEvents(new AnvilEffectFusionListener(this), this);
@@ -293,13 +293,14 @@ public class ZItems extends ItemsPlugin {
             this.getSLF4JLogger().error("Failed to load messages configuration.", e);
         }
 
-        ItemsRegistry registry = Registry.get(ItemsRegistry.class);
-        if (registry != null) {
-            registry.loadFromFolder();
-        }
         EffectsRegistry effectsRegistry = Registry.get(EffectsRegistry.class);
         if (effectsRegistry != null) {
             effectsRegistry.loadFromFolder();
+        }
+
+        ItemsRegistry registry = Registry.get(ItemsRegistry.class);
+        if (registry != null) {
+            registry.loadFromFolder();
         }
 
         ItemsManager itemsManager = this.getManager(ItemsManager.class);

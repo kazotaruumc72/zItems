@@ -11,6 +11,7 @@ public abstract class EffectsRegistry extends FileBasedRegistry<String, Effect> 
     /**
      * Constructs an EffectsRegistry with the specified ItemsPlugin.
      *
+     * @param directory the directory where effect data is stored
      * @param plugin the ItemsPlugin instance
      */
     protected EffectsRegistry(ItemsPlugin plugin, String directory) {

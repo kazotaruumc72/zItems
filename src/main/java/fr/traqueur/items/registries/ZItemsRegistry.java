@@ -1,6 +1,6 @@
 package fr.traqueur.items.registries;
 
-import fr.traqueur.items.PlatformType;
+import fr.traqueur.items.api.PlatformType;
 import fr.traqueur.items.ZItems;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
@@ -13,7 +13,6 @@ import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.effects.EffectHandler;
 import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.items.ItemMetadata;
-import fr.traqueur.items.api.models.Folder;
 import fr.traqueur.items.api.registries.HandlersRegistry;
 import fr.traqueur.items.api.registries.ItemsRegistry;
 import fr.traqueur.items.api.registries.Registry;
@@ -22,15 +21,10 @@ import fr.traqueur.items.utils.ReflectionsCache;
 import fr.traqueur.structura.api.Structura;
 import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.registries.PolymorphicRegistry;
-import org.bukkit.Material;
 import org.reflections.Reflections;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class ZItemsRegistry extends ItemsRegistry {
 

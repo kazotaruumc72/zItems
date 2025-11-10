@@ -1,18 +1,24 @@
 package fr.traqueur.items.api.settings.models;
 
+import fr.maxlego08.menu.zcore.utils.nms.ItemStackUtils;
 import fr.traqueur.items.api.items.Item;
+import fr.traqueur.items.api.placeholders.PlaceholderParser;
 import fr.traqueur.items.api.registries.ItemsRegistry;
 import fr.traqueur.items.api.registries.Registry;
+import fr.traqueur.items.api.utils.ItemUtil;
+import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultInt;
 import fr.traqueur.structura.api.Loadable;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,9 +56,9 @@ public record ItemStackWrapper(
 
         @Options(optional = true) String itemId,
 
-        @Options(optional = true) Component displayName,
+        @Options(optional = true) String displayName,
 
-        @Options(optional = true) List<Component> lore
+        @Options(optional = true) List<String> lore
 ) implements Loadable {
 
     /**
@@ -89,20 +95,24 @@ public record ItemStackWrapper(
             throw new IllegalStateException("Custom item with ID '" + itemId + "' not found in registry");
         }
 
-        ItemStack itemStack = new ItemStack(material, amount);
-
-        // Apply display name and lore if present
-        if (displayName != null || (lore != null && !lore.isEmpty())) {
-            itemStack.editMeta(meta -> {
-                if (displayName != null) {
-                    meta.displayName(displayName);
-                }
-                if (lore != null && !lore.isEmpty()) {
-                    meta.lore(lore);
-                }
-            });
+        Component parsedDisplayName = null;
+        if (displayName != null && !displayName.isEmpty()) {
+            String parsedDisplayNameStr =  PlaceholderParser.parsePlaceholders(player, displayName);
+            parsedDisplayName = MessageUtil.parseMessage(parsedDisplayNameStr);
         }
 
+        List<Component> lore = new ArrayList<>();
+        if (this.lore != null) {
+            for (String loreLine : this.lore) {
+                String parsedLoreLineStr = PlaceholderParser.parsePlaceholders(player, loreLine);
+                Component parsedLoreLine = MessageUtil.parseMessage(parsedLoreLineStr);
+                lore.add(parsedLoreLine);
+            }
+        }
+
+        ItemStack itemStack = new ItemStack(material, amount);
+        ItemUtil.setDisplayName(itemStack, parsedDisplayName);
+        ItemUtil.setLore(itemStack, lore);
         return itemStack;
     }
 }

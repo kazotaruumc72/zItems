@@ -1,10 +1,13 @@
 package fr.traqueur.items;
 
-import fr.traqueur.items.utils.MessageUtil;
+import fr.traqueur.items.api.placeholders.PlaceholderParser;
+import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.structura.api.Loadable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public enum Messages implements Loadable {
 
@@ -49,23 +52,6 @@ public enum Messages implements Loadable {
     }
 
     /**
-     * Gets the message Component with placeholders replaced.
-     * <p>
-     * Example usage:
-     * <pre>{@code
-     * Messages.EFFECT_APPLIED.get(
-     *     Placeholder.parsed("effect", "super_hammer")
-     * )
-     * }</pre>
-     *
-     * @param placeholders the placeholders to replace
-     * @return the parsed Component with replaced placeholders
-     */
-    public Component get(TagResolver... placeholders) {
-        return MessageUtil.parseMessage(rawMessage, placeholders);
-    }
-
-    /**
      * Sends this message to a command sender with placeholders replaced.
      * <p>
      * Example usage:
@@ -80,6 +66,10 @@ public enum Messages implements Loadable {
      * @param placeholders the placeholders to replace
      */
     public void send(CommandSender sender, TagResolver... placeholders) {
-        MessageUtil.sendMessage(sender, get(placeholders));
+        MessageUtil.sendMessage(sender, this.rawMessage, placeholders);
+    }
+
+    public String get() {
+        return this.rawMessage;
     }
 }

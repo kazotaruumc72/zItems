@@ -1,6 +1,6 @@
 package fr.traqueur.items.items;
 
-import fr.traqueur.items.PlatformType;
+import fr.traqueur.items.api.PlatformType;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.events.ItemBuildEvent;
@@ -8,10 +8,9 @@ import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.managers.EffectsManager;
 import fr.traqueur.items.api.settings.ItemSettings;
 import fr.traqueur.items.api.settings.models.EnchantmentWrapper;
-import fr.traqueur.items.effects.ZEffectsManager;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.utils.AttributeUtil;
-import fr.traqueur.items.utils.ItemUtil;
+import fr.traqueur.items.api.utils.ItemUtil;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.api.Loadable;
 import net.kyori.adventure.text.Component;
@@ -37,7 +36,7 @@ public record ZItem(String id, @Options(inline = true) ItemSettings settings) im
         List<Component> effectLoreLines = List.of();
         if (settings.effects() != null && !settings.effects().isEmpty()) {
             EffectsManager effectsManager = plugin.getManager(EffectsManager.class);
-            effectLoreLines = effectsManager.generateBaseEffectLore(settings.effects(), settings);
+            effectLoreLines = effectsManager.generateBaseEffectLore(player, settings.effects(), settings);
         }
 
         // Combine base lore with effect lore

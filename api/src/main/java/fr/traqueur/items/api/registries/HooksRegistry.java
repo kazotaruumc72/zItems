@@ -3,6 +3,8 @@ package fr.traqueur.items.api.registries;
 import fr.traqueur.items.api.hooks.Hook;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Optional;
+
 /**
  * Registry for managing {@link Hook} instances that provide third-party plugin integrations.
  *
@@ -30,10 +32,16 @@ import org.bukkit.plugin.java.JavaPlugin;
  * // Enable all discovered hooks
  * hooksRegistry.enableAll();
  *
- * // Later, check if a specific hook is loaded
+ * // Later, check if a specific hook is loaded by name
  * Optional<Hook> jobsHook = hooksRegistry.get("Jobs");
  * if (jobsHook.isPresent()) {
  *     // Jobs integration is available
+ * }
+ *
+ * // Or by class type (type-safe)
+ * Optional<JobsHook> jobsHook = hooksRegistry.getHook(JobsHook.class);
+ * if (jobsHook.isPresent()) {
+ *     jobsHook.get().doSomethingSpecific();
  * }
  * }</pre>
  *

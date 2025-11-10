@@ -8,7 +8,7 @@ import fr.traqueur.items.api.registries.CustomBlockProviderRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.effects.settings.VeinMinerSettings;
 import fr.traqueur.items.utils.EventUtil;
-import fr.traqueur.items.utils.ItemUtil;
+import fr.traqueur.items.api.utils.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

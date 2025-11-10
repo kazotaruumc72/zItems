@@ -11,6 +11,12 @@ softdepend:
   - ShopGUIPlus
   - ZShop
   - WorldGuard
+  - PlaceholderAPI
+  - Jobs
+  - zJobs
+  - ItemsAdder
+  - Nexo
+  - Oraxen
 depend:
   - zMenu
 libraries:

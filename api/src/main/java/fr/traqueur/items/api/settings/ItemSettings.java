@@ -120,7 +120,7 @@ public record ItemSettings(
         RecipeSettings recipe,
 
         @Options(optional = true)
-        @AttributeMergeStrategy.DefaultStrategy(AttributeMergeStrategy.REPLACE)
+        @AttributeMergeStrategy.DefaultStrategy(AttributeMergeStrategy.ADD)
         AttributeMergeStrategy attributeMergeStrategy,
 
         @Options(optional = true)

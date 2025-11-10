@@ -1,6 +1,6 @@
 package fr.traqueur.items.registries;
 
-import fr.traqueur.items.PlatformType;
+import fr.traqueur.items.api.PlatformType;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.AutoEffect;

@@ -10,7 +10,7 @@ import fr.traqueur.items.api.effects.EffectApplicationResult;
 import fr.traqueur.items.api.managers.EffectsManager;
 import fr.traqueur.items.api.registries.ApplicatorsRegistry;
 import fr.traqueur.items.api.registries.Registry;
-import fr.traqueur.items.utils.ItemUtil;
+import fr.traqueur.items.api.utils.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

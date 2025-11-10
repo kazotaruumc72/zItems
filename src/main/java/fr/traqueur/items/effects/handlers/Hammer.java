@@ -8,7 +8,7 @@ import fr.traqueur.items.api.registries.CustomBlockProviderRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.effects.settings.HammerSettings;
 import fr.traqueur.items.utils.EventUtil;
-import fr.traqueur.items.utils.ItemUtil;
+import fr.traqueur.items.api.utils.ItemUtil;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;

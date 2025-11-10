@@ -118,20 +118,22 @@ public non-sealed interface EffectsManager extends Manager {
     /**
      * Generates lore lines for the base effects of an item.
      *
+     * @param player the player context (can be null)
      * @param baseEffects the list of base effects
      * @param itemSettings the item settings (can be null for vanilla items)
      * @return the list of lore components representing the base effects
      */
-    List<Component> generateBaseEffectLore(List<Effect> baseEffects, ItemSettings itemSettings);
+    List<Component> generateBaseEffectLore(Player player, List<Effect> baseEffects, ItemSettings itemSettings);
 
     /**
      * Updates the item's lore to display the given effects.
      * Handles both custom items (with ItemSettings) and vanilla items.
      *
+     * @param player the player context (can be null)
      * @param item the item to update
      * @param effects all effects to display in the lore
      */
-    void updateItemLoreWithEffects(ItemStack item, List<Effect> effects);
+    void updateItemLoreWithEffects(Player player, ItemStack item, List<Effect> effects);
 
     /**
      * Reapplies all NoEventEffects from the given list to the item.

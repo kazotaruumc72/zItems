@@ -9,19 +9,22 @@ import fr.traqueur.items.api.effects.EffectRepresentation;
 import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.managers.EffectsManager;
 import fr.traqueur.items.api.managers.ItemsManager;
+import fr.traqueur.items.api.placeholders.PlaceholderParser;
 import fr.traqueur.items.api.registries.EffectsRegistry;
 import fr.traqueur.items.api.registries.HandlersRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.api.settings.ItemSettings;
 import fr.traqueur.items.api.settings.Settings;
+import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.settings.PluginSettings;
-import fr.traqueur.items.utils.ItemUtil;
+import fr.traqueur.items.api.utils.ItemUtil;
 import fr.traqueur.recipes.api.RecipeType;
 import fr.traqueur.recipes.impl.domains.ItemRecipe;
 import fr.traqueur.recipes.impl.domains.ingredients.StrictItemStackIngredient;
 import fr.traqueur.recipes.impl.domains.recipes.RecipeBuilder;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Material;
@@ -155,7 +158,7 @@ public class ZEffectsManager implements EffectsManager {
                     item.getItemMeta().getPersistentDataContainer(),
                     new ArrayList<>()
             );
-            updateItemLoreWithEffects(item, allEffects);
+            updateItemLoreWithEffects(player, item, allEffects);
         }
 
         return EffectApplicationResult.SUCCESS;
@@ -239,7 +242,7 @@ public class ZEffectsManager implements EffectsManager {
     }
 
     @Override
-    public void updateItemLoreWithEffects(ItemStack item, List<Effect> effects) {
+    public void updateItemLoreWithEffects(Player player, ItemStack item, List<Effect> effects) {
         if (item == null || !item.hasItemMeta() || effects == null) {
             return;
         }
@@ -248,9 +251,9 @@ public class ZEffectsManager implements EffectsManager {
         if (itemsManager != null) {
             Optional<Item> customItem = itemsManager.getCustomItem(item);
             if (customItem.isPresent()) {
-                updateItemLoreForCustomItem(item, customItem.get(), effects);
+                updateItemLoreForCustomItem(player, item, customItem.get(), effects);
             } else {
-                updateVanillaItemLoreWithEffects(item, effects);
+                updateVanillaItemLoreWithEffects(player, item, effects);
             }
         }
     }
@@ -273,7 +276,7 @@ public class ZEffectsManager implements EffectsManager {
      * @param customItem the custom item definition
      * @param allEffects all effects to display
      */
-    private void updateItemLoreForCustomItem(ItemStack item, Item customItem, List<Effect> allEffects) {
+    private void updateItemLoreForCustomItem(Player player, ItemStack item, Item customItem, List<Effect> allEffects) {
         // Separate base effects and additional effects
         List<Effect> baseEffects = customItem.settings().effects() != null
                 ? customItem.settings().effects()
@@ -289,6 +292,7 @@ public class ZEffectsManager implements EffectsManager {
 
         // Generate effect lore
         List<Component> effectLoreLines = generateEffectLore(
+                player,
                 baseEffects,
                 additionalEffects,
                 customItem.settings()
@@ -314,13 +318,13 @@ public class ZEffectsManager implements EffectsManager {
      * @param item the vanilla item to update
      * @param allEffects all effects to display
      */
-    private void updateVanillaItemLoreWithEffects(ItemStack item, List<Effect> allEffects) {
+    private void updateVanillaItemLoreWithEffects(Player player, ItemStack item, List<Effect> allEffects) {
         if (allEffects.isEmpty()) {
             return; // No effects to display
         }
 
         // Prepare the reference plain texts
-        String titlePlain = PLAIN_TEXT_SERIALIZER.serialize(Messages.EFFECTS_LORE_TITLE.get()).trim();
+        String titlePlain = PLAIN_TEXT_SERIALIZER.serialize(MessageUtil.MINI_MESSAGE.deserialize(Messages.EFFECTS_LORE_TITLE.get())).trim();
 
         // Get existing lore (if any)
         List<Component> existingLore = ItemUtil.getLore(item);
@@ -354,7 +358,7 @@ public class ZEffectsManager implements EffectsManager {
         }
 
         // Generate new effect lore
-        List<Component> effectLoreLines = generateVanillaEffectLore(allEffects);
+        List<Component> effectLoreLines = generateVanillaEffectLore(player, allEffects);
 
         // Combine clean lore + updated effect section
         List<Component> combinedLore = new ArrayList<>(existingLore);
@@ -375,6 +379,7 @@ public class ZEffectsManager implements EffectsManager {
      * @return list of lore components to add to the item
      */
     private List<Component> generateEffectLore(
+            Player player,
             List<Effect> baseEffects,
             List<Effect> additionalEffects,
             ItemSettings itemSettings
@@ -404,7 +409,7 @@ public class ZEffectsManager implements EffectsManager {
                 .filter(effect -> effect.displayName() != null)
                 .toList();
 
-        return renderEffectLore(visibleEffects, nbEffectsView);
+        return renderEffectLore(player, visibleEffects, nbEffectsView);
     }
 
     /**
@@ -415,8 +420,8 @@ public class ZEffectsManager implements EffectsManager {
      * @return list of lore components to add to the item
      */
     @Override
-    public List<Component> generateBaseEffectLore(List<Effect> baseEffects, ItemSettings itemSettings) {
-        return generateEffectLore(baseEffects, List.of(), itemSettings);
+    public List<Component> generateBaseEffectLore(Player player, List<Effect> baseEffects, ItemSettings itemSettings) {
+        return generateEffectLore(player, baseEffects, List.of(), itemSettings);
     }
 
     /**
@@ -425,7 +430,7 @@ public class ZEffectsManager implements EffectsManager {
      * @param allEffects all effects on the vanilla item
      * @return list of lore components to add to the item
      */
-    private List<Component> generateVanillaEffectLore(List<Effect> allEffects) {
+    private List<Component> generateVanillaEffectLore(Player player, List<Effect> allEffects) {
         // Get global default settings
         PluginSettings pluginSettings = Settings.get(PluginSettings.class);
         int nbEffectsView = pluginSettings.defaultNbEffectsView();
@@ -435,7 +440,7 @@ public class ZEffectsManager implements EffectsManager {
                 .filter(effect -> effect.displayName() != null)
                 .toList();
 
-        return renderEffectLore(visibleEffects, nbEffectsView);
+        return renderEffectLore(player, visibleEffects, nbEffectsView);
     }
 
     /**
@@ -445,7 +450,7 @@ public class ZEffectsManager implements EffectsManager {
      * @param nbEffectsView maximum number of effects to show (-1 for unlimited, 0 to hide all)
      * @return list of lore components
      */
-    private List<Component> renderEffectLore(List<Effect> visibleEffects, int nbEffectsView) {
+    private List<Component> renderEffectLore(Player player, List<Effect> visibleEffects, int nbEffectsView) {
         List<Component> loreLines = new ArrayList<>();
 
         // If set to 0, don't show any effects
@@ -454,28 +459,28 @@ public class ZEffectsManager implements EffectsManager {
         }
 
         // Add header (empty line) - only if not empty
-        Component headerComponent = Messages.EFFECTS_LORE_HEADER.get();
+        Component headerComponent = MessageUtil.parseMessage(PlaceholderParser.parsePlaceholders(player, Messages.EFFECTS_LORE_HEADER.get()));
         if (!headerComponent.equals(Component.empty())) {
             loreLines.add(headerComponent);
         }
 
         // Add title ("Effects")
-        loreLines.add(Messages.EFFECTS_LORE_TITLE.get());
+        loreLines.add(MessageUtil.parseMessage(PlaceholderParser.parsePlaceholders(player, Messages.EFFECTS_LORE_TITLE.get())));
 
         // Add effect lines
         int effectsToShow = nbEffectsView == -1 ? visibleEffects.size() : Math.min(nbEffectsView, visibleEffects.size());
 
         for (int i = 0; i < effectsToShow; i++) {
             Effect effect = visibleEffects.get(i);
-            Component effectLine = Messages.EFFECTS_LORE_LINE.get(
-                    Placeholder.component("effect", effect.displayName())
-            );
+            Component effectLine = MessageUtil.parseMessage(PlaceholderParser.parsePlaceholders(player, Messages.EFFECTS_LORE_LINE.get()), Placeholder.component("effect", effect.displayName()));
+
+
             loreLines.add(effectLine);
         }
 
         // Add "And More..." if there are more effects than the limit
         if (nbEffectsView != -1 && visibleEffects.size() > nbEffectsView) {
-            loreLines.add(Messages.EFFECTS_LORE_MORE.get());
+            loreLines.add(MessageUtil.parseMessage(PlaceholderParser.parsePlaceholders(player, Messages.EFFECTS_LORE_MORE.get())));
         }
 
         return loreLines;

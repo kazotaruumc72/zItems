@@ -5,14 +5,14 @@ import fr.traqueur.items.api.effects.drops.DropLocation;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultBool;
 import fr.traqueur.structura.annotations.defaults.DefaultInt;
+import fr.traqueur.structura.annotations.validation.Min;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 
 import java.util.List;
 
 public record FarmingHoeSettings(
-
-        @Options(optional = true) @DefaultInt(3) int size,
+        @Min(1) int size,
         @Options(optional = true) @DefaultBool(true) boolean autoReplant,
         @Options(optional = true) DropLocation dropLocation,
         @Options(optional = true) @DefaultBool(false) boolean dropInInventory,

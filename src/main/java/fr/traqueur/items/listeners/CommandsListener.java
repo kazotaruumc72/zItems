@@ -1,6 +1,5 @@
 package fr.traqueur.items.listeners;
 
-import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.interactions.InteractionAction;
 import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.registries.ItemsRegistry;
@@ -8,7 +7,8 @@ import fr.traqueur.items.api.registries.Registry;
 import fr.traqueur.items.items.metadata.CommandsMetadata;
 import fr.traqueur.items.items.metadata.CommandsMetadata.ItemCommand;
 import fr.traqueur.items.serialization.Keys;
-import fr.traqueur.items.utils.ItemUtil;
+import fr.traqueur.items.api.utils.ItemUtil;
+import fr.traqueur.items.api.utils.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,12 +26,7 @@ import java.util.UUID;
  */
 public class CommandsListener implements Listener {
 
-    private final ItemsPlugin plugin;
     private final Map<UUID, Map<String, Long>> cooldowns = new HashMap<>();
-
-    public CommandsListener(ItemsPlugin plugin) {
-        this.plugin = plugin;
-    }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -110,7 +105,7 @@ public class CommandsListener implements Listener {
             // Send messages
             if (command.messages() != null && !command.messages().isEmpty()) {
                 for (String message : command.messages()) {
-                    player.sendMessage(message.replace("%player%", player.getName()));
+                    MessageUtil.sendMessage(player, message);
                 }
             }
 

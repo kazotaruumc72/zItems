@@ -1,6 +1,6 @@
 package fr.traqueur.items.utils;
 
-import fr.traqueur.items.PlatformType;
+import fr.traqueur.items.api.PlatformType;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.settings.models.AttributeMergeStrategy;
 import fr.traqueur.items.api.settings.models.AttributeWrapper;

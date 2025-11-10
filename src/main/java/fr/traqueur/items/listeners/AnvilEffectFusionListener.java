@@ -11,6 +11,7 @@ import fr.traqueur.items.effects.handlers.EnchantsApplicator;
 import fr.traqueur.items.effects.settings.EnchantsSettings;
 import fr.traqueur.items.serialization.Keys;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -146,7 +147,7 @@ public class AnvilEffectFusionListener implements Listener {
             effectsManager.reapplyNoEventEffects(null, result, allEffects);
 
             // Update item lore to show all effects using the manager
-            effectsManager.updateItemLoreWithEffects(result, allEffects);
+            effectsManager.updateItemLoreWithEffects((Player) event.getViewers().getFirst(), result, allEffects);
         }
 
         event.setResult(result);

@@ -1,6 +1,6 @@
 package fr.traqueur.items.settings.readers;
 
-import fr.traqueur.items.utils.MessageUtil;
+import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.structura.exceptions.StructuraException;
 import fr.traqueur.structura.readers.Reader;
 import net.kyori.adventure.text.Component;

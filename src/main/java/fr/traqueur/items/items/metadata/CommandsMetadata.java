@@ -7,6 +7,7 @@ import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultBool;
 import fr.traqueur.structura.annotations.defaults.DefaultLong;
 import fr.traqueur.structura.api.Loadable;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;

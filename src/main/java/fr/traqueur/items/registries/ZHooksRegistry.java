@@ -1,5 +1,7 @@
 package fr.traqueur.items.registries;
 
+import com.google.common.collect.ClassToInstanceMap;
+import com.google.common.collect.MutableClassToInstanceMap;
 import fr.traqueur.items.api.Logger;
 import fr.traqueur.items.api.annotations.AutoHook;
 import fr.traqueur.items.api.hooks.Hook;

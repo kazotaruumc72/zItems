@@ -1,13 +1,13 @@
-package fr.traqueur.items.utils;
+package fr.traqueur.items.api.utils;
 
-import fr.traqueur.items.PlatformType;
+import fr.traqueur.items.api.PlatformType;
 import fr.traqueur.items.api.Logger;
+import fr.traqueur.items.api.placeholders.PlaceholderParser;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -19,6 +19,13 @@ import java.util.Map;
  * Automatically detects Paper (native Adventure) vs Spigot (Adventure Platform wrapper).
  */
 public class MessageUtil {
+
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private MessageUtil() {
+        // Utility class
+    }
 
     /**
      * Legacy Minecraft color codes mapping to MiniMessage tags.
@@ -47,7 +54,11 @@ public class MessageUtil {
             Map.entry("&r", "<reset>")
     );
     private static BukkitAudiences bukkitAudiences;
-    private static MiniMessage miniMessage;
+
+    /**
+     * MiniMessage instance for parsing messages.
+     */
+    public static MiniMessage MINI_MESSAGE;
 
     /**
      * Initializes the MessageUtil with the plugin instance.
@@ -57,7 +68,7 @@ public class MessageUtil {
      */
     public static void initialize(Plugin plugin) {
         PlatformType platformType = PlatformType.detect();
-        miniMessage = MiniMessage.miniMessage();
+        MINI_MESSAGE = MiniMessage.miniMessage();
 
         if (platformType == PlatformType.SPIGOT) {
             bukkitAudiences = BukkitAudiences.create(plugin);
@@ -79,78 +90,22 @@ public class MessageUtil {
     }
 
     /**
-     * Sends a Component message to a player.
-     * Handles Paper (native) vs Spigot (wrapper) automatically.
-     *
-     * @param player    The player to send the message to
-     * @param component The Component to send
-     */
-    public static void sendMessage(Player player, Component component) {
-        if (PlatformType.isPaper()) {
-            player.sendMessage(component);
-        } else {
-            Audience audience = bukkitAudiences.player(player);
-            audience.sendMessage(component);
-        }
-    }
-
-    /**
      * Sends a Component message to a command sender.
      * Handles Paper (native) vs Spigot (wrapper) automatically.
      *
      * @param sender    The command sender
-     * @param component The Component to send
+     * @param message   The message to send
+     * @param placeholders the placeholder resolvers
      */
-    public static void sendMessage(CommandSender sender, Component component) {
+    public static void sendMessage(CommandSender sender, String message, TagResolver... placeholders) {
+        String parsedString = sender instanceof Player player ? PlaceholderParser.parsePlaceholders(player, message) : message;
+        Component parsedComponent = parseMessage(parsedString, placeholders);
         if (PlatformType.isPaper()) {
-            sender.sendMessage(component);
+            sender.sendMessage(parsedComponent);
         } else {
             Audience audience = bukkitAudiences.sender(sender);
-            audience.sendMessage(component);
+            audience.sendMessage(parsedComponent);
         }
-    }
-
-    /**
-     * Broadcasts a Component message to all online players.
-     * Handles Paper (native) vs Spigot (wrapper) automatically.
-     *
-     * @param component The Component to broadcast
-     */
-    public static void broadcast(Component component) {
-        if (PlatformType.isPaper()) {
-            Bukkit.broadcast(component);
-        } else {
-            Audience audience = bukkitAudiences.all();
-            audience.sendMessage(component);
-        }
-    }
-
-    /**
-     * Sends a Component action bar message to a player.
-     * Handles Paper (native) vs Spigot (wrapper) automatically.
-     *
-     * @param player    The player to send the action bar to
-     * @param component The Component to send
-     */
-    public static void sendActionBar(Player player, Component component) {
-        if (PlatformType.isPaper()) {
-            player.sendActionBar(component);
-        } else {
-            Audience audience = bukkitAudiences.player(player);
-            audience.sendActionBar(component);
-        }
-    }
-
-    /**
-     * Parses a message with MiniMessage tags and legacy color codes.
-     * Converts legacy codes to MiniMessage format first, then parses.
-     *
-     * @param message The message to parse
-     * @return The parsed Component
-     */
-    public static Component parseMessage(String message) {
-        String converted = convertLegacyToMiniMessage(message);
-        return miniMessage.deserialize(converted);
     }
 
     /**
@@ -174,7 +129,7 @@ public class MessageUtil {
      */
     public static Component parseMessage(String message, TagResolver... placeholders) {
         String converted = convertLegacyToMiniMessage(message);
-        return miniMessage.deserialize(converted, placeholders);
+        return MINI_MESSAGE.deserialize(converted, placeholders);
     }
 
     /**

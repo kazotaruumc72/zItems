@@ -1,6 +1,7 @@
 package fr.traqueur.items.api.managers;
 
 import fr.traqueur.items.api.items.Item;
+import fr.traqueur.items.api.settings.models.RecipeWrapper;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Optional;
@@ -52,7 +53,7 @@ import java.util.Optional;
  * <p>The manager implementation (typically {@code ZItemsManager}) coordinates:</p>
  * <ul>
  *   <li>Item building via {@link Item#build(org.bukkit.entity.Player, int)}</li>
- *   <li>Recipe generation from {@link fr.traqueur.items.api.settings.RecipeSettings}</li>
+ *   <li>Recipe generation from {@link RecipeWrapper}</li>
  *   <li>PDC tagging with unique item identifiers</li>
  *   <li>Event firing ({@link fr.traqueur.items.api.events.ItemBuildEvent})</li>
  * </ul>
@@ -67,7 +68,7 @@ public non-sealed interface ItemsManager extends Manager {
      * Generates and registers Bukkit recipes for all loaded custom items.
      *
      * <p>This method iterates through all items in the {@link fr.traqueur.items.api.registries.ItemsRegistry}
-     * and generates their recipes based on {@link fr.traqueur.items.api.settings.RecipeSettings}.
+     * and generates their recipes based on {@link RecipeWrapper}.
      * Recipes are registered with Bukkit's server and become available in crafting tables,
      * furnaces, smithing tables, etc.</p>
      *
@@ -93,7 +94,7 @@ public non-sealed interface ItemsManager extends Manager {
      * <p><b>Important:</b> Existing recipes with the same key are removed before
      * registration to prevent duplicates when reloading.</p>
      *
-     * @see fr.traqueur.items.api.settings.RecipeSettings
+     * @see RecipeWrapper
      */
     void generateRecipesFromLoadedItems();
 

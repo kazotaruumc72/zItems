@@ -32,6 +32,6 @@ public class ZItemIngredient extends Ingredient {
         if (this.item == null) {
             this.item = Registry.get(ItemsRegistry.class).getById(id);
         }
-        return new RecipeChoice.MaterialChoice(this.item.settings().material());
+        return new RecipeChoice.MaterialChoice(this.item.settings().baseItem().material());
     }
 }

@@ -7,9 +7,13 @@ import com.nexomc.nexo.items.ItemBuilder;
 import com.nexomc.nexo.mechanics.custom_block.CustomBlockMechanic;
 import com.nexomc.nexo.mechanics.furniture.FurnitureMechanic;
 import fr.traqueur.items.api.annotations.AutoHook;
+import fr.traqueur.items.api.blocks.CustomBlockProvider;
 import fr.traqueur.items.api.hooks.Hook;
 import fr.traqueur.items.api.registries.CustomBlockProviderRegistry;
 import fr.traqueur.items.api.registries.Registry;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +22,13 @@ import java.util.Optional;
 public class NexoHook implements Hook {
     @Override
     public void onEnable() {
-        Registry.get(CustomBlockProviderRegistry.class).register("nexo", (block, player) -> {
+        Registry.get(CustomBlockProviderRegistry.class).register("nexo", new NexoProvider());
+    }
+
+    private record NexoProvider() implements CustomBlockProvider {
+
+        @Override
+        public Optional<List<ItemStack>> getCustomBlockDrop(Block block, Player player) {
             boolean mechanic = NexoFurniture.isFurniture(block.getLocation());
             boolean isBlockMechanic = NexoBlocks.isCustomBlock(block);
 
@@ -45,6 +55,15 @@ public class NexoHook implements Hook {
             }
 
             return Optional.empty();
-        });
+        }
+
+        @Override
+        public ItemStack getItem(Player __, String itemId) {
+            ItemBuilder itemBuilder = NexoItems.itemFromId(itemId);
+            if (itemBuilder != null) {
+                return itemBuilder.build();
+            }
+            return null;
+        }
     }
 }

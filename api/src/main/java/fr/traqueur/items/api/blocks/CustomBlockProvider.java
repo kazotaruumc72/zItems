@@ -26,7 +26,6 @@ import java.util.Optional;
  *   <li>{@code OraxenProvider} - Uses Oraxen API to detect custom blocks</li>
  * </ul>
  */
-@FunctionalInterface
 public interface CustomBlockProvider {
 
     /**
@@ -49,4 +48,14 @@ public interface CustomBlockProvider {
      * @return Optional containing the custom ItemStack, or empty if not a custom block
      */
     Optional<List<ItemStack>> getCustomBlockDrop(Block block, Player player);
+
+    /**
+     * Retrieves the ItemStack associated with a custom block by its item ID.
+     *
+     * @param player the player requesting the item
+     * @param itemId the unique identifier of the custom block item
+     * @return the corresponding ItemStack, or null if not found
+     */
+    ItemStack getItem(Player player, String itemId);
+
 }

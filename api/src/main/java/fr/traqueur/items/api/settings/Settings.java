@@ -2,6 +2,7 @@ package fr.traqueur.items.api.settings;
 
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.MutableClassToInstanceMap;
+import fr.traqueur.items.api.settings.models.RecipeWrapper;
 import fr.traqueur.structura.api.Loadable;
 
 /**
@@ -24,7 +25,7 @@ import fr.traqueur.structura.api.Loadable;
  * <p>Settings classes in zItems include:</p>
  * <ul>
  *   <li>{@link ItemSettings} - Custom item definitions (items/*.yml)</li>
- *   <li>{@link RecipeSettings} - Recipe configurations</li>
+ *   <li>{@link RecipeWrapper} - Recipe configurations</li>
  *   <li>{@link fr.traqueur.items.api.effects.EffectSettings} - Effect handler configurations (effects/*.yml)</li>
  * </ul>
  *
@@ -103,7 +104,7 @@ import fr.traqueur.structura.api.Loadable;
  *
  * @see Loadable
  * @see ItemSettings
- * @see RecipeSettings
+ * @see RecipeWrapper
  * @see fr.traqueur.items.api.effects.EffectSettings
  */
 public interface Settings extends Loadable {

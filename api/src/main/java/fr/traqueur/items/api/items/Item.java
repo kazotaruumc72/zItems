@@ -37,14 +37,14 @@ public interface Item {
      *
      * @return the representative name component
      */
-    default Component representativeName() {
-        if (settings().displayName() == null && settings().itemName() == null) {
-            return Component.text(id());
+    default String representativeName() {
+        if (settings().baseItem().displayName() == null && settings().baseItem().itemName() == null) {
+            return id();
         }
-        if (settings().displayName() != null) {
-            return settings().displayName();
+        if (settings().baseItem().displayName() != null) {
+            return settings().baseItem().displayName();
         } else {
-            return settings().itemName();
+            return settings().baseItem().itemName();
         }
     }
 

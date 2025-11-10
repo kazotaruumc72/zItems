@@ -1,13 +1,16 @@
 package fr.traqueur.items.items;
 
+import com.mojang.brigadier.Message;
 import fr.traqueur.items.api.PlatformType;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.events.ItemBuildEvent;
 import fr.traqueur.items.api.items.Item;
 import fr.traqueur.items.api.managers.EffectsManager;
+import fr.traqueur.items.api.placeholders.PlaceholderParser;
 import fr.traqueur.items.api.settings.ItemSettings;
 import fr.traqueur.items.api.settings.models.EnchantmentWrapper;
+import fr.traqueur.items.api.utils.MessageUtil;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.utils.AttributeUtil;
 import fr.traqueur.items.api.utils.ItemUtil;
@@ -25,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public record ZItem(String id, @Options(inline = true) ItemSettings settings) implements Item, Loadable {
 
@@ -41,19 +45,15 @@ public record ZItem(String id, @Options(inline = true) ItemSettings settings) im
 
         // Combine base lore with effect lore
         List<Component> combinedLore = new ArrayList<>();
-        if (settings.lore() != null) {
-            combinedLore.addAll(settings.lore());
+        if (settings.baseItem().lore() != null) {
+            List<Component> lore = settings.baseItem().lore().stream().map(str -> MessageUtil.parseMessage(PlaceholderParser.parsePlaceholders(player, str))).toList();
+            combinedLore.addAll(lore);
         }
         combinedLore.addAll(effectLoreLines);
 
         // Create base item using ItemUtil
-        ItemStack itemStack = ItemUtil.createItem(
-                settings.material(),
-                amount,
-                settings.displayName(),
-                combinedLore,
-                settings.itemName()
-        );
+        ItemStack itemStack = this.settings.baseItem().build(player);
+        ItemUtil.setLore(itemStack, combinedLore);
 
         AttributeUtil.applyAttributes(itemStack, settings.attributes(), plugin, settings.attributeMergeStrategy());
 

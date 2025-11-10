@@ -47,6 +47,7 @@ import java.util.List;
  * @param amount The quantity of the item (default is 1)
  * @param itemId The ID of a custom zItem (optional if material is provided)
  * @param displayName The custom display name (optional)
+ * @param itemName The internal name of the item (optional)
  * @param lore The custom lore lines (optional)
  */
 public record ItemStackWrapper(
@@ -57,6 +58,8 @@ public record ItemStackWrapper(
         @Options(optional = true) String itemId,
 
         @Options(optional = true) String displayName,
+
+        @Options(optional = true) String itemName,
 
         @Options(optional = true) List<String> lore
 ) implements Loadable {

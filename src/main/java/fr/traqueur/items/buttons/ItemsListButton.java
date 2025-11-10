@@ -92,7 +92,7 @@ public class ItemsListButton extends PaginateButton {
                                 player.getWorld().dropItem(player.getLocation(), dropped)
                         );
                         Messages.ITEM_RECEIVED.send(player,
-                                Placeholder.component("item", element.item().representativeName()),
+                                Placeholder.parsed("item", element.item().representativeName()),
                                 Placeholder.parsed("amount", "1"));
                     });
                 } catch (Exception e) {

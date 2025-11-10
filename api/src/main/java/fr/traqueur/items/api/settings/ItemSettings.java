@@ -2,10 +2,7 @@ package fr.traqueur.items.api.settings;
 
 import fr.traqueur.items.api.effects.Effect;
 import fr.traqueur.items.api.items.ItemMetadata;
-import fr.traqueur.items.api.settings.models.AttributeMergeStrategy;
-import fr.traqueur.items.api.settings.models.AttributeWrapper;
-import fr.traqueur.items.api.settings.models.DisabledEnchantment;
-import fr.traqueur.items.api.settings.models.EnchantmentWrapper;
+import fr.traqueur.items.api.settings.models.*;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultBool;
 import fr.traqueur.structura.annotations.defaults.DefaultInt;
@@ -23,10 +20,7 @@ import java.util.List;
 /**
  * Configuration settings for a custom item.
  * This record contains all the properties that define how an item appears and behaves.
- * @param material               The base material of the item.
- * @param displayName            The custom display name of the item.
- * @param itemName               The internal name of the item.
- * @param lore                   The lore (description) of the item.
+ * @param baseItem               The base item configuration (material, display name, lore, etc.) - inlined from ItemStackWrapper.
  * @param enchantments           The enchantments applied to the item.
  * @param disabledEnchantments   The enchantments that are disabled on the item.
  * @param attributes             The attributes applied to the item.
@@ -54,16 +48,8 @@ import java.util.List;
  * @param enchantingTableEnabled Whether the item can be enchanted at an enchanting table.
  */
 public record ItemSettings(
-        @NotNull Material material,
-
-        @Options(optional = true)
-        Component displayName,
-
-        @Options(optional = true)
-        Component itemName,
-
-        @Options(optional = true)
-        List<Component> lore,
+        @Options(inline = true)
+        ItemStackWrapper baseItem,
 
         @Options(optional = true)
         List<EnchantmentWrapper> enchantments,
@@ -117,7 +103,7 @@ public record ItemSettings(
         Tag<DamageType> damageTypeResistance,
 
         @Options(optional = true)
-        RecipeSettings recipe,
+        RecipeWrapper recipe,
 
         @Options(optional = true)
         @AttributeMergeStrategy.DefaultStrategy(AttributeMergeStrategy.ADD)
@@ -153,5 +139,4 @@ public record ItemSettings(
         @Options(optional = true)
         @DefaultBool(true)
         boolean enchantingTableEnabled
-) implements Loadable {
-}
+) implements Loadable {}

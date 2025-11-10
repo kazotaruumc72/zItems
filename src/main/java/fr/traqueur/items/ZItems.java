@@ -4,6 +4,7 @@ import fr.maxlego08.menu.api.ButtonManager;
 import fr.maxlego08.menu.api.InventoryManager;
 import fr.maxlego08.menu.api.loader.NoneLoader;
 import fr.traqueur.commands.spigot.CommandManager;
+import fr.traqueur.items.blocks.ZItemsProvider;
 import fr.traqueur.items.buttons.ItemsListButton;
 import fr.traqueur.items.api.ItemsPlugin;
 import fr.traqueur.items.api.Logger;
@@ -152,13 +153,7 @@ public class ZItems extends ItemsPlugin {
         Registry.get(HooksRegistry.class).enableAll();
         Registry.get(EffectsRegistry.class).loadFromFolder();
         Registry.get(ItemsRegistry.class).loadFromFolder();
-        Registry.get(CustomBlockProviderRegistry.class).register(this.getName().toLowerCase(), (block, player) -> {
-            Optional<ItemStack> customDrop = BlockTracker.get().getCustomBlockDrop(block, player);
-            if (customDrop.isPresent()) {
-                BlockTracker.get().untrackBlock(block);
-            }
-            return customDrop.map(List::of);
-        });
+        Registry.get(CustomBlockProviderRegistry.class).register(this.getName().toLowerCase(), new ZItemsProvider());
     }
 
     private void registerRegistries() {

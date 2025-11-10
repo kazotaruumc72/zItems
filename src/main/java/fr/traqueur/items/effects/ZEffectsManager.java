@@ -300,8 +300,8 @@ public class ZEffectsManager implements EffectsManager {
 
         // Combine base lore with effect lore
         List<Component> combinedLore = new ArrayList<>();
-        if (customItem.settings().lore() != null) {
-            combinedLore.addAll(customItem.settings().lore());
+        if (customItem.settings().baseItem().lore() != null) {
+            combinedLore.addAll(customItem.settings().baseItem().lore().stream().map(str -> MessageUtil.parseMessage(PlaceholderParser.parsePlaceholders(player, str))).toList());
         }
         combinedLore.addAll(effectLoreLines);
 

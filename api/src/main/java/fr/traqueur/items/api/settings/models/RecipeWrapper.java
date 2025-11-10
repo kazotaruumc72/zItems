@@ -1,7 +1,6 @@
-package fr.traqueur.items.api.settings;
+package fr.traqueur.items.api.settings.models;
 
 import fr.traqueur.items.api.items.Item;
-import fr.traqueur.items.api.settings.models.IngredientWrapper;
 import fr.traqueur.recipes.api.RecipeType;
 import fr.traqueur.recipes.api.domains.Ingredient;
 import fr.traqueur.recipes.api.domains.Recipe;
@@ -28,15 +27,15 @@ import java.util.List;
  * @param experience   The optional experience gained from the recipe.
  * @param priority     The optional priority of the recipe.
  */
-public record RecipeSettings(RecipeType type,
-                             List<IngredientWrapper> ingredients,
-                             @Options(optional = true) List<String> pattern,
-                             @Options(optional = true) @DefaultInt(0) int cookingTime,
-                             @Options(optional = true) @DefaultString("") String group,
-                             @Options(optional = true) @DefaultString("") String category,
-                             @Options(optional = true) @DefaultInt(1) int amount,
-                             @Options(optional = true) @DefaultDouble(0) double experience,
-                             @Options(optional = true) @DefaultInt(0) int priority
+public record RecipeWrapper(RecipeType type,
+                            List<IngredientWrapper> ingredients,
+                            @Options(optional = true) List<String> pattern,
+                            @Options(optional = true) @DefaultInt(0) int cookingTime,
+                            @Options(optional = true) @DefaultString("") String group,
+                            @Options(optional = true) @DefaultString("") String category,
+                            @Options(optional = true) @DefaultInt(1) int amount,
+                            @Options(optional = true) @DefaultDouble(0) double experience,
+                            @Options(optional = true) @DefaultInt(0) int priority
 ) implements Recipe, Loadable {
 
     @Override

@@ -16,7 +16,7 @@ allprojects {
     apply(plugin = "com.gradleup.shadow")
     apply(plugin = "re.alwyn974.groupez.repository")
 
-    group = "fr.traqueur.items"
+    group = "fr.traqueur"
     version = "1.0.0"
 
     repositories {

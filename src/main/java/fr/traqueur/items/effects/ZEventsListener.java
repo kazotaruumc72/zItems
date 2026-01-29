@@ -213,8 +213,18 @@ public record ZEventsListener(EffectsDispatcher dispatcher) implements Listener 
             return;
         }
 
+        Logger.debug("Event <aqua>{}<reset> extracted for player <yellow>{}<reset> with item <yellow>{}<reset>",
+                eventClass.getSimpleName(),
+                result.player().getName(),
+                result.itemSource().getType().name()
+        );
         // Dispatch to handlers
         EffectContext context = dispatcher.dispatch(result.player(), result.itemSource(), event);
+
+        Logger.debug("Event <aqua>{}<reset> processed by effects for player <yellow>{}<reset>",
+                eventClass.getSimpleName(),
+                result.player().getName()
+        );
 
         // If no effects were processed, context will be null
         if (context == null) {

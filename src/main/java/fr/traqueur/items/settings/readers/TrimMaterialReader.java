@@ -9,6 +9,6 @@ import org.bukkit.inventory.meta.trim.TrimMaterial;
 public class TrimMaterialReader implements Reader<TrimMaterial> {
     @Override
     public TrimMaterial read(String s) throws StructuraException {
-        return Registry.TRIM_MATERIAL.getOrThrow(NamespacedKey.minecraft(s));
+        return Registry.TRIM_MATERIAL.getOrThrow(NamespacedKey.minecraft(s.toLowerCase()));
     }
 }

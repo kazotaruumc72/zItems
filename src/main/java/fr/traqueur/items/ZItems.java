@@ -33,6 +33,7 @@ import fr.traqueur.items.hooks.recipes.RecipesHook;
 import fr.traqueur.items.inventories.ApplicatorMenu;
 import fr.traqueur.items.items.ZItemsManager;
 import fr.traqueur.items.listeners.*;
+import fr.traqueur.items.providers.ZItemsItemProvider;
 import fr.traqueur.items.registries.*;
 import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.items.serialization.ZEffectDataType;
@@ -48,6 +49,7 @@ import fr.traqueur.structura.registries.CustomReaderRegistry;
 import fr.traqueur.structura.registries.DefaultValueRegistry;
 import fr.traqueur.structura.types.TypeToken;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
@@ -69,7 +71,7 @@ public class ZItems extends ItemsPlugin {
     public static final String ITEMS_FOLDER = "items";
     public static final String EFFECTS_FOLDER = "effects";
 
-    private org.slf4j.Logger logger;
+    private final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger("zItems");
 
     private RecipesAPI recipesManager;
     private EffectsDispatcher dispatcher;
@@ -77,16 +79,9 @@ public class ZItems extends ItemsPlugin {
     private ButtonManager buttonManager;
 
     @Override
-    public void onLoad() {
-        this.registerRegistries();
-    }
-
-    @Override
     public void onEnable() {
 
         long enableTime = System.currentTimeMillis();
-
-        logger = org.slf4j.LoggerFactory.getLogger("zItems");
 
         this.saveDefaultConfig();
         this.injectReaders();
@@ -118,12 +113,11 @@ public class ZItems extends ItemsPlugin {
         }
         Logger.info("Shop provider <green>{} <reset>has been found.", ShopProviders.FOUND_PROVIDER.pluginName());
 
-        this.populateRegistries();
+        this.registerRegistries();
 
         Logger.info("Setting up event dispatching system...");
         this.dispatcher = new ZEffectsDispatcher();
         ZEventsListener eventsListener = new ZEventsListener(this.dispatcher);
-        eventsListener.registerDynamicListeners(this);
         Logger.info("<green>Event dispatching system initialized successfully!");
 
         // Register legacy rune migration listener (zItemsOld backward compatibility)
@@ -134,13 +128,10 @@ public class ZItems extends ItemsPlugin {
             Logger.warning("Legacy rune migration system is only possible with paper spigot!");
         }
 
-
         this.registerListeners();
 
         EffectsManager effectsManager = this.registerManager(EffectsManager.class, new ZEffectsManager());
         ItemsManager itemsManager = this.registerManager(ItemsManager.class, new ZItemsManager());
-        itemsManager.generateRecipesFromLoadedItems();
-        effectsManager.loadRecipes();
 
         this.getServer().getPluginManager().registerEvents(new BlockTrackerListener(BlockTracker.get(), itemsManager, effectsManager), this);
 
@@ -148,6 +139,14 @@ public class ZItems extends ItemsPlugin {
         this.loadInventories();
 
         this.registerCommands(settings);
+
+
+        Bukkit.getScheduler().runTask(this, () -> {
+            this.populateRegistries();
+            eventsListener.registerDynamicListeners(this);
+            itemsManager.generateRecipesFromLoadedItems();
+            effectsManager.loadRecipes();
+        });
 
         Logger.info("<yellow>=== ENABLE DONE <gray>(<gold>" + Math.abs(enableTime - System.currentTimeMillis()) + "ms<gray>) <yellow>===");
     }
@@ -169,12 +168,15 @@ public class ZItems extends ItemsPlugin {
         Registry.get(EffectsRegistry.class).loadFromFolder();
         Registry.get(ItemsRegistry.class).loadFromFolder();
         Registry.get(CustomBlockProviderRegistry.class).register(this.getName().toLowerCase(), new ZItemsProvider());
+        Registry.get(ItemProviderRegistry.class).register(this.getName().toLowerCase(), new ZItemsItemProvider());
     }
 
     private void registerRegistries() {
         Registry.register(LocationAccessRegistry.class, new ZLocationAccessRegistry());
         // Register custom block provider registry
         Registry.register(CustomBlockProviderRegistry.class, new ZCustomBlockProviderRegistry());
+        // Register item provider registry
+        Registry.register(ItemProviderRegistry.class, new ZItemProviderRegistry());
         // Register and scan hooks
         Registry.register(HooksRegistry.class, new ZHooksRegistry());
         // Register and scan effect handlers

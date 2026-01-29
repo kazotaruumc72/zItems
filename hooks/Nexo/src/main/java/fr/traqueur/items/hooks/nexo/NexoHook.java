@@ -9,12 +9,16 @@ import com.nexomc.nexo.mechanics.furniture.FurnitureMechanic;
 import fr.traqueur.items.api.annotations.AutoHook;
 import fr.traqueur.items.api.blocks.CustomBlockProvider;
 import fr.traqueur.items.api.hooks.Hook;
+import fr.traqueur.items.api.items.ItemProvider;
 import fr.traqueur.items.api.registries.CustomBlockProviderRegistry;
+import fr.traqueur.items.api.registries.ItemProviderRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,10 +27,11 @@ import java.util.Optional;
 public class NexoHook implements Hook {
     @Override
     public void onEnable() {
-        Registry.get(CustomBlockProviderRegistry.class).register("nexo", new NexoProvider());
+        Registry.get(CustomBlockProviderRegistry.class).register("nexo", new NexoBlockProvider());
+        Registry.get(ItemProviderRegistry.class).register("nexo", new NexoItemProvider());
     }
 
-    private record NexoProvider() implements CustomBlockProvider {
+    private record NexoBlockProvider() implements CustomBlockProvider {
 
         @Override
         public Optional<List<ItemStack>> getCustomBlockDrop(Block block, Player player) {
@@ -81,6 +86,22 @@ public class NexoHook implements Hook {
             }
             block.setBlockData(data);
         }
+    }
 
+    private record NexoItemProvider() implements ItemProvider {
+
+        @Override
+        public @NotNull Optional<ItemStack> createItem(@Nullable Player player, @NotNull String itemId) {
+            ItemBuilder itemBuilder = NexoItems.itemFromId(itemId);
+            if (itemBuilder == null) {
+                return Optional.empty();
+            }
+            return Optional.of(itemBuilder.build());
+        }
+
+        @Override
+        public boolean hasItem(@NotNull String itemId) {
+            return NexoItems.itemFromId(itemId) != null;
+        }
     }
 }

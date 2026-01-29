@@ -3,7 +3,9 @@ package fr.traqueur.items.hooks.oraxen;
 import fr.traqueur.items.api.annotations.AutoHook;
 import fr.traqueur.items.api.blocks.CustomBlockProvider;
 import fr.traqueur.items.api.hooks.Hook;
+import fr.traqueur.items.api.items.ItemProvider;
 import fr.traqueur.items.api.registries.CustomBlockProviderRegistry;
+import fr.traqueur.items.api.registries.ItemProviderRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import io.th0rgal.oraxen.api.OraxenBlocks;
 import io.th0rgal.oraxen.api.OraxenFurniture;
@@ -16,6 +18,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,10 +29,11 @@ public class OraxenHook implements Hook {
 
     @Override
     public void onEnable() {
-        Registry.get(CustomBlockProviderRegistry.class).register("oraxen", new OraxenProvider());
+        Registry.get(CustomBlockProviderRegistry.class).register("oraxen", new OraxenBlockProvider());
+        Registry.get(ItemProviderRegistry.class).register("oraxen", new OraxenItemProvider());
     }
 
-    private record OraxenProvider() implements CustomBlockProvider {
+    private record OraxenBlockProvider() implements CustomBlockProvider {
 
         @Override
         public Optional<List<ItemStack>> getCustomBlockDrop(Block block, Player player) {
@@ -65,6 +70,22 @@ public class OraxenHook implements Hook {
             }
             throw new IllegalArgumentException("Oraxen block with item ID " + itemId + " does not exist.");
         }
+    }
 
+    private record OraxenItemProvider() implements ItemProvider {
+
+        @Override
+        public @NotNull Optional<ItemStack> createItem(@Nullable Player player, @NotNull String itemId) {
+            ItemBuilder itemBuilder = OraxenItems.getItemById(itemId);
+            if (itemBuilder == null) {
+                return Optional.empty();
+            }
+            return Optional.of(itemBuilder.build());
+        }
+
+        @Override
+        public boolean hasItem(@NotNull String itemId) {
+            return OraxenItems.getItemById(itemId) != null;
+        }
     }
 }

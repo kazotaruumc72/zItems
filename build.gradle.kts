@@ -58,7 +58,7 @@ allprojects {
 
         /* Libraries */
         implementation("com.github.Traqueur-dev:RecipesAPI:3.1.1")
-        implementation("fr.traqueur:structura:1.6.0")
+        implementation("fr.traqueur:structura:1.6.1")
         implementation("com.github.Traqueur-dev.CommandsAPI:platform-spigot:4.2.3")
         compileOnly("org.reflections:reflections:0.10.2")
 

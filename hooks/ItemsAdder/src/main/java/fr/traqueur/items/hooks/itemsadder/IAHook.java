@@ -6,11 +6,15 @@ import dev.lone.itemsadder.api.CustomStack;
 import fr.traqueur.items.api.annotations.AutoHook;
 import fr.traqueur.items.api.blocks.CustomBlockProvider;
 import fr.traqueur.items.api.hooks.Hook;
+import fr.traqueur.items.api.items.ItemProvider;
 import fr.traqueur.items.api.registries.CustomBlockProviderRegistry;
+import fr.traqueur.items.api.registries.ItemProviderRegistry;
 import fr.traqueur.items.api.registries.Registry;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +23,11 @@ import java.util.Optional;
 public class IAHook implements Hook {
     @Override
     public void onEnable() {
-        Registry.get(CustomBlockProviderRegistry.class).register("itemsadder", new IAProvider());
+        Registry.get(CustomBlockProviderRegistry.class).register("itemsadder", new IABlockProvider());
+        Registry.get(ItemProviderRegistry.class).register("itemsadder", new IAItemProvider());
     }
 
-    private record IAProvider() implements CustomBlockProvider {
+    private record IABlockProvider() implements CustomBlockProvider {
 
         @Override
         public Optional<List<ItemStack>> getCustomBlockDrop(Block block, Player player) {
@@ -57,7 +62,22 @@ public class IAHook implements Hook {
             }
             CustomBlock.place(itemId, block.getLocation());
         }
-
     }
 
+    private record IAItemProvider() implements ItemProvider {
+
+        @Override
+        public @NotNull Optional<ItemStack> createItem(@Nullable Player player, @NotNull String itemId) {
+            CustomStack customStack = CustomStack.getInstance(itemId);
+            if (customStack == null) {
+                return Optional.empty();
+            }
+            return Optional.of(customStack.getItemStack());
+        }
+
+        @Override
+        public boolean hasItem(@NotNull String itemId) {
+            return CustomStack.getInstance(itemId) != null;
+        }
+    }
 }

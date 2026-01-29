@@ -199,7 +199,7 @@ public class ItemUtil {
      * @param itemStack The ItemStack to modify
      * @param itemName  The item name as a Component
      */
-    private static void setItemName(ItemStack itemStack, Component itemName) {
+    public static void setItemName(ItemStack itemStack, Component itemName) {
         if (itemStack == null || itemName == null) {
             return;
         }

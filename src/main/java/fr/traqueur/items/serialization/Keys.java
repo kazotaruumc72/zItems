@@ -32,6 +32,9 @@ public class Keys {
     public static final DataKey<Integer> TRACKED_BLOCK_POSITION = new DataKey<>(PersistentDataType.INTEGER);
     public static final DataKey<String> TRACKED_BLOCK_ITEM_ID = new DataKey<>(PersistentDataType.STRING);
 
+    // MythicMobs spawner type
+    public static final DataKey<String> MYTHIC_MOB_TYPE = new DataKey<>(PersistentDataType.STRING);
+
     // Chunk-level tracked blocks list
     public static final DataKey<List<TrackedBlock>> TRACKED_BLOCKS = new DataKey<>(PersistentDataType.LIST.listTypeFrom(TrackedBlockDataType.INSTANCE));
 

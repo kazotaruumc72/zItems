@@ -9,6 +9,7 @@ destinations.yml
 .idea/
 .claude/
 CLAUDE.md
+dependency-reduced-pom.xml
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

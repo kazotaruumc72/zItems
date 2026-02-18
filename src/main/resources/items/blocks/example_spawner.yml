@@ -8,7 +8,8 @@ metadata:
   block-state:
     settings:
       spawner:
-        spawned-type: ZOMBIE  # Entity type to spawn
+        spawned-type: ZOMBIE  # Entity type to spawn (vanilla fallback)
+        mythic-mob-type: ""  # MythicMobs mob type (leave empty for vanilla, requires MythicMobs plugin)
         delay: 20  # Initial delay before first spawn
         min-spawn-delay: 200  # Minimum delay between spawns (10 seconds)
         max-spawn-delay: 800  # Maximum delay between spawns (40 seconds)

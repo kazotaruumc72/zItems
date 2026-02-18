@@ -2,6 +2,7 @@ package fr.traqueur.items.items.blockstate;
 
 import fr.traqueur.items.api.annotations.AutoBlockStateMeta;
 import fr.traqueur.items.api.items.BlockStateMeta;
+import fr.traqueur.items.serialization.Keys;
 import fr.traqueur.structura.annotations.Options;
 import fr.traqueur.structura.annotations.defaults.DefaultInt;
 import org.bukkit.block.CreatureSpawner;
@@ -11,10 +12,12 @@ import org.bukkit.entity.Player;
 /**
  * BlockState configuration for spawner blocks.
  * Allows setting spawner properties like entity type, spawn delay, and range.
+ * Supports MythicMobs mob types via the mythicMobType field.
  */
 @AutoBlockStateMeta("spawner")
 public record SpawnerStateMeta(
         @Options(optional = true) EntityType spawnedType,
+        @Options(optional = true) String mythicMobType,
         @Options(optional = true) @DefaultInt(-1) int delay,
         @Options(optional = true) @DefaultInt(-1) int minSpawnDelay,
         @Options(optional = true) @DefaultInt(-1) int maxSpawnDelay,
@@ -28,6 +31,10 @@ public record SpawnerStateMeta(
     public void apply(Player player, CreatureSpawner spawner) {
         if (spawnedType != null) {
             spawner.setSpawnedType(spawnedType);
+        }
+
+        if (mythicMobType != null && !mythicMobType.isEmpty()) {
+            Keys.MYTHIC_MOB_TYPE.set(spawner.getPersistentDataContainer(), mythicMobType);
         }
 
         if (delay >= 0) {

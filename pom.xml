@@ -126,7 +126,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.GroupeZ-dev</groupId>
-            <artifactId>zItems-API</artifactId>
+            <artifactId>zItems</artifactId>
             <version>main-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>

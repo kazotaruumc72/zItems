@@ -64,6 +64,10 @@
             <id>lumine-repo</id>
             <url>https://mvn.lumine.io/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>groupez</id>
+            <url>https://repo.groupez.dev/releases</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -106,6 +110,24 @@
             <groupId>io.lumine</groupId>
             <artifactId>Mythic-Dist</artifactId>
             <version>5.6.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>fr.traqueur</groupId>
+            <artifactId>structura</artifactId>
+            <version>1.6.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>fr.maxlego08.menu</groupId>
+            <artifactId>zmenu-api</artifactId>
+            <version>1.1.0.8</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.GroupeZ-dev</groupId>
+            <artifactId>zItems-API</artifactId>
+            <version>main-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

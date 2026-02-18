@@ -3,6 +3,7 @@ package fr.maxlego08.items.hook.mythicmobs;
 import fr.maxlego08.items.api.Item;
 import fr.maxlego08.items.api.hook.Hook;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.event.EventHandler;
@@ -21,7 +22,11 @@ public class MythicMobsHook implements Hook {
         if (mythicMobType != null) {
             event.setCancelled(true);
             Location location = event.getLocation();
-            MythicBukkit.inst().getMobManager().spawnMob(mythicMobType, location);
+            try {
+                MythicBukkit.inst().getMobManager().spawnMob(mythicMobType, location);
+            } catch (Exception exception) {
+                Bukkit.getLogger().warning("[zItems] Failed to spawn MythicMobs mob '" + mythicMobType + "': " + exception.getMessage());
+            }
         }
     }
 }

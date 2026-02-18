@@ -11,6 +11,7 @@ public enum Plugins {
 	ZTRANSLATOR("zTranslator"),
 	WORLDGUARD("WorldGuard"),
 	JOBS("Jobs"),
+	MYTHICMOBS("MythicMobs"),
 	
 	;
 

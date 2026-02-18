@@ -59,6 +59,10 @@ public class ZItem extends ZUtils implements Item {
             PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
             persistentDataContainer.set(ITEM_KEY, PersistentDataType.STRING, this.name);
 
+            if (this.configuration.getMythicMobType() != null) {
+                persistentDataContainer.set(MYTHICMOB_TYPE_KEY, PersistentDataType.STRING, this.configuration.getMythicMobType());
+            }
+
             if (this.configuration.getMaxStackSize() > 0) {
                 itemMeta.setMaxStackSize(this.configuration.getMaxStackSize());
             }

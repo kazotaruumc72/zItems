@@ -1,0 +1,11 @@
+# Example custom spawner that spawns a MythicMobs mob
+# Requires MythicMobs plugin to be installed
+material: SPAWNER
+display-name: "&6&lMythic Spawner"
+lore:
+  - "&7Places a spawner that spawns"
+  - "&7a MythicMobs mob."
+
+# The MythicMobs mob internal name to spawn
+# This must match an existing MythicMobs mob ID
+mythicmob-type: "SkeletalKnight"

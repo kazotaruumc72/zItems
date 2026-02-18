@@ -84,6 +84,7 @@ public class ItemConfiguration {
     private ItemRuneConfiguration itemRuneConfiguration;
     private Food food;
     private ItemRarity itemRarity;
+    private final String mythicMobType;
 
     public ItemConfiguration(ItemPlugin plugin, YamlConfiguration configuration, String fileName, String path) {
 
@@ -109,6 +110,7 @@ public class ItemConfiguration {
         this.canBreakShowInTooltip = configuration.getBoolean(path + "can-break.show-in-tooltip", true);
         this.enchantmentGlint = configuration.getBoolean(path + "enchantment.glint", false);
         this.enchantmentShowInTooltip = configuration.getBoolean(path + "enchantment.show-in-tooltip", true);
+        this.mythicMobType = configuration.getString(path + "mythicmob-type", null);
         String rarity = configuration.getString(path + "rarity");
         if (rarity != null) {
             try {
@@ -559,5 +561,9 @@ public class ItemConfiguration {
             throw new IllegalArgumentException("Item is not a rune item or the rune configuration is null");
         }
         return itemRuneConfiguration;
+    }
+
+    public String getMythicMobType() {
+        return mythicMobType;
     }
 }

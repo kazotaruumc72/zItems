@@ -20,6 +20,7 @@ import fr.maxlego08.items.enchantments.DisableEnchantsListener;
 import fr.maxlego08.items.enchantments.ZEnchantments;
 import fr.maxlego08.items.hook.ZHookManager;
 import fr.maxlego08.items.hook.jobs.JobsHook;
+import fr.maxlego08.items.hook.mythicmobs.MythicMobsHook;
 import fr.maxlego08.items.hook.worlds.WorldGuardHook;
 import fr.maxlego08.items.listener.SpawnerListener;
 import fr.maxlego08.items.placeholder.LocalPlaceholder;
@@ -91,8 +92,8 @@ public class ItemsPlugin extends ZPlugin implements ItemPlugin {
 
         //Register all internal hooks
         List.of(
-                new Hooks(Plugins.JOBS, new JobsHook(this.runeManager))
-                // ToDo, add more hook
+                new Hooks(Plugins.JOBS, new JobsHook(this.runeManager)),
+                new Hooks(Plugins.MYTHICMOBS, new MythicMobsHook())
         ).forEach(hooks -> this.hookManager.registerHook(hooks.plugins(), hooks.hook()));
 
         this.getServer().getScheduler().runTask(this, () -> {

@@ -66,6 +66,20 @@
         </repository>
     </repositories>
     <dependencies>
+        <!-- Structura: Type-safe YAML configuration library for Java -->
+        <dependency>
+            <groupId>com.github.Traqueur-dev</groupId>
+            <artifactId>Structura</artifactId>
+            <version>1.6.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- SnakeYAML: Required for Structura YAML parsing -->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>2.4</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>

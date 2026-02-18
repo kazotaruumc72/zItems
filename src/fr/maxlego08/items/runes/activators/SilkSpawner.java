@@ -1,5 +1,6 @@
 package fr.maxlego08.items.runes.activators;
 
+import fr.maxlego08.items.api.Item;
 import fr.maxlego08.items.api.ItemPlugin;
 import fr.maxlego08.items.api.runes.configurations.EmptyConfiguration;
 import org.bukkit.Location;
@@ -10,6 +11,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,15 @@ public class SilkSpawner extends RuneActivatorHelper<EmptyConfiguration> {
             itemSpawner.setSpawnedType(type);
             blockStateMeta.setBlockState(itemSpawner);
             itemStack.setItemMeta(blockStateMeta);
+
+            // Preserve MythicMobs mob type if present on the spawner
+            PersistentDataContainer spawnerPdc = spawner.getPersistentDataContainer();
+            String mythicMobType = spawnerPdc.get(Item.MYTHICMOB_TYPE_KEY, PersistentDataType.STRING);
+            if (mythicMobType != null) {
+                var meta = itemStack.getItemMeta();
+                meta.getPersistentDataContainer().set(Item.MYTHICMOB_TYPE_KEY, PersistentDataType.STRING, mythicMobType);
+                itemStack.setItemMeta(meta);
+            }
 
             List<ItemStack> dropsAfter = drops.getOrDefault(block.getLocation(), new ArrayList<>());
             dropsAfter.add(itemStack);

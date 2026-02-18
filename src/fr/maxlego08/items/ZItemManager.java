@@ -50,6 +50,7 @@ public class ZItemManager extends ZUtils implements ItemManager {
                 this.plugin.saveResource("items/strength-potion.yml", false);
                 this.plugin.saveResource("items/hoe.yml", false);
                 this.plugin.saveResource("items/hammer.yml", false);
+                this.plugin.saveResource("items/custom_spawner.yml", false);
             }
         }
         File runeFolder = new File(folder, "runes_items");

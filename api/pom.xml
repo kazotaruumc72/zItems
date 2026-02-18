@@ -4,113 +4,65 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fr.traqueur</groupId>
+    <parent>
+        <groupId>fr.traqueur</groupId>
+        <artifactId>zItems-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
     <artifactId>zItems-api</artifactId>
-    <version>1.0.0</version>
     <packaging>jar</packaging>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>21</maven.compiler.release>
-    </properties>
-
-    <repositories>
-        <repository>
-            <id>papermc</id>
-            <url>https://repo.papermc.io/repository/maven-public/</url>
-        </repository>
-        <repository>
-            <id>jitpack</id>
-            <url>https://jitpack.io</url>
-        </repository>
-        <repository>
-            <id>groupez-releases</id>
-            <url>https://repo.groupez.dev/releases</url>
-        </repository>
-        <repository>
-            <id>extendedclip</id>
-            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-        <repository>
-            <id>project-local</id>
-            <url>file://${maven.multiModuleProjectDirectory}/libs/repository</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.11.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>fr.maxlego08.menu</groupId>
             <artifactId>zmenu-api</artifactId>
-            <version>1.1.0.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>fr.maxlego08.menu</groupId>
             <artifactId>zmenu</artifactId>
-            <version>1.1.0.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.3.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.18.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.10.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.Traqueur-dev</groupId>
             <artifactId>RecipesAPI</artifactId>
-            <version>3.1.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>fr.traqueur</groupId>
             <artifactId>structura</artifactId>
-            <version>1.6.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.Traqueur-dev.CommandsAPI</groupId>
             <artifactId>platform-spigot</artifactId>
-            <version>4.2.3</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
-                <configuration>
-                    <release>21</release>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

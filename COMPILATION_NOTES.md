@@ -9,13 +9,13 @@ The Maven build failures have been resolved by fixing critical dependency issues
 1. **Removed Circular Self-Dependency** ✅
    - The project was incorrectly depending on itself via `com.github.GroupeZ-dev:zItems:main-SNAPSHOT`
    - This caused Maven to fail during dependency resolution
-   - **Fix**: Removed lines 141-146 from pom.xml
+   - **Fix**: Removed the self-referencing dependency from pom.xml
 
 2. **Removed Duplicate Structura Dependency** ✅
    - Two conflicting Structura dependencies were defined:
      - `com.github.Traqueur-dev:Structura:1.6.1` (kept)
      - `fr.traqueur:structura:1.6.0` (removed)
-   - **Fix**: Removed lines 129-134 from pom.xml, keeping only the first dependency
+   - **Fix**: Removed the duplicate dependency from pom.xml, keeping only the first dependency
 
 ### Current Dependencies
 

@@ -1,13 +1,27 @@
 name: zItems
-author: Maxlego08
-contributors: [ Traqueur_ ]
-main: fr.maxlego08.items.ItemsPlugin
+author: Traqueur_
+main: fr.traqueur.items.ZItems
 website: https://groupez.dev
 description: Custom items
-version: 1.0.0
+version: ${project.version}
 api-version: 1.21
+folia-supported: true
 softdepend:
+  - EconomyShopGUI
+  - ShopGUIPlus
+  - ZShop
   - WorldGuard
+  - PlaceholderAPI
   - Jobs
+  - zJobs
+  - ItemsAdder
+  - Nexo
+  - Oraxen
   - MythicMobs
-commands:
+depend:
+  - zMenu
+libraries:
+  - net.kyori:adventure-api:4.18.0
+  - net.kyori:adventure-text-minimessage:4.18.0
+  - net.kyori:adventure-platform-bukkit:4.3.4
+  - org.reflections:reflections:0.10.2

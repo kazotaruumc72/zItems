@@ -1,0 +1,20 @@
+# Respawn Anchor - Pre-charged respawn anchor
+id: "charged_respawn_anchor"
+material: RESPAWN_ANCHOR
+display-name: "<gradient:#8B00FF:#FF00FF><bold>⚡ Charged Respawn Anchor</bold></gradient>"
+lore:
+  - "<gray>A pre-charged dimensional anchor"
+  - ""
+  - "<light_purple>⚡ Charges:"
+  - "  <pink>• 4/4 glowstone charges"
+  - "  <pink>• Ready for immediate use"
+  - ""
+  - "<gold>🌟 Perfect for Nether explorers!"
+  - ""
+  - "<dark_gray>Place it to set your respawn point"
+custom-model-data: 3002
+metadata:
+  block-data:
+    settings:
+      respawn-anchor:
+        charges: 4  # Fully charged

@@ -1,0 +1,6 @@
+# Empty Effect Example
+# A placeholder effect with no functionality (useful for testing)
+id: "empty_effect"
+type: "EMPTY"
+display-name: "<gradient:#808080:#A9A9A9><bold>⚫ EMPTY</bold></gradient>"
+# No settings required - this effect does nothing

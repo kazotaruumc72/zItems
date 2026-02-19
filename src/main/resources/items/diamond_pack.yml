@@ -1,0 +1,26 @@
+# Diamond Pack
+# Crafted with 1 Compressed Cobblestone x2
+# Gives 64 diamonds
+id: "diamond_pack"
+material: DIAMOND
+display-name: "<gradient:#00FFFF:#0080FF><bold>💎 Diamond Pack</bold></gradient>"
+lore:
+  - "<aqua>Contains 64 precious diamonds"
+  - "<gray>Obtained via extreme compression"
+  - ""
+  - "<gold>✨ Result of ultimate compression"
+custom-model-data: 3001
+hide-tooltip: false
+max-stack-size: 64
+enchantments:
+  - enchantment: fortune
+    level: 1
+hide-enchantments: true
+
+recipe:
+  type: CRAFTING_SHAPELESS
+  group: compressed_blocks
+  category: MISC
+  amount: 64
+  ingredients:
+    - item: "zItems:cobblestone_compressed_x2"

@@ -1,0 +1,18 @@
+package fr.traqueur.items.items.blockdata;
+
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
+import fr.traqueur.items.api.items.BlockDataMeta;
+import org.bukkit.block.data.type.TrapDoor;
+
+/**
+ * BlockData metadata for trapdoor blocks.
+ * Sets whether the trapdoor is open.
+ */
+@AutoBlockDataMeta("trap-door")
+public record TrapDoorMeta(boolean open) implements BlockDataMeta<TrapDoor> {
+
+    @Override
+    public void apply(TrapDoor blockData) {
+        blockData.setOpen(open);
+    }
+}

@@ -1,0 +1,27 @@
+# Strength Sword Example
+# A sword with custom attack damage attribute
+id: "strength_sword"
+material: NETHERITE_SWORD
+display-name: "<gradient:#8B0000:#FF0000><bold>⚔ Strength Sword</bold></gradient>"
+item-name: "strength_sword"
+lore:
+  - "<gray>A powerful sword that boosts your strength"
+  - ""
+  - "<gold>Attributes:"
+  - "  <yellow>• +15 Attack Damage"
+  - "  <yellow>• +10% Attack Speed"
+attributes:
+  - attribute: attack_damage
+    operation: ADD_NUMBER
+    amount: 15.0
+    slot: HAND
+  - attribute: attack_speed
+    operation: ADD_SCALAR
+    amount: 0.1
+    slot: HAND
+enchantments:
+  - enchantment: sharpness
+    level: 5
+unbreakable: true
+hide-tooltip: false
+max-stack-size: 1

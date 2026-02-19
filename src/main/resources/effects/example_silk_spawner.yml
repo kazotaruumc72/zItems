@@ -1,0 +1,6 @@
+# Silk Spawner Effect Example
+# Mine spawners and keep them as items
+id: "silk_touch_spawner"
+type: "SILK_SPAWNER"
+display-name: "<gradient:#F0F0F0:#C0C0C0><bold>🕸️ SILK SPAWNER</bold></gradient>"
+# No additional settings required for this effect

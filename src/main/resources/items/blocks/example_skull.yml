@@ -1,0 +1,18 @@
+id: "example_custom_skull"
+material: PLAYER_HEAD
+display-name: "<gradient:#FFD700:#FFA500>Custom Player Head</gradient>"
+lore:
+  - "<gray>A skull with custom texture or player"
+
+metadata:
+  block-state:
+    settings:
+      skull:
+        # Option 1: Use a player name
+        player-name: "Notch"
+
+        # Option 2: Use a player UUID (commented out)
+        # player-uuid: "069a79f4-44e9-4726-a5be-fca90e38aaf5"
+
+        # Option 3: Use a custom texture (Base64 encoded texture value)
+        # texture: "ewogICJ0aW1lc3RhbXAiIDogMTY..."

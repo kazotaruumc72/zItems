@@ -1,0 +1,11 @@
+id: "example_custom_jukebox"
+material: JUKEBOX
+display-name: "<gradient:#1E90FF:#4169E1>Music Jukebox</gradient>"
+lore:
+  - "<gray>A jukebox with a pre-loaded music disc"
+
+metadata:
+  block-state:
+    settings:
+      jukebox:
+        record: MUSIC_DISC_PIGSTEP

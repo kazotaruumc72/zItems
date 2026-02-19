@@ -1,0 +1,7 @@
+# Job XP Boost Effect Example
+# Multiply experience gained from Jobs plugin
+id: "xp_job_boost"
+type: "JOB_XP_BOOST"
+display-name: "<gradient:#FFD700:#FFA500><bold>💼 JOB XP BOOST</bold></gradient>"
+boost: 100
+chance-to-boost: 1.0

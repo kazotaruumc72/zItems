@@ -1,0 +1,13 @@
+id: "example_custom_furnace"
+material: FURNACE
+display-name: "<gradient:#FF4500:#FF8C00>Pre-heated Furnace</gradient>"
+lore:
+  - "<gray>A furnace with pre-configured timers"
+
+metadata:
+  block-state:
+    settings:
+      furnace:
+        burn-time: 1600  # Ticks (80 seconds)
+        cook-time: 100  # Current cooking progress
+        cook-time-total: 200  # Total time needed to cook

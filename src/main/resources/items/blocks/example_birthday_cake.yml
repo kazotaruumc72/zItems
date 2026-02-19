@@ -1,0 +1,18 @@
+# Birthday Cake - A magical birthday cake that regenerates
+id: "birthday_cake"
+material: CAKE
+display-name: "<gradient:#FFB6C1:#FF69B4><bold>🎂 Magical Birthday Cake</bold></gradient>"
+lore:
+  - "<gray>A delicious cake that never ends..."
+  - ""
+  - "<light_purple>✨ Magical properties:"
+  - "  <pink>• Always 3 slices available"
+  - "  <pink>• Instant regeneration"
+  - ""
+  - "<gold>🎉 Perfect for parties!"
+custom-model-data: 3001
+metadata:
+  block-data:
+    settings:
+      cake:
+        bites: 3  # Already eaten 3 times out of 6

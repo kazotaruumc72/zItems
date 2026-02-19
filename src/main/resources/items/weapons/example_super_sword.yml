@@ -1,0 +1,22 @@
+# Super Sword Example
+# A simple sword with enchantments
+id: "super_sword"
+material: DIAMOND_SWORD
+display-name: "<gradient:#FF0000:#FFAA00><bold>Super Sword</bold></gradient>"
+lore:
+  - "<gray>A legendary sword with incredible power"
+  - ""
+  - "<gold>Enchantments:"
+  - "  <yellow>• Sharpness X"
+  - "  <yellow>• Fire Aspect II"
+  - "  <yellow>• Looting III"
+enchantments:
+  - enchantment: sharpness
+    level: 10
+  - enchantment: fire_aspect
+    level: 2
+  - enchantment: looting
+    level: 3
+unbreakable: true
+hide-tooltip: false
+max-stack-size: 1

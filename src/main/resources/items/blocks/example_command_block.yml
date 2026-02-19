@@ -1,0 +1,12 @@
+id: "example_custom_command_block"
+material: COMMAND_BLOCK
+display-name: "<gradient:#FF4500:#FF6347>Custom Command Block</gradient>"
+lore:
+  - "<gray>A command block with pre-configured command"
+
+metadata:
+  block-state:
+    settings:
+      command-block:
+        command: "say Hello from custom command block!"
+        name: "<gold>Welcome Command</gold>"

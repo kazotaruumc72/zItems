@@ -1,0 +1,9 @@
+# Sell Stick Effect Example
+# Right-click on containers to sell all items inside
+id: "sell_stick"
+type: "SELL_STICK"
+display-name: "<gradient:#FFD700:#FFA500><bold>🪄 SELL STICK</bold></gradient>"
+multiplier: 1.0    # 100% sell price (optional, default: 1.0)
+damage: true       # Apply durability damage (optional, default: true)
+action: "CLICK"    # Required action: CLICK, RIGHT_CLICK, LEFT_CLICK, SHIFT_RIGHT_CLICK, SHIFT_LEFT_CLICK (optional)
+hand: "HAND"       # Required hand: HAND or OFF_HAND (optional)

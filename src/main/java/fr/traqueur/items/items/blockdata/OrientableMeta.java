@@ -1,0 +1,21 @@
+package fr.traqueur.items.items.blockdata;
+
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
+import fr.traqueur.items.api.items.BlockDataMeta;
+import org.bukkit.Axis;
+import org.bukkit.block.data.Orientable;
+
+/**
+ * BlockData metadata for orientable blocks (logs, pillars, etc.).
+ * Sets the orientation axis.
+ */
+@AutoBlockDataMeta("orientable")
+public record OrientableMeta(Axis axis) implements BlockDataMeta<Orientable> {
+
+    @Override
+    public void apply(Orientable blockData) {
+        if (blockData.getAxes().contains(axis)) {
+            blockData.setAxis(axis);
+        }
+    }
+}

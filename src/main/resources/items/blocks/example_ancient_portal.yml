@@ -1,0 +1,24 @@
+# Ancient End Portal Frame - End portal with pre-inserted eye
+id: "ancient_portal_frame"
+material: END_PORTAL_FRAME
+display-name: "<gradient:#00FF00:#008B8B><bold>👁 Ancient Portal Frame</bold></gradient>"
+lore:
+  - "<gray>An ancient piece of the End portal"
+  - ""
+  - "<light_purple>👁 Status:"
+  - "  <green>• Eye of Ender already inserted"
+  - "  <aqua>• Activated and ready"
+  - "  <gold>• Stable dimensional energy"
+  - ""
+  - "<gold>🌟 Found in ancient ruins"
+  - ""
+  - "<dark_gray>Collection: End Artifacts"
+  - "<dark_purple>Legendary"
+custom-model-data: 3007
+metadata:
+  block-data:
+    settings:
+      end-portal-frame:
+        eye: true      # Eye of Ender already inserted
+      directional:
+        facing: NORTH  # Facing north for proper alignment

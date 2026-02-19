@@ -1,0 +1,72 @@
+# ========================================
+#  zItems - Messages Configuration
+# ========================================
+#
+# This file uses MiniMessage format for text formatting.
+# Documentation: https://docs.advntr.dev/minimessage/format.html
+#
+# Placeholders are defined using tags: <placeholder_name>
+# Colors: <red>, <green>, <yellow>, <gold>, <aqua>, etc.
+# Formatting: <bold>, <italic>, <underline>, <strikethrough>
+# Hex colors: <#FF5555>
+#
+# Examples:
+#   effect-applied: "<green>Effect <yellow><effect></yellow> applied!"
+#   coins-earned: "<gold>You earned <amount> coins!"
+# ========================================
+
+# ========================================
+# Command Messages
+# ========================================
+no-permission: "<red>You do not have permission to execute this command."
+only-in-game: "<red>This command can only be executed in-game."
+requirement-not-met: "<red>You do not meet the requirements to perform this command."
+arg-not-recognized: "<red>Argument not recognized."
+
+effect-applied: "<green>Effect <yellow><effect></yellow> has been applied to your item."
+effect-already-present: "<red>Effect <yellow><effect></yellow> is already present on this item."
+effect-incompatible: "<red>Effect <yellow><effect></yellow> is incompatible with existing effects on this item."
+effect-not-allowed: "<red>Additional effects are not allowed on this item."
+effect-disabled: "<red>Effect <yellow><effect></yellow> is disabled for this item."
+effect-handler-not-found: "<red>Handler not found for effect <yellow><effect></yellow>."
+
+# ========================================
+# Item Give Command Messages
+# ========================================
+item-given: "<green>Given <yellow><amount>x <item></yellow> to <aqua><player></aqua>."
+item-received: "<green>You received <yellow><amount>x <item></yellow>."
+item-give-invalid-amount: "<red>Invalid amount! Amount must be greater than 0."
+
+# ========================================
+# Effect Give Command Messages
+# ========================================
+effect-given: "<green>Given <yellow><amount>x <effect></yellow> to <aqua><player></aqua>."
+effect-give-invalid-amount: "<red>Invalid amount! Amount must be greater than 0."
+effect-received: "<green>You received <yellow><amount>x <effect></yellow>."
+effect-no-representation: "<red>Effect <yellow><effect></yellow> has no representation and cannot be given as an item."
+
+# ========================================
+# Effects Display in Item Lore
+# ========================================
+# These messages control how effects are displayed in item lore
+# <effect> placeholder will be replaced with the effect's display name
+effects-lore-header: ""  # Empty line before effects section
+effects-lore-title: "<gray>Effects"  # Section title
+effects-lore-line: "<dark_gray>- <effect>"  # Each effect line
+effects-lore-more: "<dark_gray>- <white>And More..."  # When limit exceeded
+
+# ========================================
+# View Effects Command Messages
+# ========================================
+# Messages for the /zitems effect view command to display effects
+# Placeholders: <count>, <display-name>, <type>, <priority>
+view-no-item: "<red>You must be holding an item!"
+view-no-effects: "<yellow>This item has no effects."
+view-header: "<gray>======== <aqua>Item Effects (<count>) <gray>========"
+view-effect-line: "<dark_gray>• <display-name> <dark_gray>(<type>) <gray>- Priority: <priority>"
+view-footer: "<gray>==============================="
+
+# ========================================
+# GUI Messages
+# ========================================
+failed-to-open-gui: "<red>Failed to open the GUI. Please try again later."

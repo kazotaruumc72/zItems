@@ -1,0 +1,27 @@
+# Leather Armor with Custom Color Example
+id: "red_leather_chestplate"
+material: LEATHER_CHESTPLATE
+display-name: "<red><bold>Ruby Chestplate</bold>"
+lore:
+  - "<gray>Colored with the essence of rubies"
+  - ""
+  - "<red>+10 Armor"
+  - "<red>+5 Armor Toughness"
+enchantments:
+  - enchantment: protection
+    level: 4
+  - enchantment: unbreaking
+    level: 3
+attributes:
+  - attribute: armor
+    operation: ADD_NUMBER
+    amount: 10.0
+    slot: CHEST
+  - attribute: armor_toughness
+    operation: ADD_NUMBER
+    amount: 5.0
+    slot: CHEST
+metadata:
+  leather-armor:
+    color: "#FF0000"
+unbreakable: true

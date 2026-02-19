@@ -1,0 +1,7 @@
+# XP Boost Effect Example
+# Multiply experience gained from mining
+id: "xp_boost_pickaxe"
+type: "XP_BOOST"
+display-name: "<gradient:#00FF00:#ADFF2F><bold>⭐ XP BOOST</bold></gradient>"
+boost: 2.0          # XP multiplier (2.0 = 200%)
+chance-to-boost: 100.0  # Chance to apply boost (optional, default: -1 = always, range: 0-100)

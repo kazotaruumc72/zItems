@@ -1,0 +1,6 @@
+# Unbreakable Effect Example
+# Makes the item unbreakable
+id: "unbreakable_tool"
+type: "UNBREAKABLE"
+display-name: "<gradient:#696969:#2F4F4F><bold>🛡️ UNBREAKABLE</bold></gradient>"
+# No additional settings required - applied when item is created

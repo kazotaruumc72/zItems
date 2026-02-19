@@ -1,0 +1,25 @@
+# Custom Potion Example
+id: "super_strength_potion"
+material: POTION
+display-name: "<gradient:#FF0000:#8B0000><bold>⚔ Potion of Ultimate Strength</bold></gradient>"
+lore:
+  - "<gray>Grants immense physical power"
+  - ""
+  - "<gold>Effects:"
+  - "  <yellow>• Strength III (5min)"
+  - "  <yellow>• Speed II (5min)"
+  - "  <yellow>• Resistance I (5min)"
+metadata:
+  potion:
+    color: "#FF0000"
+    base-potion-type: STRENGTH
+    custom-effects:
+      - type: STRENGTH
+        duration: 6000
+        amplifier: 2
+      - type: SPEED
+        duration: 6000
+        amplifier: 1
+      - type: RESISTANCE
+        duration: 6000
+        amplifier: 0

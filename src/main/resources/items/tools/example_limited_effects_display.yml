@@ -1,0 +1,31 @@
+# Example Item - Limited Effect Display
+# Shows how to limit the number of visible effects in lore
+
+id: "limited_display_tool"
+material: GOLDEN_PICKAXE
+display-name: "<gradient:#FFD700:#FFA500><bold>🌟 Mystery Tool</bold></gradient>"
+lore:
+  - "<gray>A tool with hidden powers"
+  - "<dark_gray>Some effects remain secret..."
+
+custom-model-data: 5001
+
+# Base effects
+effects:
+  - super_hammer
+
+# Only show 1 effect in lore, others will show as "And More..."
+nb-effects-view: 1
+
+# Both base and additional effects are visible (within the limit)
+base-effects-visible: true
+additional-effects-visible: true
+
+# Allow adding more effects
+allow-additional-effects: true
+
+# Example usage:
+# 1. /zitems give <player> limited_display_tool
+#    -> Shows "⚒ HAMMER" in lore
+# 2. /zitems apply <player> vein_miner_pickaxe
+#    -> Lore updates to show "⚒ HAMMER" and "And More..." (hiding vein miner)

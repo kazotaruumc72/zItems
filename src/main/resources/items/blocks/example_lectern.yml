@@ -1,0 +1,18 @@
+id: "example_custom_lectern"
+material: LECTERN
+display-name: "<gradient:#8B4513:#A0522D>Knowledge Lectern</gradient>"
+lore:
+  - "<gray>A lectern with a pre-loaded book"
+
+metadata:
+  block-state:
+    settings:
+      lectern:
+        book:
+          material: WRITTEN_BOOK
+          amount: 1
+          display-name: "<gold>Ancient Knowledge"
+          lore:
+            - "<gray>A book of wisdom"
+            - "<gray>Open to discover secrets"
+        page: 0  # Start at first page

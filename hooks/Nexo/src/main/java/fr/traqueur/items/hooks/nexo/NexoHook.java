@@ -1,0 +1,107 @@
+package fr.traqueur.items.hooks.nexo;
+
+import com.nexomc.nexo.api.NexoBlocks;
+import com.nexomc.nexo.api.NexoFurniture;
+import com.nexomc.nexo.api.NexoItems;
+import com.nexomc.nexo.items.ItemBuilder;
+import com.nexomc.nexo.mechanics.custom_block.CustomBlockMechanic;
+import com.nexomc.nexo.mechanics.furniture.FurnitureMechanic;
+import fr.traqueur.items.api.annotations.AutoHook;
+import fr.traqueur.items.api.blocks.CustomBlockProvider;
+import fr.traqueur.items.api.hooks.Hook;
+import fr.traqueur.items.api.items.ItemProvider;
+import fr.traqueur.items.api.registries.CustomBlockProviderRegistry;
+import fr.traqueur.items.api.registries.ItemProviderRegistry;
+import fr.traqueur.items.api.registries.Registry;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.Optional;
+
+@AutoHook("Nexo")
+public class NexoHook implements Hook {
+    @Override
+    public void onEnable() {
+        Registry.get(CustomBlockProviderRegistry.class).register("nexo", new NexoBlockProvider());
+        Registry.get(ItemProviderRegistry.class).register("nexo", new NexoItemProvider());
+    }
+
+    private record NexoBlockProvider() implements CustomBlockProvider {
+
+        @Override
+        public Optional<List<ItemStack>> getCustomBlockDrop(Block block, Player player) {
+            boolean mechanic = NexoFurniture.isFurniture(block.getLocation());
+            boolean isBlockMechanic = NexoBlocks.isCustomBlock(block);
+
+            if(!mechanic && !isBlockMechanic) {
+                return Optional.empty();
+            }
+
+            if (mechanic) {
+                FurnitureMechanic furnitureMechanic = NexoFurniture.furnitureMechanic(block.getLocation());
+                if (furnitureMechanic != null) {
+                    ItemBuilder itemBuilder = NexoItems.itemFromId(furnitureMechanic.getItemID());
+                    if (itemBuilder != null) {
+                        return Optional.of(List.of(itemBuilder.build()));
+                    }
+                }
+            }
+
+            CustomBlockMechanic blockMechanic = NexoBlocks.customBlockMechanic(block);
+            if (blockMechanic != null) {
+                ItemBuilder itemBuilder = NexoItems.itemFromId(blockMechanic.getItemID());
+                if (itemBuilder != null) {
+                    return Optional.of(List.of(itemBuilder.build()));
+                }
+            }
+
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<String> getCustomBlockId(Block block) {
+            boolean isBlockMechanic = NexoBlocks.isCustomBlock(block);
+            if(!isBlockMechanic) {
+                return Optional.empty();
+            }
+
+            CustomBlockMechanic blockMechanic = NexoBlocks.customBlockMechanic(block);
+            if (blockMechanic != null) {
+                return Optional.of(blockMechanic.getItemID());
+            }
+
+            return Optional.empty();
+        }
+
+        @Override
+        public void placeCustomBlock(String itemId, Block block) {
+            BlockData data = NexoBlocks.blockData(itemId);
+            if (data == null) {
+                throw new IllegalArgumentException("Nexo block with item ID " + itemId + " does not exist.");
+            }
+            block.setBlockData(data);
+        }
+    }
+
+    private record NexoItemProvider() implements ItemProvider {
+
+        @Override
+        public @NotNull Optional<ItemStack> createItem(@Nullable Player player, @NotNull String itemId) {
+            ItemBuilder itemBuilder = NexoItems.itemFromId(itemId);
+            if (itemBuilder == null) {
+                return Optional.empty();
+            }
+            return Optional.of(itemBuilder.build());
+        }
+
+        @Override
+        public boolean hasItem(@NotNull String itemId) {
+            return NexoItems.itemFromId(itemId) != null;
+        }
+    }
+}

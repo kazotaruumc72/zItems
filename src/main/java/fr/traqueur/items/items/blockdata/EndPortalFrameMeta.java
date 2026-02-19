@@ -1,0 +1,18 @@
+package fr.traqueur.items.items.blockdata;
+
+import fr.traqueur.items.api.annotations.AutoBlockDataMeta;
+import fr.traqueur.items.api.items.BlockDataMeta;
+import org.bukkit.block.data.type.EndPortalFrame;
+
+/**
+ * BlockData metadata for end portal frame blocks.
+ * Sets whether the frame has an eye of ender.
+ */
+@AutoBlockDataMeta("end-portal-frame")
+public record EndPortalFrameMeta(boolean eye) implements BlockDataMeta<EndPortalFrame> {
+
+    @Override
+    public void apply(EndPortalFrame blockData) {
+        blockData.setEye(eye);
+    }
+}

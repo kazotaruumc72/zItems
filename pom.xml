@@ -127,21 +127,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>fr.traqueur</groupId>
-            <artifactId>structura</artifactId>
-            <version>1.6.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>fr.maxlego08.menu</groupId>
             <artifactId>zmenu-api</artifactId>
             <version>1.1.0.8</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.GroupeZ-dev</groupId>
-            <artifactId>zItems</artifactId>
-            <version>main-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

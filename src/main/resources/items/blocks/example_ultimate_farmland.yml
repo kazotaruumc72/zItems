@@ -1,0 +1,23 @@
+# Ultimate Farmland - Ultra-hydrated farmland
+id: "ultimate_farmland"
+material: FARMLAND
+display-name: "<gradient:#8B4513:#DEB887><bold>🌾 Divine Farmland</bold></gradient>"
+lore:
+  - "<gray>Farmland blessed by the gods"
+  - ""
+  - "<light_purple>🌾 Properties:"
+  - "  <aqua>• Maximum hydration (7/7)"
+  - "  <green>• 3x faster growth"
+  - "  <gold>• Can never dry out"
+  - ""
+  - "<gold>✨ Blessing of the Harvest Goddess"
+  - ""
+  - "<yellow>Crops can never be trampled"
+  - "<dark_gray>Perfect for mega-farms"
+custom-model-data: 3013
+metadata:
+  block-data:
+    settings:
+      farmland:
+        moisture: 7  # Maximum moisture level
+        max: true

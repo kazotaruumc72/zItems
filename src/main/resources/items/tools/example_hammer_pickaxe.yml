@@ -1,0 +1,20 @@
+# Hammer Pickaxe Example
+# A pickaxe with the hammer effect that breaks 3x3 areas
+id: "hammer_pickaxe"
+material: DIAMOND_PICKAXE
+display-name: "<gradient:#00FFFF:#0088FF><bold>⚒ Hammer Pickaxe</bold></gradient>"
+lore:
+  - "<gray>Breaks blocks in a 3x3 area!"
+  - ""
+  - "<gold>Effects:"
+  - "  <yellow>• Hammer (3x3x3)"
+  - "  <yellow>• Efficiency V"
+enchantments:
+  - enchantment: efficiency
+    level: 5
+effects:
+  - super_hammer
+unbreakable: false
+max-damage: 2000
+hide-tooltip: false
+max-stack-size: 1

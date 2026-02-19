@@ -1,0 +1,34 @@
+id: "example_custom_chest"
+material: CHEST
+display-name: "<gradient:#8B4513:#D2691E>Pre-filled Chest</gradient>"
+lore:
+  - "<gray>A chest with pre-configured items"
+  - "<gray>Demonstrates both simple and custom item modes"
+
+trackable: false
+
+metadata:
+  block-state:
+    settings:
+      container:
+        items:
+          0:
+            material: DIAMOND
+            amount: 64
+            display-name: "<aqua>Shiny Diamonds"
+
+          # Simple mode with custom lore
+          13:
+            material: GOLDEN_APPLE
+            amount: 16
+            lore:
+              - "<gold>Enchanted Golden Apples"
+              - "<gray>Very rare!"
+
+          # Simple mode
+          26:
+            material: EMERALD
+            amount: 32
+          4:
+             item-id: "cobblestone_compressed_x2"
+             amount: 1

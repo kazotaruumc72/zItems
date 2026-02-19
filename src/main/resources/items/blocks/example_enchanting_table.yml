@@ -1,0 +1,11 @@
+id: "example_custom_enchanting_table"
+material: ENCHANTING_TABLE
+display-name: "<gradient:#9370DB:#BA55D3>Mystical Enchanting Table</gradient>"
+lore:
+  - "<gray>An enchanting table with a custom name"
+
+metadata:
+  block-state:
+    settings:
+      enchanting-table:
+        custom-name: "<gradient:#9370DB:#BA55D3>Table of Enchantment</gradient>"

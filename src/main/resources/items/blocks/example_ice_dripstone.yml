@@ -1,0 +1,25 @@
+# Frozen Dripstone - Massive ice stalactite
+id: "frozen_dripstone"
+material: POINTED_DRIPSTONE
+display-name: "<gradient:#B0E0E6:#4682B4><bold>🧊 Ice Stalactite</bold></gradient>"
+lore:
+  - "<gray>An ancient ice formation"
+  - ""
+  - "<light_purple>🧊 Characteristics:"
+  - "  <aqua>• Thickness: THICK (Massive)"
+  - "  <blue>• Direction: Downward"
+  - "  <white>• Millennial ice"
+  - ""
+  - "<gold>❄ Discovered in frozen caverns"
+  - ""
+  - "<yellow>Danger: Can fall and cause damage!"
+  - "<dark_gray>Inflicts 6 damage points when falling"
+custom-model-data: 3012
+metadata:
+  block-data:
+    settings:
+      pointed-dripstone:
+        thickness: BASE           # Maximum thickness
+        vertical-direction: DOWN   # Pointing downward
+      waterlogged:
+        waterlogged: false         # Not waterlogged

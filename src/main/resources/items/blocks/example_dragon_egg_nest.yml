@@ -1,0 +1,25 @@
+# Dragon Egg Nest - Turtle egg nest ready to hatch
+id: "dragon_egg_nest"
+material: TURTLE_EGG
+display-name: "<gradient:#90EE90:#228B22><bold>🥚 Enchanted Egg Nest</bold></gradient>"
+lore:
+  - "<gray>A nest containing precious eggs"
+  - ""
+  - "<light_purple>🥚 Configuration:"
+  - "  <green>• 4 stacked eggs"
+  - "  <yellow>• Ready to hatch"
+  - "  <aqua>• Magical protection"
+  - ""
+  - "<gold>🐢 Creatures to be born: Sea Turtles"
+  - ""
+  - "<yellow>Place near water for hatching"
+  - "<dark_gray>Hatching time reduced by 50%"
+custom-model-data: 3009
+metadata:
+  block-data:
+    settings:
+      turtle-egg:
+        eggs: 4      # Maximum eggs in one block
+      hatchable:
+        hatch: 2     # Almost ready to hatch
+        max: false

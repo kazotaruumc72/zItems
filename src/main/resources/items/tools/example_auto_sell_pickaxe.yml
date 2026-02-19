@@ -1,0 +1,39 @@
+# Auto Sell Pickaxe Example
+# A pickaxe that automatically sells what you mine
+id: "auto_sell_pickaxe"
+material: GOLDEN_PICKAXE
+display-name: "<gradient:#FFD700:#FFA500><bold>💰 Auto-Sell Pickaxe</bold></gradient>"
+lore:
+  - "<gray>Automatically sells everything you mine!"
+  - ""
+  - "<gold>Effects:"
+  - "  <yellow>• Auto Sell (1.5x multiplier)"
+  - "  <yellow>• Unbreakable"
+enchantments:
+  - enchantment: efficiency
+    level: 10
+  - enchantment: fortune
+    level: 5
+effects:
+  - auto_sell_pickaxe
+  - unbreakable_tool
+custom-model-data: 1001
+unbreakable: false
+hide-tooltip: false
+max-stack-size: 1
+
+recipe:
+  type: CRAFTING_SHAPED
+  # Not for Smithing recipes
+  group: example
+  # Not for Smithing recipes
+  # FOOD, BLOCKS, MISC for smelting recipes
+  # BUILDING, REDSTONE, EQUIPMENT, MISC for crafting recipes
+  category: MISC
+  pattern:
+    - "###"
+    - "## "
+  result-amount: 5
+  ingredients:
+    - item: "material:stone"
+      sign: '#'

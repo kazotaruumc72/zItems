@@ -1,0 +1,22 @@
+# Glowing Berry Vines - Vines with glowing berries
+id: "glowing_berry_vines"
+material: CAVE_VINES
+display-name: "<gradient:#FF6B35:#FFA500><bold>🫐 Charged Glowing Vines</bold></gradient>"
+lore:
+  - "<gray>Cave vines full of berries"
+  - ""
+  - "<light_purple>🫐 Properties:"
+  - "  <gold>• Ripe and ready berries"
+  - "  <yellow>• Emits soft light"
+  - "  <green>• Instant harvest"
+  - ""
+  - "<gold>✨ Perfect for decorating caves!"
+  - ""
+  - "<yellow>Right-click to harvest berries"
+  - "<dark_gray>Regenerates slowly"
+custom-model-data: 3008
+metadata:
+  block-data:
+    settings:
+      cave-vines-plant:
+        berries: true  # Has berries ready to harvest

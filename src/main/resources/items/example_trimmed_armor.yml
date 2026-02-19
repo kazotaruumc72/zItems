@@ -1,0 +1,40 @@
+# Netherite Armor with Trim Example
+id: "trimmed_netherite_chestplate"
+material: NETHERITE_CHESTPLATE
+display-name: "<gradient:#4A4A4A:#8B0000><bold>⚔ Legendary Netherite Chestplate</bold></gradient>"
+lore:
+  - "<gray>Ancient armor with mystical patterns"
+  - ""
+  - "<gold>Features:"
+  - "  <yellow>• Netherite Vex Trim"
+  - "  <yellow>• +12 Armor (without the default armor value so +20 total)"
+  - "  <yellow>• +3 Knockback Resistance"
+enchantments:
+  - enchantment: protection
+    level: 5
+  - enchantment: unbreaking
+    level: 5
+  - enchantment: thorns
+    level: 3
+attributes:
+  - attribute: armor
+    operation: ADD_NUMBER
+    amount: 12.0
+    slot: CHEST
+  - attribute: knockback_resistance
+    operation: ADD_NUMBER
+    amount: 0.3
+    slot: CHEST
+# Strategy for merging custom attributes with default item attributes
+# Options: REPLACE, ADD, KEEP_HIGHEST, KEEP_LOWEST, SUM
+# REPLACE: Replace all existing attributes (default)
+# ADD: Keep existing + add new (may create duplicates)
+# KEEP_HIGHEST: Keep highest value for each (attribute, operation, slot)
+# KEEP_LOWEST: Keep lowest value for each (attribute, operation, slot)
+# SUM: Sum values for each (attribute, operation, slot)
+attribute-merge-strategy: SUM
+metadata:
+  trim:
+    material: DIAMOND
+    pattern: VEX
+unbreakable: true

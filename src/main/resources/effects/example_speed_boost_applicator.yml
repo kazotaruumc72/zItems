@@ -1,0 +1,52 @@
+# Speed Boost Effect - Example with ZITEMS_APPLICATOR
+# This effect demonstrates the custom applicator GUI requiring ingredients
+
+id: "speed_boost_boots"
+type: "ATTRIBUTES_APPLICATOR"
+display-name: "<gradient:#00FFFF:#0080FF><bold>⚡ SPEED BOOST</bold></gradient>"
+
+# Effect representation as item (can be obtained/given to players)
+representation:
+  material: FEATHER
+  display-name: "<aqua><bold>⚡ Speed Boost Effect</bold></aqua>"
+  lore:
+    - ""
+    - "<gray>Apply this effect to boots to gain"
+    - "<gray>permanent <yellow>+20% movement speed<gray>!"
+    - ""
+    - "<dark_gray>▸ <white>Applicable to: <yellow>Boots"
+    - "<dark_gray>▸ <white>Application: <light_purple>Custom Applicator"
+    - "<dark_gray>▸ <white>Required: <yellow>2x Diamond, 1x Nether Star"
+    - ""
+    - "<gradient:#00FFFF:#0080FF>⚡ Legendary Effect</gradient>"
+  enchant:
+    - enchant: UNBREAKING
+      level: 1
+  flags:
+    - HIDE_ENCHANTS
+  custom-model-data: 200
+
+  # Use custom applicator GUI instead of smithing table
+  applicator-type: ZITEMS_APPLICATOR
+
+  # Required ingredients for the custom applicator
+  ingredients:
+    - item: "item:DIAMOND"
+    - item: "item:NETHER_STAR"
+
+# Attribute modification
+attributes:
+  - attribute: MOVEMENT_SPEED
+    operation: ADD_SCALAR
+    amount: 0.2                # +20% movement speed
+    slot: FEET
+
+# Material applicability - can only be applied to boots
+applicable-materials:
+  - LEATHER_BOOTS
+  - CHAINMAIL_BOOTS
+  - IRON_BOOTS
+  - GOLDEN_BOOTS
+  - DIAMOND_BOOTS
+  - NETHERITE_BOOTS
+applicability-blacklisted: false  # Whitelist mode

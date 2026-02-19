@@ -1,11 +1,15 @@
-.idea/
-target/
-archive/
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+target/
+target-api/
+destinations.yml
+.idea/
+.claude/
+CLAUDE.md
+dependency-reduced-pom.xml
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -43,6 +47,3 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-
-### Maven ###
-dependency-reduced-pom.xml

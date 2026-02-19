@@ -1,0 +1,20 @@
+id: "example_mythicmobs_spawner"
+material: SPAWNER
+display-name: "<gradient:#9B59B6:#8E44AD>MythicMobs Spawner</gradient>"
+lore:
+  - "<gray>A spawner that spawns MythicMobs mobs"
+  - "<dark_purple>Requires MythicMobs plugin"
+
+metadata:
+  block-state:
+    settings:
+      spawner:
+        spawned-type: ZOMBIE  # Vanilla fallback entity type
+        mythic-mob-type: "SkeletalKnight"  # MythicMobs mob type identifier
+        delay: 20
+        min-spawn-delay: 200
+        max-spawn-delay: 800
+        spawn-count: 1
+        max-nearby-entities: 4
+        required-player-range: 16
+        spawn-range: 4

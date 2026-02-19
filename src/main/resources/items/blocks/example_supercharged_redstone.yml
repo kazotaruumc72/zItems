@@ -1,0 +1,21 @@
+# Supercharged Comparator - Supercharged redstone comparator
+id: "supercharged_comparator"
+material: COMPARATOR
+display-name: "<gradient:#FF0000:#8B0000><bold>⚡ Supercharged Comparator</bold></gradient>"
+lore:
+  - "<gray>A comparator modified by red magic"
+  - ""
+  - "<light_purple>⚡ Characteristics:"
+  - "  <red>• Maximum power (15/15)"
+  - "  <gold>• Subtract mode"
+  - "  <aqua>• Arcane overcharge"
+  - ""
+  - "<gold>🔧 For redstone masters"
+  - ""
+  - "<dark_gray>Warning: May cause dimensional explosions"
+custom-model-data: 3006
+metadata:
+  block-data:
+    settings:
+      comparator:
+        mode: SUBTRACT

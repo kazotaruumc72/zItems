@@ -1,0 +1,22 @@
+# Rainbow Candles - Stacked rainbow candles
+id: "rainbow_candles"
+material: CANDLE
+display-name: "<gradient:#FF0000:#FF7F00:#FFFF00:#00FF00:#0000FF:#4B0082:#9400D3>🕯 Rainbow Candles</gradient>"
+lore:
+  - "<gray>A magical arrangement of colorful candles"
+  - ""
+  - "<light_purple>🕯 Configuration:"
+  - "  <pink>• 4 stacked candles"
+  - "  <gold>• Lit and ready"
+  - "  <aqua>• Maximum lighting"
+  - ""
+  - "<gold>✨ Creates a festive atmosphere!"
+  - ""
+  - "<yellow>Perfect for event decorations"
+custom-model-data: 3005
+metadata:
+  block-data:
+    settings:
+      candle:
+        candles: 4  # Maximum stack of candles
+        lit: true   # Pre-lit

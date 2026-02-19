@@ -1,0 +1,25 @@
+id: "example_custom_sign"
+material: OAK_SIGN
+display-name: "<gradient:#8B4513:#D2691E>Custom Sign</gradient>"
+lore:
+  - "<gray>A sign with custom text and colors"
+ 
+metadata:
+  block-state:
+    settings:
+      sign:
+        waxed: true  # Prevents editing
+        front:
+          glow: true
+          color: WHITE
+          lines:
+            - "<gradient:#00FFFF:#0080FF>Welcome</gradient>"
+            - "<gold>To the Server!"
+            - ""
+            - "<gray>Enjoy your stay"
+        back:
+          glow: false
+          color: BLACK
+          lines:
+            - "<red>Back Side"
+            - "<gray>Secret message"

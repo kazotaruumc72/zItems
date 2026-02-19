@@ -1,0 +1,39 @@
+# Example Item - Hidden Additional Effects
+# Base effects are visible, but additional effects are hidden from lore
+
+id: "stealth_tool"
+material: NETHERITE_PICKAXE
+display-name: "<gradient:#4B0082:#8B008B><bold>🔮 Stealth Miner</bold></gradient>"
+lore:
+  - "<gray>A tool with visible base powers"
+  - "<dark_purple>Additional powers remain hidden..."
+  - ""
+  - "<aqua>Base Effect: Shown in lore"
+  - "<gold>Additional Effects: Hidden but active!"
+
+custom-model-data: 5002
+
+# Base effects
+effects:
+  - super_hammer
+
+# Display all effects (no limit)
+nb-effects-view: -1
+
+# Show base effects but hide additional ones
+base-effects-visible: true
+additional-effects-visible: false  # Additional effects won't show in lore!
+
+# Allow adding more effects (they just won't be visible)
+allow-additional-effects: true
+
+unbreakable: true
+trackable: true
+
+# Example usage:
+# 1. /zitems give <player> stealth_tool
+#    -> Shows "⚒ HAMMER" in lore
+# 2. /zitems apply <player> vein_miner_pickaxe
+#    -> Lore stays the same (only shows HAMMER)
+#    -> BUT the vein miner effect is active and works!
+#    -> Perfect for keeping item descriptions clean

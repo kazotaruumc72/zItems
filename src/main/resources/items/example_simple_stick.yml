@@ -1,0 +1,9 @@
+# Simple Stick Example
+# A basic item without complex features
+id: "simple_stick"
+material: STICK
+display-name: "<aqua>Simple Stick"
+lore:
+  - "<gray>Just a simple stick, nothing special"
+hide-tooltip: false
+max-stack-size: 64

@@ -1,0 +1,26 @@
+# Sculk Alarm System - Sophisticated Sculk alarm system
+id: "sculk_alarm_system"
+material: SCULK_SHRIEKER
+display-name: "<gradient:#0A0E27:#1E3A5F><bold>🔊 Sculk Alarm System</bold></gradient>"
+lore:
+  - "<gray>A dimensional security system"
+  - ""
+  - "<light_purple>🔊 Features:"
+  - "  <red>• Alert mode activated"
+  - "  <gold>• Can summon the Warden"
+  - "  <aqua>• Motion detection"
+  - ""
+  - "<gold>⚠ DANGER: Extremely sensitive"
+  - ""
+  - "<red>Summons the Warden after 3 triggers"
+  - "<yellow>Detection range: 16 blocks"
+  - "<dark_gray>Technology: Ancient Sculk"
+custom-model-data: 3015
+metadata:
+  block-data:
+    settings:
+      sculk-shrieker:
+        shrieking: true      # Currently active
+        can-summon: true     # Can summon the Warden
+      waterlogged:
+        waterlogged: false

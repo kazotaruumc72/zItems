@@ -1,0 +1,12 @@
+id: "example_custom_brewing_stand"
+material: BREWING_STAND
+display-name: "<gradient:#8B008B:#DA70D6>Custom Brewing Stand</gradient>"
+lore:
+  - "<gray>A brewing stand with pre-configured brewing time"
+
+metadata:
+  block-state:
+    settings:
+      brewing-stand:
+        brewing-time: 200  # Ticks (10 seconds)
+        fuel-level: 20  # Blaze powder fuel level

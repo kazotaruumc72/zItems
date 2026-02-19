@@ -1,0 +1,51 @@
+id: "example_super_pickaxe"
+material: DIAMOND_PICKAXE
+display-name: "<gradient:#00FFFF:#0080FF>Super Pickaxe</gradient>"
+lore:
+  - "<gray>A pickaxe with custom mining speeds"
+  - "<gray>Mines stone blocks faster than normal"
+  - "<yellow>Paper only feature!"
+
+enchantments:
+  - enchantment: EFFICIENCY
+    level: 5
+  - enchantment: UNBREAKING
+    level: 3
+
+metadata:
+  tool:
+    # Damage taken per block mined
+    damage-per-block: 1
+
+    # Default mining speed for blocks not specified in rules
+    default-mining-speed: 1.0
+
+    # Tag-based mining rules
+    rules:
+      # Mine all pickaxe-mineable blocks at 8x speed
+      - tag: MINEABLE/PICKAXE
+        speed: 8.0
+        correct-for-drops: true
+
+      # Mine all shovel-mineable blocks at 4x speed (if you want multi-tool behavior)
+      - tag: MINEABLE/SHOVEL
+        speed: 4.0
+        correct-for-drops: true
+
+    # Material-specific mining rules (overrides tag rules)
+    material-rules:
+      # Ultra-fast mining for specific stone types
+      - materials:
+          - STONE
+          - COBBLESTONE
+          - DEEPSLATE
+          - COBBLED_DEEPSLATE
+        speed: 15.0
+        correct-for-drops: true
+
+      # Fast obsidian mining
+      - materials:
+          - OBSIDIAN
+          - CRYING_OBSIDIAN
+        speed: 5.0
+        correct-for-drops: true

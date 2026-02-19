@@ -1,0 +1,52 @@
+# Example Item - Effect Control Demonstration
+# This example shows all the new effect display and control options
+
+id: "effects_control_demo"
+material: DIAMOND_PICKAXE
+display-name: "<gradient:#00FFFF:#0080FF><bold>⚡ Advanced Tool</bold></gradient>"
+lore:
+  - "<gray>A powerful tool with controlled effects"
+  - ""
+  - "<yellow>⚠ This item demonstrates effect control features:"
+  - "  <aqua>• Effect display configuration"
+  - "  <aqua>• Effect restrictions"
+  - "  <aqua>• Additional effects control"
+  - ""
+  - "<gold>Try: /zitems applyeffect <player> vein_miner_pickaxe"
+  - "<gray>The lore will update automatically!"
+
+custom-model-data: 5000
+
+# Base effects that will be applied to this item
+effects:
+  - super_hammer  # Reference to effect defined in effects/example_hammer.yml
+
+# ========================================
+# Effect Display Configuration
+# ========================================
+
+# Number of effects to display in lore:
+# -1 = show all effects (default)
+# 0 = hide all effects
+# 1, 2, 3... = show only this number (remaining shown as "...")
+nb-effects-view: -1
+
+# Control visibility of base effects (defined in 'effects:' above)
+base-effects-visible: true
+
+# Control visibility of additional effects (applied via /zitems apply command)
+additional-effects-visible: true
+
+# ========================================
+# Effect Restrictions
+# ========================================
+
+# Allow additional effects to be applied to this item
+# If false, /zitems applyeffect command will be blocked for this item
+allow-additional-effects: true
+
+# List of effect IDs that cannot be applied to this item
+# Even if allow-additional-effects is true, these specific effects will be blocked
+disabled-effects:
+  - "vein_miner"  # Cannot apply vein miner to this item
+  # - "auto_sell"  # Uncomment to also disable auto sell

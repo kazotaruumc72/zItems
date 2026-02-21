@@ -16,8 +16,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
   build:
-    name: Build and Publish zItems
+    needs: checkout
     uses: GroupeZ-dev/actions/.github/workflows/build.yml@main
     with:
       project-name: "zItems"
